@@ -1,0 +1,178 @@
+📝 DAFTAR FILE YANG DITAMBAHKAN UNTUK ADMIN PANEL
+================================================
+
+🆕 FILE-FILE BARU YANG TELAH DIBUAT:
+
+1. BACKEND & DATABASE
+   ├── admin-setup.js        [BARU] Setup database SQLite
+   ├── admin-routes.js       [BARU] API routes untuk admin
+   ├── data.db               [OTOMATIS] Database file
+   └── SERVER_UPDATE.js      [BARU] Kode untuk ditambahkan ke server.js
+
+2. FRONTEND ADMIN PANEL
+   ├── admin.html            [BARU] Dashboard admin (login + UI)
+   └── js/admin.js           [BARU] JavaScript untuk admin panel
+
+3. DOKUMENTASI
+   ├── README_ADMIN.md       [BARU] Panduan lengkap
+   ├── SETUP_ADMIN.md        [BARU] Step-by-step setup
+   ├── SUMMARY_ADMIN.txt     [BARU] Ringkasan ini
+   ├── CHECKLIST.txt         [BARU] Checklist setup
+   └── START_ADMIN.bat       [BARU] Quick start (Windows)
+
+4. FOLDER YANG PERLU DIBUAT
+   └── public/images/        [PERLU DIBUAT] Untuk upload foto
+
+---
+
+📊 TOTAL: 11 file baru + 1 folder
+
+---
+
+✅ LANGKAH UNTUK AKTIVASI
+
+### 1. Install Dependencies
+```powershell
+npm install sqlite3 express cors multer
+```
+
+### 2. Setup Database
+```powershell
+node admin-setup.js
+```
+
+### 3. Update server.js
+Tambahkan kode dari SERVER_UPDATE.js ke akhir server.js
+
+### 4. Buat Folder
+```powershell
+mkdir public\images
+```
+
+### 5. Jalankan Server
+```powershell
+node server.js
+```
+
+### 6. Akses Admin Panel
+Browser: http://localhost:3000/admin.html
+Username: admin
+Password: admin123
+
+---
+
+📂 STRUKTUR FOLDER SETELAH SETUP
+
+org-calendar-app/
+├── [HTML files - sudah ada]
+│   ├── index.html
+│   ├── about.html
+│   ├── produk.html
+│   ├── order.html
+│   └── contact.html
+│
+├── [CSS & JS - sudah ada]
+│   ├── css/style.css
+│   └── js/script.js
+│
+├── [ADMIN PANEL - BARU]
+│   ├── admin.html ★
+│   ├── admin-setup.js ★
+│   ├── admin-routes.js ★
+│   └── js/admin.js ★
+│
+├── [SERVER - UPDATE]
+│   └── server.js (UPDATE: tambahkan admin routes)
+│
+├── [DATABASE - OTOMATIS]
+│   └── data.db ★ (terbuat saat jalankan admin-setup.js)
+│
+├── [UPLOAD FOLDER - BUAT]
+│   └── public/images/ ★ (untuk foto produk & logo)
+│
+├── [DOKUMENTASI - BARU]
+│   ├── README_ADMIN.md ★
+│   ├── SETUP_ADMIN.md ★
+│   ├── SUMMARY_ADMIN.txt ★
+│   ├── CHECKLIST.txt ★
+│   └── START_ADMIN.bat ★
+│
+└── [FILE LAIN]
+    ├── package.json
+    ├── CARA_SHARING.md
+    └── README.md
+
+---
+
+🔑 FILE-FILE PENTING
+
+HARUS BACA:
+1. README_ADMIN.md    - Panduan lengkap & API docs
+2. CHECKLIST.txt      - Verify setiap step
+
+HARUS JALANKAN:
+1. admin-setup.js     - Setup database (1x saja)
+2. server.js          - Main server
+
+HARUS UPDATE:
+1. server.js          - Tambahkan admin routes
+
+HARUS BUAT:
+1. public/images/     - Folder untuk upload
+
+---
+
+🎯 QUICK START CHECKLIST
+
+Yang harus dilakukan sebelum bisa pakai admin panel:
+
+□ npm install sqlite3 express cors multer
+□ node admin-setup.js
+□ Update server.js (copy dari SERVER_UPDATE.js)
+□ mkdir public\images
+□ node server.js
+□ Buka http://localhost:3000/admin.html
+□ Login: admin / admin123
+
+---
+
+📱 FILE YANG PERLU UPDATE (EXISTING)
+
+server.js
+  Location: Baris terakhir (sebelum app.listen)
+  Action: Paste isi file SERVER_UPDATE.js
+  Why: Untuk integrasi admin routes & serve static files
+
+---
+
+📋 VERIFIKASI
+
+Setelah setup, verifikasi dengan:
+
+✓ Admin panel bisa dibuka: http://localhost:3000/admin.html
+✓ Bisa login dengan admin / admin123
+✓ Bisa melihat tabel produk
+✓ Bisa tambah produk baru
+✓ Bisa upload foto
+✓ Bisa edit & delete produk
+✓ Bisa update info perusahaan
+✓ Data terlihat di website
+
+---
+
+🆘 JIKA ADA ERROR
+
+File-file untuk troubleshooting:
+1. README_ADMIN.md - Section "Troubleshooting"
+2. SETUP_ADMIN.md  - Section "Troubleshooting"
+3. Console PowerShell - Lihat error message
+4. Browser DevTools (F12) - Lihat client error
+
+---
+
+✨ SIAP DIGUNAKAN!
+
+Semua file untuk admin panel sudah disiapkan.
+Tinggal follow checklist setup di atas.
+
+Good luck! 🚀

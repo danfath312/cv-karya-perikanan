@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Pesan produk CV Karya Perikanan Indonesia dengan mudah. Form pemesanan online langsung ke WhatsApp. Respon cepat 24 jam">
+    <meta name="theme-color" content="#0066B3">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pemesanan Online | CV Karya Perikanan Indonesia">
+    <meta property="og:description" content="Pesan produk kami dengan mudah melalui WhatsApp. Layanan 24/7">
+    <meta property="og:image" content="images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo.png">
+    
+    <title>Pemesanan | CV Karya Perikanan Indonesia</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- ===================================
+         NAVIGATION BAR
+         ================================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="" class="logo-image">
+                <span>CV Karya Perikanan Indonesia</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Beranda</a></li>
+                <li><a href="about.html" class="nav-link">Tentang Kami</a></li>
+                <li><a href="produk.html" class="nav-link">Produk</a></li>
+                <li><a href="order.html" class="nav-link active">Pemesanan</a></li>
+                <li><a href="contact.html" class="nav-link">Kontak</a></li>
+            </ul>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================================
+         PAGE HEADER
+         ================================== -->
+    <section class="hero" style="padding: 120px 0 80px;">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Formulir Pemesanan</h1>
+                <p>Pesan Produk Berkualitas Kami dengan Mudah</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+         ORDER FORM SECTION
+         ================================== -->
+    <section class="section">
+        <div class="container">
+            <div class="order-form-container">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">📝</div>
+                    <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Form Pemesanan</h2>
+                    <p style="color: var(--text-gray);">
+                        Isi formulir di bawah ini dengan lengkap. Pesanan Anda akan langsung 
+                        diteruskan ke WhatsApp kami untuk proses lebih lanjut.
+                    </p>
+                </div>
+
+                <form id="orderForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap <span style="color: red;">*</span></label>
+                            <input 
+                                type="text" 
+                                id="nama" 
+                                name="nama" 
+                                placeholder="Masukkan nama lengkap Anda"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="whatsapp">Nomor WhatsApp <span style="color: red;">*</span></label>
+                            <input 
+                                type="tel" 
+                                id="whatsapp" 
+                                name="whatsapp" 
+                                placeholder="08xx-xxxx-xxxx"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="email@example.com (opsional)"
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="produk">Pilih Produk <span style="color: red;">*</span></label>
+                            <select id="produk" name="produk" required>
+                                <option value="">-- Pilih Produk --</option>
+                                <option value="Sisik Ikan Kakap Merah">Sisik Ikan Kakap Merah</option>
+                                <option value="Sisik Ikan Nila">Sisik Ikan Nila</option>
+                                <option value="Kulit Ikan">Kulit Ikan</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jumlah">Jumlah (kg) <span style="color: red;">*</span></label>
+                            <input 
+                                type="number" 
+                                id="jumlah" 
+                                name="jumlah" 
+                                placeholder="Contoh: 10"
+                                min="1"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamat">Alamat Pengiriman <span style="color: red;">*</span></label>
+                        <textarea 
+                            id="alamat" 
+                            name="alamat" 
+                            rows="3"
+                            placeholder="Masukkan alamat lengkap untuk pengiriman"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="catatan">Catatan Tambahan</label>
+                        <textarea 
+                            id="catatan" 
+                            name="catatan" 
+                            rows="4"
+                            placeholder="Tambahkan catatan atau permintaan khusus (opsional)"
+                        ></textarea>
+                    </div>
+
+                    <div style="background: var(--light-blue); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
+                            <i class="fas fa-info-circle"></i> Informasi Penting:
+                        </h4>
+                        <ul style="list-style: none; padding-left: 0; color: var(--text-gray);">
+                            <li style="padding: 5px 0;">• Semua field dengan tanda (*) wajib diisi</li>
+                            <li style="padding: 5px 0;">• Pesanan akan diproses setelah konfirmasi</li>
+                            <li style="padding: 5px 0;">• Harga akan dikonfirmasi via WhatsApp</li>
+                            <li style="padding: 5px 0;">• Tersedia diskon untuk pembelian dalam jumlah besar</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                        <i class="fab fa-whatsapp"></i> Kirim Pesanan ke WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+         HOW TO ORDER SECTION
+         ================================== -->
+    <section class="section" style="background: var(--bg-light);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Cara Pemesanan</h2>
+                <p>Langkah Mudah untuk Memesan Produk Kami</p>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); height: 150px; color: white;">
+                        <span style="font-size: 3rem; font-weight: bold;">1</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Isi Formulir</h3>
+                        <p>
+                            Lengkapi formulir pemesanan di atas dengan data yang akurat. 
+                            Pastikan nomor WhatsApp aktif untuk komunikasi.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); height: 150px; color: white;">
+                        <span style="font-size: 3rem; font-weight: bold;">2</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kirim ke WhatsApp</h3>
+                        <p>
+                            Klik tombol kirim dan Anda akan diarahkan ke WhatsApp kami. 
+                            Pesanan akan otomatis terformat dengan rapi.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); height: 150px; color: white;">
+                        <span style="font-size: 3rem; font-weight: bold;">3</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Konfirmasi & Pembayaran</h3>
+                        <p>
+                            Tim kami akan mengkonfirmasi detail pesanan, harga, dan metode 
+                            pembayaran melalui WhatsApp.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); height: 150px; color: white;">
+                        <span style="font-size: 3rem; font-weight: bold;">4</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Proses & Pengiriman</h3>
+                        <p>
+                            Setelah pembayaran dikonfirmasi, kami akan memproses dan 
+                            mengirimkan pesanan Anda sesuai kesepakatan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+         WHY ORDER FROM US
+         ================================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Keuntungan Memesan dari Kami</h2>
+                <p>Layanan Terbaik untuk Kepuasan Pelanggan</p>
+            </div>
+            
+            <div class="vm-grid">
+                <div class="vm-card">
+                    <div class="icon">⚡</div>
+                    <h3>Respon Cepat</h3>
+                    <ul>
+                        <li>Layanan pelanggan 24/7</li>
+                        <li>Respon WhatsApp dalam hitungan menit</li>
+                        <li>Konfirmasi pesanan yang cepat</li>
+                        <li>Update status pesanan real-time</li>
+                    </ul>
+                </div>
+                
+                <div class="vm-card">
+                    <div class="icon">✅</div>
+                    <h3>Kualitas Terjamin</h3>
+                    <ul>
+                        <li>Produk dengan standar mutu tinggi</li>
+                        <li>Proses produksi yang higienis</li>
+                        <li>Garansi kualitas produk</li>
+                        <li>Kemasan aman dan rapi</li>
+                    </ul>
+                </div>
+                
+                <div class="vm-card">
+                    <div class="icon">💰</div>
+                    <h3>Harga Kompetitif</h3>
+                    <ul>
+                        <li>Harga terbaik di pasaran</li>
+                        <li>Diskon untuk pembelian banyak</li>
+                        <li>Tidak ada biaya tersembunyi</li>
+                        <li>Sistem pembayaran fleksibel</li>
+                    </ul>
+                </div>
+                
+                <div class="vm-card">
+                    <div class="icon">🚚</div>
+                    <h3>Pengiriman Terpercaya</h3>
+                    <ul>
+                        <li>Kerjasama dengan ekspedisi terpercaya</li>
+                        <li>Packaging aman untuk pengiriman</li>
+                        <li>Tracking pesanan tersedia</li>
+                        <li>Pengiriman tepat waktu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+         CONTACT INFO SECTION
+         ================================== -->
+    <section class="section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%); color: white;">
+        <div class="container">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">Butuh Bantuan?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                    Tim customer service kami siap membantu Anda 24 jam setiap hari. 
+                    Jangan ragu untuk menghubungi kami jika ada pertanyaan.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 30px;">
+                    <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
+                        <h4 style="color: white; margin-bottom: 5px;">WhatsApp</h4>
+                        <p style="opacity: 0.9;">0878-0822-8699</p>
+                    </div>
+                    <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">⏰</div>
+                        <h4 style="color: white; margin-bottom: 5px;">Jam Operasional</h4>
+                        <p style="opacity: 0.9;">Buka 24 Jam</p>
+                    </div>
+                </div>
+                <a href="contact.html" class="btn btn-light">Lihat Info Kontak Lengkap</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+         FOOTER
+         ================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <h3>CV Karya Perikanan Indonesia</h3>
+                    <p>
+                        Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
+                        produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Menu Cepat</h4>
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="about.html">Tentang Kami</a></li>
+                        <li><a href="produk.html">Produk</a></li>
+                        <li><a href="order.html">Pemesanan</a></li>
+                        <li><a href="contact.html">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Kontak</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450</p>
+                    <p><i class="fas fa-phone"></i> 0878-0822-8699</p>
+                    <p><i class="fas fa-clock"></i> Buka 24 Jam</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>

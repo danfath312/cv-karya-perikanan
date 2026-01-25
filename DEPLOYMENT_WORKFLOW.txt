@@ -1,0 +1,273 @@
+📊 DEPLOYMENT WORKFLOW - VISUAL DIAGRAM
+==========================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                    💻 YOUR COMPUTER                         │
+│                                                             │
+│  c:\Users\zidan\org-calendar-app\                           │
+│  ├── index.html (Homepage)                                  │
+│  ├── about.html                                             │
+│  ├── produk.html                                            │
+│  ├── order.html                                             │
+│  ├── contact.html                                           │
+│  ├── admin.html (Admin Panel)                               │
+│  ├── server.js (Express Backend)                            │
+│  ├── admin-routes.js (API)                                  │
+│  ├── public/                                                │
+│  │   ├── css/style.css                                      │
+│  │   ├── js/script.js                                       │
+│  │   ├── js/admin.js                                        │
+│  │   └── images/logo.png                                    │
+│  └── package.json                                           │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          │ git push
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    🐙 GITHUB REPOSITORY                     │
+│                                                             │
+│  https://github.com/USERNAME/cv-karya-perikanan             │
+│                                                             │
+│  ✓ Version control                                          │
+│  ✓ Backup otomatis                                          │
+│  ✓ Collaboration ready                                      │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          │ vercel import
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    ▲ VERCEL HOSTING                         │
+│                                                             │
+│  https://cv-karya-perikanan.vercel.app                      │
+│                                                             │
+│  ┌───────────────────────────────────────────────────┐     │
+│  │  Frontend (Static Files)                          │     │
+│  │  • index.html                                     │     │
+│  │  • CSS, JS, Images                                │     │
+│  │  • Auto-cached worldwide (CDN)                    │     │
+│  └───────────────────────────────────────────────────┘     │
+│                                                             │
+│  ┌───────────────────────────────────────────────────┐     │
+│  │  Backend (Serverless Functions)                   │     │
+│  │  • server.js → API endpoints                      │     │
+│  │  • admin-routes.js → CRUD operations              │     │
+│  │  • Auto-scaling                                   │     │
+│  └───────────────────────────────────────────────────┘     │
+│                          │                                  │
+│                          │ SQL queries                      │
+│                          ▼                                  │
+│  ┌───────────────────────────────────────────────────┐     │
+│  │  🗄️ Vercel Postgres Database                      │     │
+│  │  • products table                                 │     │
+│  │  • admins table                                   │     │
+│  │  • company table                                  │     │
+│  │  • Auto-backup                                    │     │
+│  └───────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          │ HTTPS
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│              🌍 USERS (Worldwide Access)                    │
+│                                                             │
+│  📱 Mobile     💻 Desktop     📲 Tablet                     │
+│                                                             │
+│  • Fast loading (CDN)                                       │
+│  • Secure (HTTPS)                                           │
+│  • Responsive                                               │
+└─────────────────────────────────────────────────────────────┘
+
+
+═════════════════════════════════════════════════════════════
+
+🔄 UPDATE WORKFLOW (Setelah Deploy)
+
+┌──────────────┐
+│ Edit Code    │ (Di local computer)
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│ git add .    │
+│ git commit   │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│ git push     │ → Upload ke GitHub
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────┐
+│ Vercel Auto      │ (Detect changes in 5 detik)
+│ Deploy           │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│ Build & Deploy   │ (1-2 menit)
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│ ✅ LIVE!         │ Website updated
+└──────────────────┘
+
+═════════════════════════════════════════════════════════════
+
+🎯 DATA FLOW (Admin Panel → Website)
+
+Admin Panel (admin.html)
+       │
+       │ 1. User tambah produk
+       ▼
+Admin JavaScript (admin.js)
+       │
+       │ 2. POST /api/products
+       ▼
+Express Backend (admin-routes.js)
+       │
+       │ 3. INSERT INTO products
+       ▼
+PostgreSQL Database
+       │
+       │ 4. Data saved
+       ▼
+Website Query (produk.html)
+       │
+       │ 5. GET /api/products
+       ▼
+Display Products
+       │
+       │ 6. Render ke halaman
+       ▼
+✅ User lihat produk baru!
+
+═════════════════════════════════════════════════════════════
+
+📊 ARCHITECTURE OVERVIEW
+
+Internet
+    │
+    ▼
+Vercel Edge Network (CDN)
+    │
+    ├─→ Static Files (HTML/CSS/JS/Images)
+    │   └─→ Cached globally
+    │
+    └─→ API Routes (/api/*)
+        └─→ Serverless Functions
+            └─→ Database Queries
+                └─→ Vercel Postgres
+
+Benefits:
+✓ Fast (CDN worldwide)
+✓ Scalable (auto-scaling)
+✓ Secure (HTTPS default)
+✓ Free tier generous
+✓ Zero config deployment
+
+═════════════════════════════════════════════════════════════
+
+🌐 DOMAIN MAPPING
+
+Before:
+http://localhost:3000/                  (Local only)
+http://localhost:3000/admin.html        (Local only)
+
+After GitHub + Vercel:
+https://cv-karya-perikanan.vercel.app/              (Public)
+https://cv-karya-perikanan.vercel.app/admin.html    (Public)
+
+With Custom Domain:
+https://karyaperikanan.com/             (Your domain!)
+https://karyaperikanan.com/admin.html   (Admin)
+
+═════════════════════════════════════════════════════════════
+
+🔒 SECURITY IN PRODUCTION
+
+Local (Development):
+• No HTTPS
+• Weak passwords OK
+• Public access OK
+
+Production (Vercel):
+✓ Auto HTTPS (SSL certificate)
+✓ Environment variables encrypted
+✓ Database credentials secured
+✓ CORS configured
+⚠️ MUST change default admin password!
+
+═════════════════════════════════════════════════════════════
+
+💰 COST ESTIMATE
+
+GitHub:
+• Free untuk public repo
+• Free untuk private repo (unlimited)
+
+Vercel:
+• Hobby Plan: FREE
+  - Unlimited deployments
+  - 100GB bandwidth/month
+  - Automatic HTTPS
+  - Analytics
+
+Vercel Postgres:
+• Free tier: 256MB storage
+• Upgrade: $20/month untuk 512MB
+
+Total Cost: $0 - $20/month (tergantung traffic)
+
+═════════════════════════════════════════════════════════════
+
+⏱️ TIMELINE
+
+Install Tools:        10 minutes
+Setup Git:            5 minutes
+Create GitHub repo:   2 minutes
+Push to GitHub:       3 minutes
+Vercel signup:        2 minutes
+Import project:       1 minute
+Setup database:       5 minutes
+Configure & deploy:   3 minutes
+Database migration:   2 minutes
+Testing:              5 minutes
+──────────────────────────────
+TOTAL:               ~38 minutes
+
+Setelah itu, updates hanya butuh:
+• Code → commit → push: 1 minute
+• Auto-deploy: 2 minutes
+• TOTAL update: 3 minutes!
+
+═════════════════════════════════════════════════════════════
+
+🎯 QUICK START SUMMARY
+
+1. Install Node.js: nodejs.org
+2. Install Git: git-scm.com
+3. Restart PowerShell
+4. Run: npm install (di folder project)
+5. Run: git init
+6. Create GitHub repo
+7. Push: git push
+8. Import di Vercel
+9. Add Postgres database
+10. Deploy!
+
+✅ Website LIVE dalam ~40 menit!
+
+═════════════════════════════════════════════════════════════
+
+📖 NEXT STEPS
+
+After deployment:
+1. Ganti password admin
+2. Upload foto produk real
+3. Update info perusahaan
+4. Test semua fitur
+5. Share link ke customer!
+
+═════════════════════════════════════════════════════════════

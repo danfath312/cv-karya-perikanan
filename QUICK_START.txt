@@ -1,0 +1,170 @@
+⚡ QUICK START - 5 LANGKAH AKTIFKAN ADMIN PANEL
+
+=====================================================
+
+✅ LANGKAH 1: INSTALL DEPENDENCIES
+─────────────────────────────────────
+
+Buka PowerShell di folder project, lalu jalankan:
+
+```
+npm install sqlite3 express cors multer body-parser
+```
+
+Expected output:
+- Terlihat text "added X packages"
+- Folder "node_modules" muncul
+- File "package-lock.json" muncul
+
+Waktu: ~30-60 detik
+
+---
+
+✅ LANGKAH 2: SETUP DATABASE
+─────────────────────────────────────
+
+Di PowerShell yang sama, jalankan:
+
+```
+node admin-setup.js
+```
+
+Expected output:
+✓ Database created (file data.db muncul)
+✓ Tables created
+✓ Default data inserted
+✓ Admin account ready: admin/admin123
+
+Waktu: ~5 detik
+
+---
+
+✅ LANGKAH 3: UPDATE SERVER.JS
+─────────────────────────────────────
+
+Buka file server.js dengan text editor, 
+lalu TAMBAHKAN CODE ini SEBELUM app.listen():
+
+```javascript
+// Admin Routes
+const adminRoutes = require('./admin-routes');
+app.use(adminRoutes);
+```
+
+Location: Cari baris "app.listen()" lalu 
+tambahkan code di atasnya.
+
+Expected: File server.js sekarang memiliki 2 baris baru.
+
+---
+
+✅ LANGKAH 4: CREATE IMAGE FOLDER
+─────────────────────────────────────
+
+Di PowerShell, jalankan:
+
+```
+mkdir public/images
+```
+
+Atau manual: 
+Buka folder "public" → Klik kanan → New Folder → Nama "images"
+
+Expected: Folder "public/images/" muncul
+
+---
+
+✅ LANGKAH 5: JALANKAN SERVER
+─────────────────────────────────────
+
+Di PowerShell, jalankan:
+
+```
+node server.js
+```
+
+Expected output di console:
+🚀 Server: http://localhost:3000
+📊 Admin Panel: http://localhost:3000/admin.html
+
+---
+
+🎉 SELESAI! AKSES ADMIN PANEL
+─────────────────────────────────────
+
+Buka browser, ketik:
+http://localhost:3000/admin.html
+
+Login dengan:
+Username: admin
+Password: admin123
+
+---
+
+📋 VERIFICATION CHECKLIST
+
+Setelah setiap step, verifikasi:
+
+Step 1 ✓ node_modules folder ada
+Step 2 ✓ data.db file ada
+Step 3 ✓ server.js punya 2 baris kode baru
+Step 4 ✓ public/images folder ada
+Step 5 ✓ Server jalan di http://localhost:3000
+
+---
+
+⚠️ TROUBLESHOOTING
+
+Problem: npm install gagal
+Solution: 
+- Update npm: npm install -g npm
+- Delete package-lock.json
+- Coba lagi npm install
+
+Problem: Admin panel blank page
+Solution:
+- Refresh browser (Ctrl+F5)
+- Check console (F12) untuk error
+- Restart server
+
+Problem: Upload foto tidak bekerja
+Solution:
+- Pastikan public/images folder ada
+- Pastikan permissions folder OK
+- Restart server
+
+Problem: Database error
+Solution:
+- Delete file data.db
+- Jalankan lagi: node admin-setup.js
+
+Problem: Server tidak bisa diakses
+Solution:
+- Port 3000 mungkin terpakai
+- Cek: netstat -ano | findstr :3000
+- Kill process atau ubah port di server.js
+
+---
+
+🚀 NEXT: MULAI GUNAKAN ADMIN PANEL
+
+1. Tambah produk baru
+2. Upload foto produk
+3. Update info perusahaan
+4. Upload logo
+5. Lihat perubahan di website (otomatis update)
+
+---
+
+💡 TIPS
+
+- Selalu backup data.db sebelum update besar
+- Test di lokal dulu sebelum production
+- Gunakan foto yang sudah compressed
+- Jangan hapus file yang sudah ada
+
+---
+
+⏱️ TOTAL WAKTU SETUP: ~2-3 MENIT
+
+Siap? Mari mulai! 🎯

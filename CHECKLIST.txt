@@ -1,0 +1,133 @@
+📋 CHECKLIST SETUP ADMIN PANEL
+========================================
+
+PASTIKAN SUDAH SELESAIKAN LANGKAH INI:
+
+## ✅ REQUIREMENT CHECK
+- [ ] Node.js sudah diinstall (cek: node --version)
+- [ ] npm sudah tersedia (cek: npm --version)
+- [ ] Folder c:\Users\zidan\org-calendar-app sudah ada
+- [ ] Sudah punya file server.js
+
+## ✅ STEP 1: INSTALL DEPENDENCIES
+Command:
+  cd c:\Users\zidan\org-calendar-app
+  npm install sqlite3 express cors multer
+
+Atau klik 2x: START_ADMIN.bat (Windows)
+
+## ✅ STEP 2: SETUP DATABASE
+Command:
+  node admin-setup.js
+
+Output yang diharapkan:
+  ✓ Tabel products berhasil dibuat
+  ✓ Tabel admins berhasil dibuat
+  ✓ Tabel company berhasil dibuat
+  ✓ Admin default berhasil ditambahkan
+  ✓ Produk default berhasil ditambahkan
+  ✓ Info perusahaan berhasil ditambahkan
+  ✅ Setup database selesai!
+
+## ✅ STEP 3: UPDATE server.js
+1. Buka file: server.js
+2. Pergi ke baris terakhir (sebelum app.listen)
+3. Copy isi file: SERVER_UPDATE.js
+4. Paste ke server.js
+5. SAVE
+
+Verifikasi:
+- Pastikan ada baris: const adminRoutes = require('./admin-routes');
+- Pastikan ada baris: app.use(adminRoutes);
+
+## ✅ STEP 4: CREATE FOLDERS
+Pastikan folder ini ada:
+- [ ] c:\Users\zidan\org-calendar-app\public\images\
+
+Jika tidak ada, buat manual atau jalankan:
+  mkdir public\images
+
+## ✅ STEP 5: JALANKAN SERVER
+Command:
+  node server.js
+
+Output yang diharapkan:
+  🚀 Server: http://localhost:3000
+  📊 Admin Panel: http://localhost:3000/admin.html
+
+## ✅ STEP 6: TEST ADMIN PANEL
+1. Buka browser
+2. URL: http://localhost:3000/admin.html
+3. Login:
+   Username: admin
+   Password: admin123
+
+Jika berhasil, Anda akan lihat:
+- [ ] Dashboard admin dengan 2 tab
+- [ ] Tab "Produk" dengan tabel produk
+- [ ] Tab "Info Perusahaan" dengan form
+
+## ✅ STEP 7: TEST FEATURES
+
+### Test Tambah Produk
+- [ ] Klik "Tambah Produk"
+- [ ] Isi form
+- [ ] Upload foto
+- [ ] Klik Simpan
+- [ ] Produk muncul di tabel
+
+### Test Edit Produk
+- [ ] Klik tombol Edit
+- [ ] Ubah beberapa field
+- [ ] Klik Simpan
+- [ ] Data terupdate
+
+### Test Disable Produk
+- [ ] Klik tombol Enable/Disable
+- [ ] Status berubah langsung
+- [ ] Cek website - produk hilang
+
+### Test Info Perusahaan
+- [ ] Masuk tab "Info Perusahaan"
+- [ ] Ubah data
+- [ ] Upload logo baru
+- [ ] Klik Simpan
+- [ ] Cek website - logo & info terupdate
+
+## ✅ TROUBLESHOOTING JIKA ERROR
+
+Error: "Cannot find module"
+  → npm install [nama-module]
+
+Error: "Port 3000 already in use"
+  → $env:PORT=3001; node server.js
+
+Error: "Cannot find admin.html"
+  → Pastikan ada file admin.html di root folder
+
+Database tidak terbuat
+  → Hapus data.db, jalankan ulang admin-setup.js
+
+## 🎉 SELESAI!
+
+Jika semua test berhasil:
+- ✅ Admin panel siap digunakan
+- ✅ Database terbuat dan terisi data default
+- ✅ Upload foto produk & logo berfungsi
+- ✅ Website terhubung dengan database
+
+NEXT STEPS:
+1. Mulai upload foto produk
+2. Tambah produk baru sesuai kebutuhan
+3. Update ketersediaan produk
+4. Deploy website ke hosting online
+
+CATATAN:
+- Server harus selalu running untuk admin panel berfungsi
+- Data tersimpan di file: data.db
+- Backup file data.db secara berkala
+- Gunakan password yang kuat untuk login admin
+
+===============================================
+Untuk bantuan lebih: Baca file README_ADMIN.md
+===============================================
