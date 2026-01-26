@@ -391,3 +391,28 @@ window.addEventListener('load', function() {
         }
     });
 });
+
+// =====================================================
+// GALLERY CAROUSEL
+// =====================================================
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const totalSlides = slides.length;
+
+function moveCarousel(direction) {
+    currentSlide += direction;
+    
+    // Loop carousel
+    if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+    } else if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+    }
+    
+    // Update carousel position
+    const carouselTrack = document.getElementById('carouselTrack');
+    if (carouselTrack) {
+        carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+}
+
