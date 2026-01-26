@@ -93,7 +93,7 @@ ul {
     padding: 12px 30px;
     border-radius: 50px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
     border: none;
     font-size: 1rem;
@@ -199,7 +199,7 @@ ul {
 .nav-link {
     color: var(--text-dark);
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     position: relative;
 }
 
@@ -728,8 +728,13 @@ ul {
     
     .nav-link {
         width: 100%;
-        padding: 15px 30px;
+        padding: 20px 30px;
         border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link:active {
+        background-color: var(--light-blue);
     }
     
     .hamburger {
@@ -935,3 +940,73 @@ ul {
     }
 }
 
+/* ===================================
+   SMOOTH ANIMATIONS
+   ================================== */
+
+/* Smooth transitions for interactive elements */
+a, button, input, textarea, select {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Card hover animations */
+.product-card,
+.vm-card,
+.stat-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-card:hover,
+.vm-card:hover,
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* Smooth section animations */
+.section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Smooth image animations */
+img {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Smooth form input focus */
+input:focus,
+textarea:focus,
+select:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 15px rgba(0, 102, 179, 0.3);
+}
+
+/* Smooth button press effect */
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Smooth carousel button animations */
+.carousel-btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.carousel-btn:hover {
+    transform: scale(1.15) translateY(-2px);
+}
+
+/* Smooth text animations */
+h1, h2, h3, h4, h5, h6 {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Enhance mobile nav link feedback */
+@media (max-width: 768px) {
+    .nav-link {
+        position: relative;
+    }
+    
+    .nav-link:hover {
+        transform: translateX(5px);
+        background-color: rgba(0, 102, 179, 0.05);
+    }
+}
