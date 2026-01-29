@@ -23,7 +23,7 @@ function authMiddleware(req, res, next) {
     
     if (!token || token !== adminSecret) {
         return res.status(401).json({ 
-            error: 'Unauthorized: Invalid or missing admin token' 
+            error: 'Unauthorized: Invalid or missing admin secret' 
         });
     }
     
