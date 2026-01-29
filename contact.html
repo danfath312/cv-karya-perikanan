@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="description" content="Hubungi CV Karya Perikanan Indonesia - Blk. D No.14, Pengasinan, Tj. Priok, Jakarta Utara. WA: 0878-0822-8699. Buka 24 Jam">
+    <meta name="description" content="Hubungi CV Karya Perikanan Indonesia - Gunung Calincing, Kuripan, Ciseeng, Kab. Bogor. WA: 0878-0822-8699. Buka 24 Jam">
     <meta name="theme-color" content="#0066B3">
     
     <!-- Open Graph -->
@@ -21,6 +21,9 @@
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Language/i18n Dictionary -->
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <!-- ===================================
@@ -34,11 +37,11 @@
             </a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">Beranda</a></li>
-                <li><a href="about.html" class="nav-link">Tentang Kami</a></li>
-                <li><a href="produk.html" class="nav-link">Produk</a></li>
-                <li><a href="order.html" class="nav-link">Pemesanan</a></li>
-                <li><a href="contact.html" class="nav-link active">Kontak</a></li>
+                <li><a href="index.html" class="nav-link" data-i18n="nav_home">Beranda</a></li>
+                <li><a href="about.html" class="nav-link" data-i18n="nav_about">Tentang Kami</a></li>
+                <li><a href="produk.html" class="nav-link" data-i18n="nav_products">Produk</a></li>
+                <li><a href="order.html" class="nav-link" data-i18n="nav_order">Pemesanan</a></li>
+                <li><a href="contact.html" class="nav-link active" data-i18n="nav_contact">Kontak</a></li>
             </ul>
             
             <div class="hamburger" id="hamburger">
@@ -55,8 +58,8 @@
     <section class="hero" style="padding: 120px 0 80px;">
         <div class="container">
             <div class="hero-content">
-                <h1>Hubungi Kami</h1>
-                <p>Kami Siap Melayani Kebutuhan Anda 24/7</p>
+                <h1 data-i18n="contact_page_title">Hubungi Kami</h1>
+                <p data-i18n="contact_page_subtitle">Kami Siap Melayani Kebutuhan Anda 24/7</p>
             </div>
         </div>
     </section>
@@ -67,8 +70,8 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Informasi Kontak</h2>
-                <p>Berbagai Cara untuk Menghubungi Kami</p>
+                <h2 data-i18n="contact_info_title">Informasi Kontak</h2>
+                <p data-i18n="contact_info_subtitle">Berbagai Cara untuk Menghubungi Kami</p>
             </div>
             
             <div class="contact-grid">
@@ -79,11 +82,11 @@
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
                         <div class="details">
-                            <h4>Alamat</h4>
+                            <h4 data-i18n="contact_address">Alamat</h4>
                             <p>
-                                Blk. D No.14, Pengasinan<br>
-                                Kec. Tanjung Priok<br>
-                                Jakarta Utara 14450<br>
+                                <span data-i18n="contact_address_line1">Gunung Calincing, Kuripan</span><br>
+                                <span data-i18n="contact_address_line2">Kec. Ciseeng</span><br>
+                                <span data-i18n="contact_address_line3">Kabupaten Bogor, Jawa Barat 16120</span><br>
                                 Indonesia
                             </p>
                         </div>
@@ -95,13 +98,13 @@
                             <i class="fab fa-whatsapp"></i>
                         </div>
                         <div class="details">
-                            <h4>WhatsApp</h4>
+                            <h4 data-i18n="contact_whatsapp">WhatsApp</h4>
                             <p>
                                 <a href="https://wa.me/6287808228699" target="_blank" style="color: var(--primary-blue); font-weight: 500;">
                                     0878-0822-8699
                                 </a>
                             </p>
-                            <p style="font-size: 0.9rem; margin-top: 5px;">
+                            <p style="font-size: 0.9rem; margin-top: 5px;" data-i18n="contact_whatsapp_desc">
                                 Klik untuk chat langsung
                             </p>
                         </div>
@@ -113,13 +116,13 @@
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="details">
-                            <h4>Telepon</h4>
+                            <h4 data-i18n="contact_phone">Telepon</h4>
                             <p>
                                 <a href="tel:+6287808228699" style="color: var(--primary-blue); font-weight: 500;">
                                     0878-0822-8699
                                 </a>
                             </p>
-                            <p style="font-size: 0.9rem; margin-top: 5px;">
+                            <p style="font-size: 0.9rem; margin-top: 5px;" data-i18n="contact_phone_desc">
                                 Hubungi kami kapan saja
                             </p>
                         </div>
@@ -131,9 +134,9 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="details">
-                            <h4>Jam Operasional</h4>
+                            <h4 data-i18n="contact_hours">Jam Operasional</h4>
                             <p>
-                                <strong>Buka 24 Jam</strong><br>
+                                <strong data-i18n="contact_hours_desc">Buka 24 Jam</strong><br>
                                 Setiap Hari<br>
                                 Senin - Minggu
                             </p>
@@ -146,10 +149,10 @@
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="details">
-                            <h4>Email</h4>
+                            <h4 data-i18n="contact_email">Email</h4>
                             <p>
-                                <a href="mailto:info@karyaperikananindonesia.com" style="color: var(--primary-blue); font-weight: 500;">
-                                    info@karyaperikananindonesia.com
+                                <a href="mailto:karyaperikananindonesia@gmail.com" style="color: var(--primary-blue); font-weight: 500;">
+                                    karyaperikananindonesia@gmail.com
                                 </a>
                             </p>
                             <p style="font-size: 0.9rem; margin-top: 5px;">
@@ -162,10 +165,10 @@
                 <!-- Map -->
                 <div class="map-container">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.7890123456789!2d106.86862418885499!3d-6.137969261378269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d0e8bd919f%3A0x8d5f9dcf1e2b3c4a!2sSunter%20Agung%2C%20Tj.%20Priok%2C%20North%20Jakarta%20City%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1234567890123!5m2!1sen!2sid"
+                        src="https://www.google.com/maps?q=HM98%2BMV+Kuripan,+Kabupaten+Bogor,+Jawa+Barat&output=embed"
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade"
-                        title="Lokasi CV Karya Perikanan Indonesia">
+                        title="Lokasi CV Karya Perikanan Indonesia - HM98+MV Kuripan, Kabupaten Bogor, Jawa Barat">
                     </iframe>
                 </div>
             </div>
@@ -178,8 +181,8 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Kontak Cepat</h2>
-                <p>Pilih Cara Termudah untuk Menghubungi Kami</p>
+                <h2 data-i18n="contact_quick_title">Kontak Cepat</h2>
+                <p data-i18n="contact_quick_subtitle">Pilih Cara Termudah untuk Menghubungi Kami</p>
             </div>
             
             <div class="products-grid">
@@ -188,8 +191,8 @@
                         <span style="font-size: 5rem;"><i class="fab fa-whatsapp"></i></span>
                     </div>
                     <div class="product-info">
-                        <h3>WhatsApp</h3>
-                        <p>
+                        <h3 data-i18n="contact_whatsapp_title">WhatsApp</h3>
+                        <p data-i18n="contact_whatsapp_content">
                             Chat langsung dengan tim customer service kami melalui WhatsApp. 
                             Respon cepat dan mudah!
                         </p>
@@ -197,7 +200,7 @@
                            target="_blank" 
                            class="btn btn-secondary" 
                            style="width: 100%; text-align: center;">
-                            <i class="fab fa-whatsapp"></i> Chat Sekarang
+                            <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp_btn">Chat Sekarang</span>
                         </a>
                     </div>
                 </div>
@@ -207,15 +210,15 @@
                         <span style="font-size: 5rem;"><i class="fas fa-phone"></i></span>
                     </div>
                     <div class="product-info">
-                        <h3>Telepon</h3>
-                        <p>
+                        <h3 data-i18n="contact_phone_title">Telepon</h3>
+                        <p data-i18n="contact_phone_content">
                             Hubungi kami langsung via telepon untuk konsultasi produk, 
                             harga, atau informasi lainnya.
                         </p>
                         <a href="tel:+6287808228699" 
                            class="btn btn-primary" 
                            style="width: 100%; text-align: center;">
-                            <i class="fas fa-phone"></i> Telepon Kami
+                            <i class="fas fa-phone"></i> <span data-i18n="contact_phone_btn">Telepon Kami</span>
                         </a>
                     </div>
                 </div>
@@ -225,15 +228,15 @@
                         <span style="font-size: 5rem;"><i class="fas fa-shopping-cart"></i></span>
                     </div>
                     <div class="product-info">
-                        <h3>Order Online</h3>
-                        <p>
+                        <h3 data-i18n="contact_order_title">Order Online</h3>
+                        <p data-i18n="contact_order_content">
                             Pesan produk kami secara online melalui formulir pemesanan yang 
                             mudah dan cepat.
                         </p>
                         <a href="order.html" 
                            class="btn btn-primary" 
                            style="width: 100%; text-align: center;">
-                            <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+                            <i class="fas fa-shopping-cart"></i> <span data-i18n="contact_order_btn">Pesan Sekarang</span>
                         </a>
                     </div>
                 </div>
@@ -247,56 +250,56 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Cara Menuju Lokasi Kami</h2>
-                <p>Panduan Akses ke CV Karya Perikanan Indonesia</p>
+                <h2 data-i18n="contact_directions_title">Cara Menuju Lokasi Kami</h2>
+                <p data-i18n="contact_directions_subtitle">Panduan Akses ke CV Karya Perikanan Indonesia</p>
             </div>
             
             <div class="vm-grid">
                 <div class="vm-card">
                     <div class="icon">🚗</div>
-                    <h3>Dari Pusat Jakarta</h3>
+                    <h3 data-i18n="contact_directions_car_title">Dari Pusat Jakarta</h3>
                     <ul>
-                        <li>Ambil arah ke Jakarta Utara</li>
-                        <li>Menuju Tanjung Priok via Jl. Yos Sudarso</li>
-                        <li>Masuk ke area Sunter Agung</li>
-                        <li>Cari Blok D No.14, Pengasinan</li>
-                        <li>Estimasi waktu: 30-45 menit</li>
+                        <li data-i18n="contact_directions_car_1">Ambil arah ke Bogor via Tol Jagorawi</li>
+                        <li data-i18n="contact_directions_car_2">Keluar di Cibinong/Ciseeng</li>
+                        <li data-i18n="contact_directions_car_3">Menuju Kecamatan Ciseeng</li>
+                        <li data-i18n="contact_directions_car_4">Cari lokasi Gunung Calincing, Kuripan</li>
+                        <li data-i18n="contact_directions_car_5">Estimasi waktu: 45-60 menit</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">🚌</div>
-                    <h3>Transportasi Umum</h3>
+                    <h3 data-i18n="contact_directions_transit_title">Transportasi Umum</h3>
                     <ul>
-                        <li>Naik Transjakarta ke Terminal Tanjung Priok</li>
-                        <li>Lanjut dengan angkot/ojek ke Sunter</li>
-                        <li>Tanyakan lokasi Blok D Pengasinan</li>
-                        <li>Atau gunakan transportasi online</li>
-                        <li>Google Maps tersedia untuk navigasi</li>
+                        <li data-i18n="contact_directions_transit_1">Naik bus/angkot menuju Ciseeng</li>
+                        <li data-i18n="contact_directions_transit_2">Turun di Kecamatan Ciseeng</li>
+                        <li data-i18n="contact_directions_transit_3">Tanyakan lokasi Gunung Calincing, Kuripan</li>
+                        <li data-i18n="contact_directions_transit_4">Atau gunakan transportasi online</li>
+                        <li data-i18n="contact_directions_transit_5">Google Maps tersedia untuk navigasi</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">🏢</div>
-                    <h3>Landmark Terdekat</h3>
+                    <h3 data-i18n="contact_directions_landmark_title">Landmark Terdekat</h3>
                     <ul>
-                        <li>Dekat dengan Pelabuhan Tanjung Priok</li>
-                        <li>Area Sunter Agung, Jakarta Utara</li>
-                        <li>Akses mudah dari Jalan Yos Sudarso</li>
-                        <li>Dekat dengan pasar ikan lokal</li>
-                        <li>Area industri perikanan</li>
+                        <li data-i18n="contact_directions_landmark_1">Kecamatan Ciseeng, Kabupaten Bogor</li>
+                        <li data-i18n="contact_directions_landmark_2">Area Kuripan, Gunung Calincing</li>
+                        <li data-i18n="contact_directions_landmark_3">Akses mudah dari Tol Jagorawi</li>
+                        <li data-i18n="contact_directions_landmark_4">Wilayah Kabupaten Bogor</li>
+                        <li data-i18n="contact_directions_landmark_5">Area strategis Jawa Barat</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">📍</div>
-                    <h3>Parkir & Akses</h3>
+                    <h3 data-i18n="contact_directions_parking_title">Parkir & Akses</h3>
                     <ul>
-                        <li>Area parkir tersedia</li>
-                        <li>Akses mudah untuk kendaraan besar</li>
-                        <li>Lokasi strategis dekat pelabuhan</li>
-                        <li>Mudah dijangkau 24 jam</li>
-                        <li>Keamanan terjaga</li>
+                        <li data-i18n="contact_directions_parking_1">Area parkir tersedia</li>
+                        <li data-i18n="contact_directions_parking_2">Akses mudah untuk kendaraan besar</li>
+                        <li data-i18n="contact_directions_parking_3">Lokasi strategis dekat jalur utama</li>
+                        <li data-i18n="contact_directions_parking_4">Mudah dijangkau 24 jam</li>
+                        <li data-i18n="contact_directions_parking_5">Keamanan terjaga</li>
                     </ul>
                 </div>
             </div>
@@ -309,16 +312,16 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Pertanyaan Umum</h2>
-                <p>Jawaban atas Pertanyaan yang Sering Diajukan</p>
+                <h2 data-i18n="contact_faq_title">Pertanyaan Umum</h2>
+                <p data-i18n="contact_faq_subtitle">Jawaban atas Pertanyaan yang Sering Diajukan</p>
             </div>
             
             <div style="max-width: 800px; margin: 0 auto;">
                 <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: var(--shadow-md);">
                     <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                        <i class="fas fa-question-circle"></i> Bagaimana cara memesan produk?
+                        <i class="fas fa-question-circle"></i> <span data-i18n="contact_faq_q1">Bagaimana cara memesan produk?</span>
                     </h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">
+                    <p style="color: var(--text-gray); line-height: 1.6;" data-i18n="contact_faq_a1">
                         Anda dapat memesan melalui formulir pemesanan online di halaman Order, 
                         atau langsung menghubungi kami via WhatsApp di 0878-0822-8699.
                     </p>
@@ -326,9 +329,9 @@
                 
                 <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: var(--shadow-md);">
                     <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                        <i class="fas fa-question-circle"></i> Apakah ada minimum order?
+                        <i class="fas fa-question-circle"></i> <span data-i18n="contact_faq_q2">Apakah ada minimum order?</span>
                     </h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">
+                    <p style="color: var(--text-gray); line-height: 1.6;" data-i18n="contact_faq_a2">
                         Kami melayani pemesanan dari berbagai skala. Untuk informasi minimum 
                         order dan harga, silakan hubungi tim kami.
                     </p>
@@ -336,9 +339,9 @@
                 
                 <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: var(--shadow-md);">
                     <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                        <i class="fas fa-question-circle"></i> Berapa lama waktu pengiriman?
+                        <i class="fas fa-question-circle"></i> <span data-i18n="contact_faq_q3">Berapa lama waktu pengiriman?</span>
                     </h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">
+                    <p style="color: var(--text-gray); line-height: 1.6;" data-i18n="contact_faq_a3">
                         Waktu pengiriman tergantung lokasi dan ketersediaan stok. Biasanya 
                         1-3 hari kerja untuk area Jabodetabek.
                     </p>
@@ -346,9 +349,9 @@
                 
                 <div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: var(--shadow-md);">
                     <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                        <i class="fas fa-question-circle"></i> Apakah bisa berkunjung langsung?
+                        <i class="fas fa-question-circle"></i> <span data-i18n="contact_faq_q4">Apakah bisa berkunjung langsung?</span>
                     </h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">
+                    <p style="color: var(--text-gray); line-height: 1.6;" data-i18n="contact_faq_a4">
                         Ya, Anda dapat mengunjungi lokasi kami di alamat yang tertera. Kami 
                         beroperasi 24 jam setiap hari.
                     </p>
@@ -356,9 +359,9 @@
                 
                 <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: var(--shadow-md);">
                     <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                        <i class="fas fa-question-circle"></i> Metode pembayaran apa saja yang tersedia?
+                        <i class="fas fa-question-circle"></i> <span data-i18n="contact_faq_q5">Metode pembayaran apa saja yang tersedia?</span>
                     </h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">
+                    <p style="color: var(--text-gray); line-height: 1.6;" data-i18n="contact_faq_a5">
                         Kami menerima berbagai metode pembayaran termasuk transfer bank, 
                         cash, dan pembayaran digital. Detail akan dikonfirmasi saat pemesanan.
                     </p>
@@ -373,7 +376,7 @@
     <section class="section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%); color: white;">
         <div class="container">
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">Siap Berkonsultasi?</h2>
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;" data-i18n="contact_cta_title">Siap Berkonsultasi?</h2>
                 <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
                     Tim kami siap menjawab pertanyaan Anda dan memberikan solusi terbaik 
                     untuk kebutuhan produk perikanan Anda. Hubungi kami sekarang!
@@ -397,29 +400,29 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3>CV Karya Perikanan Indonesia</h3>
-                    <p>
+                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
                 </div>
                 
                 <div class="footer-links">
-                    <h4>Menu Cepat</h4>
+                    <h4 data-i18n="footer_menu_title">Menu Cepat</h4>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="about.html">Tentang Kami</a></li>
-                        <li><a href="produk.html">Produk</a></li>
-                        <li><a href="order.html">Pemesanan</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
+                        <li><a href="index.html" data-i18n="footer_home">Beranda</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">Tentang Kami</a></li>
+                        <li><a href="produk.html" data-i18n="footer_products">Produk</a></li>
+                        <li><a href="order.html" data-i18n="footer_order">Pemesanan</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact_link">Kontak</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-contact">
-                    <h4>Kontak</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450</p>
-                    <p><i class="fas fa-phone"></i> 0878-0822-8699</p>
-                    <p><i class="fas fa-clock"></i> Buka 24 Jam</p>
+                    <h4 data-i18n="footer_contact_title">Kontak</h4>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
                 </div>
             </div>
             

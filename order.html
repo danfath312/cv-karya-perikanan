@@ -21,6 +21,12 @@
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Language/i18n Dictionary -->
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <!-- ===================================
@@ -34,11 +40,11 @@
             </a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">Beranda</a></li>
-                <li><a href="about.html" class="nav-link">Tentang Kami</a></li>
-                <li><a href="produk.html" class="nav-link">Produk</a></li>
-                <li><a href="order.html" class="nav-link active">Pemesanan</a></li>
-                <li><a href="contact.html" class="nav-link">Kontak</a></li>
+                <li><a href="index.html" class="nav-link" data-i18n="nav_home">Beranda</a></li>
+                <li><a href="about.html" class="nav-link" data-i18n="nav_about">Tentang Kami</a></li>
+                <li><a href="produk.html" class="nav-link" data-i18n="nav_products">Produk</a></li>
+                <li><a href="order.html" class="nav-link active" data-i18n="nav_order">Pemesanan</a></li>
+                <li><a href="contact.html" class="nav-link" data-i18n="nav_contact">Kontak</a></li>
             </ul>
             
             <div class="hamburger" id="hamburger">
@@ -55,8 +61,8 @@
     <section class="hero" style="padding: 120px 0 80px;">
         <div class="container">
             <div class="hero-content">
-                <h1>Formulir Pemesanan</h1>
-                <p>Pesan Produk Berkualitas Kami dengan Mudah</p>
+                <h1 data-i18n="page_order_title">Formulir Pemesanan</h1>
+                <p data-i18n="order_form_subtitle">Pesan Produk Berkualitas Kami dengan Mudah</p>
             </div>
         </div>
     </section>
@@ -69,8 +75,8 @@
             <div class="order-form-container">
                 <div style="text-align: center; margin-bottom: 30px;">
                     <div style="font-size: 3rem; margin-bottom: 15px;">📝</div>
-                    <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Form Pemesanan</h2>
-                    <p style="color: var(--text-gray);">
+                    <h2 style="color: var(--primary-blue); margin-bottom: 10px;" data-i18n="order_form_title">Form Pemesanan</h2>
+                    <p style="color: var(--text-gray);" data-i18n="order_form_subtitle">
                         Isi formulir di bawah ini dengan lengkap. Pesanan Anda akan langsung 
                         diteruskan ke WhatsApp kami untuk proses lebih lanjut.
                     </p>
@@ -79,22 +85,24 @@
                 <form id="orderForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nama">Nama Lengkap <span style="color: red;">*</span></label>
+                            <label for="nama" data-i18n="order_your_name">Nama Lengkap <span style="color: red;">*</span></label>
                             <input 
                                 type="text" 
                                 id="nama" 
                                 name="nama" 
+                                data-i18n-placeholder="order_name_placeholder"
                                 placeholder="Masukkan nama lengkap Anda"
                                 required
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="whatsapp">Nomor WhatsApp <span style="color: red;">*</span></label>
+                            <label for="whatsapp" data-i18n="order_whatsapp">Nomor WhatsApp <span style="color: red;">*</span></label>
                             <input 
                                 type="tel" 
                                 id="whatsapp" 
                                 name="whatsapp" 
+                                data-i18n-placeholder="order_whatsapp_placeholder"
                                 placeholder="08xx-xxxx-xxxx"
                                 required
                             >
@@ -102,32 +110,31 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
+                        <label for="email" data-i18n="order_email">Email</label>
                         <input 
                             type="email" 
                             id="email" 
                             name="email" 
+                            data-i18n-placeholder="order_email_placeholder"
                             placeholder="email@example.com (opsional)"
                         >
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="produk">Pilih Produk <span style="color: red;">*</span></label>
+                            <label for="produk" data-i18n="order_product">Pilih Produk <span style="color: red;">*</span></label>
                             <select id="produk" name="produk" required>
-                                <option value="">-- Pilih Produk --</option>
-                                <option value="Sisik Ikan Kakap Merah">Sisik Ikan Kakap Merah</option>
-                                <option value="Sisik Ikan Nila">Sisik Ikan Nila</option>
-                                <option value="Kulit Ikan">Kulit Ikan</option>
+                                <option value="" data-i18n="order_select_product">-- Pilih Produk --</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="jumlah">Jumlah (kg) <span style="color: red;">*</span></label>
+                            <label for="jumlah" data-i18n="order_quantity">Jumlah (kg) <span style="color: red;">*</span></label>
                             <input 
                                 type="number" 
                                 id="jumlah" 
                                 name="jumlah" 
+                                data-i18n-placeholder="order_quantity_placeholder"
                                 placeholder="Contoh: 10"
                                 min="1"
                                 required
@@ -136,39 +143,41 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="alamat">Alamat Pengiriman <span style="color: red;">*</span></label>
+                        <label for="alamat" data-i18n="order_address">Alamat Pengiriman <span style="color: red;">*</span></label>
                         <textarea 
                             id="alamat" 
                             name="alamat" 
                             rows="3"
+                            data-i18n-placeholder="order_address_placeholder"
                             placeholder="Masukkan alamat lengkap untuk pengiriman"
                             required
                         ></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="catatan">Catatan Tambahan</label>
+                        <label for="catatan" data-i18n="order_note">Catatan Tambahan</label>
                         <textarea 
                             id="catatan" 
                             name="catatan" 
                             rows="4"
+                            data-i18n-placeholder="order_note_placeholder"
                             placeholder="Tambahkan catatan atau permintaan khusus (opsional)"
                         ></textarea>
                     </div>
 
                     <div style="background: var(--light-blue); padding: 20px; border-radius: 10px; margin: 20px 0;">
                         <h4 style="color: var(--primary-blue); margin-bottom: 10px;">
-                            <i class="fas fa-info-circle"></i> Informasi Penting:
+                            <i class="fas fa-info-circle"></i> <span data-i18n="order_important_info">Informasi Penting:</span>
                         </h4>
                         <ul style="list-style: none; padding-left: 0; color: var(--text-gray);">
-                            <li style="padding: 5px 0;">• Semua field dengan tanda (*) wajib diisi</li>
-                            <li style="padding: 5px 0;">• Pesanan akan diproses setelah konfirmasi</li>
-                            <li style="padding: 5px 0;">• Harga akan dikonfirmasi via WhatsApp</li>
-                            <li style="padding: 5px 0;">• Tersedia diskon untuk pembelian dalam jumlah besar</li>
+                            <li style="padding: 5px 0;" data-i18n="order_required_fields">• Semua field dengan tanda (*) wajib diisi</li>
+                            <li style="padding: 5px 0;" data-i18n="order_processing">• Pesanan akan diproses setelah konfirmasi</li>
+                            <li style="padding: 5px 0;" data-i18n="order_price_confirm">• Harga akan dikonfirmasi via WhatsApp</li>
+                            <li style="padding: 5px 0;" data-i18n="order_bulk_discount">• Tersedia diskon untuk pembelian dalam jumlah besar</li>
                         </ul>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;" data-i18n="order_submit">
                         <i class="fab fa-whatsapp"></i> Kirim Pesanan ke WhatsApp
                     </button>
                 </form>
@@ -182,8 +191,8 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Cara Pemesanan</h2>
-                <p>Langkah Mudah untuk Memesan Produk Kami</p>
+                <h2 data-i18n="order_how_to_title">Cara Pemesanan</h2>
+                <p data-i18n="order_how_to_subtitle">Langkah Mudah untuk Memesan Produk Kami</p>
             </div>
             
             <div class="products-grid">
@@ -192,8 +201,8 @@
                         <span style="font-size: 3rem; font-weight: bold;">1</span>
                     </div>
                     <div class="product-info">
-                        <h3>Isi Formulir</h3>
-                        <p>
+                        <h3 data-i18n="order_step1_title">Isi Formulir</h3>
+                        <p data-i18n="order_step1_desc">
                             Lengkapi formulir pemesanan di atas dengan data yang akurat. 
                             Pastikan nomor WhatsApp aktif untuk komunikasi.
                         </p>
@@ -205,8 +214,8 @@
                         <span style="font-size: 3rem; font-weight: bold;">2</span>
                     </div>
                     <div class="product-info">
-                        <h3>Kirim ke WhatsApp</h3>
-                        <p>
+                        <h3 data-i18n="order_step2_title">Kirim ke WhatsApp</h3>
+                        <p data-i18n="order_step2_desc">
                             Klik tombol kirim dan Anda akan diarahkan ke WhatsApp kami. 
                             Pesanan akan otomatis terformat dengan rapi.
                         </p>
@@ -218,8 +227,8 @@
                         <span style="font-size: 3rem; font-weight: bold;">3</span>
                     </div>
                     <div class="product-info">
-                        <h3>Konfirmasi & Pembayaran</h3>
-                        <p>
+                        <h3 data-i18n="order_step3_title">Konfirmasi & Pembayaran</h3>
+                        <p data-i18n="order_step3_desc">
                             Tim kami akan mengkonfirmasi detail pesanan, harga, dan metode 
                             pembayaran melalui WhatsApp.
                         </p>
@@ -231,8 +240,8 @@
                         <span style="font-size: 3rem; font-weight: bold;">4</span>
                     </div>
                     <div class="product-info">
-                        <h3>Proses & Pengiriman</h3>
-                        <p>
+                        <h3 data-i18n="order_step4_title">Proses & Pengiriman</h3>
+                        <p data-i18n="order_step4_desc">
                             Setelah pembayaran dikonfirmasi, kami akan memproses dan 
                             mengirimkan pesanan Anda sesuai kesepakatan.
                         </p>
@@ -248,52 +257,52 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Keuntungan Memesan dari Kami</h2>
-                <p>Layanan Terbaik untuk Kepuasan Pelanggan</p>
+                <h2 data-i18n="order_benefits_title">Keuntungan Memesan dari Kami</h2>
+                <p data-i18n="order_benefits_subtitle">Layanan Terbaik untuk Kepuasan Pelanggan</p>
             </div>
             
             <div class="vm-grid">
                 <div class="vm-card">
                     <div class="icon">⚡</div>
-                    <h3>Respon Cepat</h3>
+                    <h3 data-i18n="order_benefit_response_title">Respon Cepat</h3>
                     <ul>
-                        <li>Layanan pelanggan 24/7</li>
-                        <li>Respon WhatsApp dalam hitungan menit</li>
-                        <li>Konfirmasi pesanan yang cepat</li>
-                        <li>Update status pesanan real-time</li>
+                        <li data-i18n="order_benefit_response_1">Layanan pelanggan 24/7</li>
+                        <li data-i18n="order_benefit_response_2">Respon WhatsApp dalam hitungan menit</li>
+                        <li data-i18n="order_benefit_response_3">Konfirmasi pesanan yang cepat</li>
+                        <li data-i18n="order_benefit_response_4">Update status pesanan real-time</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">✅</div>
-                    <h3>Kualitas Terjamin</h3>
+                    <h3 data-i18n="order_benefit_quality_title">Kualitas Terjamin</h3>
                     <ul>
-                        <li>Produk dengan standar mutu tinggi</li>
-                        <li>Proses produksi yang higienis</li>
-                        <li>Garansi kualitas produk</li>
-                        <li>Kemasan aman dan rapi</li>
+                        <li data-i18n="order_benefit_quality_1">Produk dengan standar mutu tinggi</li>
+                        <li data-i18n="order_benefit_quality_2">Proses produksi yang higienis</li>
+                        <li data-i18n="order_benefit_quality_3">Garansi kualitas produk</li>
+                        <li data-i18n="order_benefit_quality_4">Kemasan aman dan rapi</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">💰</div>
-                    <h3>Harga Kompetitif</h3>
+                    <h3 data-i18n="order_benefit_price_title">Harga Kompetitif</h3>
                     <ul>
-                        <li>Harga terbaik di pasaran</li>
-                        <li>Diskon untuk pembelian banyak</li>
-                        <li>Tidak ada biaya tersembunyi</li>
-                        <li>Sistem pembayaran fleksibel</li>
+                        <li data-i18n="order_benefit_price_1">Harga terbaik di pasaran</li>
+                        <li data-i18n="order_benefit_price_2">Diskon untuk pembelian banyak</li>
+                        <li data-i18n="order_benefit_price_3">Tidak ada biaya tersembunyi</li>
+                        <li data-i18n="order_benefit_price_4">Sistem pembayaran fleksibel</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">🚚</div>
-                    <h3>Pengiriman Terpercaya</h3>
+                    <h3 data-i18n="order_benefit_delivery_title">Pengiriman Terpercaya</h3>
                     <ul>
-                        <li>Kerjasama dengan ekspedisi terpercaya</li>
-                        <li>Packaging aman untuk pengiriman</li>
-                        <li>Tracking pesanan tersedia</li>
-                        <li>Pengiriman tepat waktu</li>
+                        <li data-i18n="order_benefit_delivery_1">Kerjasama dengan ekspedisi terpercaya</li>
+                        <li data-i18n="order_benefit_delivery_2">Packaging aman untuk pengiriman</li>
+                        <li data-i18n="order_benefit_delivery_3">Tracking pesanan tersedia</li>
+                        <li data-i18n="order_benefit_delivery_4">Pengiriman tepat waktu</li>
                     </ul>
                 </div>
             </div>
@@ -306,24 +315,24 @@
     <section class="section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%); color: white;">
         <div class="container">
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">Butuh Bantuan?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;" data-i18n="order_help_title">Butuh Bantuan?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;" data-i18n="order_help_subtitle">
                     Tim customer service kami siap membantu Anda 24 jam setiap hari. 
                     Jangan ragu untuk menghubungi kami jika ada pertanyaan.
                 </p>
                 <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 30px;">
                     <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
-                        <h4 style="color: white; margin-bottom: 5px;">WhatsApp</h4>
+                        <h4 style="color: white; margin-bottom: 5px;" data-i18n="order_help_whatsapp">WhatsApp</h4>
                         <p style="opacity: 0.9;">0878-0822-8699</p>
                     </div>
                     <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">⏰</div>
-                        <h4 style="color: white; margin-bottom: 5px;">Jam Operasional</h4>
-                        <p style="opacity: 0.9;">Buka 24 Jam</p>
+                        <h4 style="color: white; margin-bottom: 5px;" data-i18n="order_help_operational">Jam Operasional</h4>
+                        <p style="opacity: 0.9;" data-i18n="footer_hours">Buka 24 Jam</p>
                     </div>
                 </div>
-                <a href="contact.html" class="btn btn-light">Lihat Info Kontak Lengkap</a>
+                <a href="contact.html" class="btn btn-light" data-i18n="contact_order_btn">Lihat Info Kontak Lengkap</a>
             </div>
         </div>
     </section>
@@ -335,29 +344,29 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3>CV Karya Perikanan Indonesia</h3>
-                    <p>
+                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
                 </div>
                 
                 <div class="footer-links">
-                    <h4>Menu Cepat</h4>
+                    <h4 data-i18n="footer_menu_title">Menu Cepat</h4>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="about.html">Tentang Kami</a></li>
-                        <li><a href="produk.html">Produk</a></li>
-                        <li><a href="order.html">Pemesanan</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
+                        <li><a href="index.html" data-i18n="footer_home">Beranda</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">Tentang Kami</a></li>
+                        <li><a href="produk.html" data-i18n="footer_products">Produk</a></li>
+                        <li><a href="order.html" data-i18n="footer_order">Pemesanan</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact_link">Kontak</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-contact">
-                    <h4>Kontak</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450</p>
-                    <p><i class="fas fa-phone"></i> 0878-0822-8699</p>
-                    <p><i class="fas fa-clock"></i> Buka 24 Jam</p>
+                    <h4 data-i18n="footer_contact_title">Kontak</h4>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
                 </div>
             </div>
             

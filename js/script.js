@@ -3,6 +3,342 @@
 // Main JavaScript File
 // =====================================================
 
+// =====================================================
+// LANGUAGE DETECTION & MANAGEMENT SYSTEM (GLOBAL)
+// =====================================================
+
+// Global language variable
+let currentLang = 'id';
+
+// Initialize language system once on page load
+function initLanguageSystem() {
+    // Skip if on admin page
+    if (window.location.pathname.includes('admin.html')) {
+        currentLang = 'id';
+        console.log('🔒 Admin page - language locked to Indonesian');
+        return;
+    }
+
+    // Priority 1: Check localStorage
+    const savedLang = localStorage.getItem('lang');
+    if (savedLang && (savedLang === 'id' || savedLang === 'en')) {
+        currentLang = savedLang;
+        console.log(`🌍 Language loaded from localStorage: ${currentLang}`);
+    } else {
+        // Priority 2: Auto-detect from browser language
+        const browserLang = navigator.language.split('-')[0];
+        if (browserLang === 'id' || browserLang === 'in') {
+            currentLang = 'id';
+        } else {
+            currentLang = 'en';
+        }
+        console.log(`🌍 Language auto-detected: ${currentLang}`);
+        localStorage.setItem('lang', currentLang);
+    }
+
+    // Apply language to page
+    applyLanguage();
+    
+    // Create and inject language switch UI
+    createLanguageSwitchUI();
+}
+
+// Apply language to all elements with data-i18n attribute
+function applyLanguage() {
+    const lang = currentLang;
+    const translations = i18n[lang];
+
+    if (!translations) {
+        console.warn(`⚠️ Language pack for '${lang}' not found`);
+        return;
+    }
+
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[key]) {
+            // Always directly update OPTION, BUTTON, A, and elements with no children
+            if (element.tagName === 'OPTION' || element.tagName === 'BUTTON' || element.tagName === 'A' || element.children.length === 0) {
+                element.textContent = translations[key];
+                if (element.tagName === 'OPTION') {
+                    console.log(`✨ Translated option: "${key}" -> "${translations[key]}"`);
+                }
+            } else {
+                // For elements with children, only update text nodes
+                let foundText = false;
+                for (let node of element.childNodes) {
+                    if (node.nodeType === 3) { // Text node
+                        node.textContent = translations[key];
+                        foundText = true;
+                        break;
+                    }
+                }
+            }
+        }
+    });
+
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[key]) {
+            element.placeholder = translations[key];
+        }
+    });
+
+    console.log(`✅ Applied language: ${lang}`);
+}
+
+// Switch language manually
+function setLanguage(lang) {
+    if (lang !== 'id' && lang !== 'en') {
+        console.warn(`⚠️ Invalid language: ${lang}`);
+        return;
+    }
+
+    // Skip if on admin page
+    if (window.location.pathname.includes('admin.html')) {
+        console.log('🔒 Admin page - language switch disabled');
+        return;
+    }
+
+    currentLang = lang;
+    localStorage.setItem('lang', currentLang);
+    console.log(`🔄 Language switched to: ${currentLang}`);
+
+    // Apply language to page
+    applyLanguage();
+    
+    // Update language switch UI
+    updateLanguageSwitchUI();
+    
+    // Refresh product list AFTER language is applied
+    if (document.getElementById('produk')) {
+        setTimeout(() => loadAvailableProducts(), 100);
+    }
+}
+
+// Create language switch UI dynamically
+function createLanguageSwitchUI() {
+    // Find navbar menu
+    const navMenu = document.getElementById('navMenu');
+    if (!navMenu) {
+        console.warn('⚠️ navMenu not found - language switch UI not created');
+        return;
+    }
+
+    // Check if language switch already exists
+    if (document.getElementById('langSwitchContainer')) {
+        console.log('✅ Language switch already exists, updating...');
+        updateLanguageSwitchUI();
+        return;
+    }
+
+    // Create language switch HTML (removed inline styles, using CSS classes)
+    const langSwitchHTML = `
+        <li id="langSwitchContainer">
+            <span id="langID" onclick="setLanguage('id')">ID</span>
+            <span style="color: #999;">|</span>
+            <span id="langEN" onclick="setLanguage('en')">EN</span>
+        </li>
+    `;
+
+    // Append to navbar menu
+    navMenu.insertAdjacentHTML('beforeend', langSwitchHTML);
+    console.log('✅ Language switch UI created');
+    
+    // Update styling
+    updateLanguageSwitchUI();
+}
+
+// Update language switch UI styling
+function updateLanguageSwitchUI() {
+    const idBtn = document.getElementById('langID');
+    const enBtn = document.getElementById('langEN');
+
+    if (idBtn && enBtn) {
+        // Remove active class from both
+        idBtn.classList.remove('active');
+        enBtn.classList.remove('active');
+        
+        // Add active class to current language
+        if (currentLang === 'id') {
+            idBtn.classList.add('active');
+            idBtn.style.opacity = '1';
+            enBtn.style.opacity = '0.6';
+        } else {
+            enBtn.classList.add('active');
+            enBtn.style.opacity = '1';
+            idBtn.style.opacity = '0.6';
+        }
+        
+        console.log(`🌍 Language switch updated: ${currentLang}`);
+    } else {
+        console.warn('⚠️ Language switch buttons not found');
+    }
+}
+
+// Run initialization when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguageSystem);
+} else {
+    // DOM is already loaded
+    initLanguageSystem();
+}
+
+// =====================================================
+// SUPABASE CONFIGURATION
+// =====================================================
+
+// Initialize Supabase when SDK is loaded
+if (typeof window !== 'undefined') {
+    const checkSupabaseSDK = setInterval(() => {
+        if (window.supabase && window.supabase.createClient && !window.supabaseClient) {
+            clearInterval(checkSupabaseSDK);
+
+            const SUPABASE_URL = 'https://pmegvhlyabddfxxoyjrq.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtZWd2aGx5YWJkZGZ4eG95anJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0Mjg0MDgsImV4cCI6MjA4NTAwNDQwOH0.xUN2pqzlxoGwCfzx5mua3XEEmlkyYUv3Y8ZY64GKGHw';
+
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('✅ Supabase client initialized');
+            
+            // Load products after Supabase is ready
+            loadAvailableProducts();
+        }
+    }, 100);
+    
+    // Timeout after 10 seconds
+    setTimeout(() => clearInterval(checkSupabaseSDK), 10000);
+}
+
+// =====================================================
+// SUPABASE HELPER FUNCTIONS
+// =====================================================
+
+// Example: Fetch data from a table
+async function fetchFromTable(tableName) {
+    try {
+        const { data, error } = await window.supabaseClient
+            .from(tableName)
+            .select('*');
+        
+        if (error) throw error;
+        console.log(`Data from ${tableName}:`, data);
+        return data;
+    } catch (error) {
+        console.error(`Error fetching from ${tableName}:`, error.message);
+        return null;
+    }
+}
+
+// Example: Insert data to a table
+async function insertToTable(tableName, data) {
+    try {
+        const { data: result, error } = await window.supabaseClient
+            .from(tableName)
+            .insert(data)
+            .select();
+        
+        if (error) throw error;
+        console.log(`Data inserted to ${tableName}:`, result);
+        return result;
+    } catch (error) {
+        console.error(`Error inserting to ${tableName}:`, error.message);
+        return null;
+    }
+}
+
+// =====================================================
+// LOAD AVAILABLE PRODUCTS FOR ORDER FORM
+// =====================================================
+async function loadAvailableProducts() {
+    try {
+        // Wait for Supabase client with timeout
+        let retries = 0;
+        const maxRetries = 100; // Wait up to 10 seconds
+        
+        while (!window.supabaseClient && retries < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            retries++;
+        }
+
+        if (!window.supabaseClient) {
+            console.warn('⚠️ Supabase client failed to initialize after timeout');
+            return;
+        }
+
+        const produkSelect = document.getElementById('produk');
+        if (!produkSelect) {
+            console.warn('⚠️ Product select element not found on this page');
+            return;
+        }
+
+        console.log('📦 Fetching available products from Supabase...');
+        const { data: products, error } = await window.supabaseClient
+            .from('products')
+            .select('id, name, name_en, available')
+            .eq('available', true)
+            .order('name', { ascending: true });
+
+        if (error) {
+            console.error('❌ Error loading available products:', error);
+            return;
+        }
+
+        // Get current selected value to restore later
+        const currentValue = produkSelect.value;
+        
+        // Remove all product options (keep default option only)
+        const options = produkSelect.querySelectorAll('option');
+        options.forEach((option, index) => {
+            if (index > 0) { // Keep first option (default)
+                option.remove();
+            }
+        });
+
+        // Add available products with language-specific names
+        if (products && products.length > 0) {
+            products.forEach(product => {
+                const option = document.createElement('option');
+                // Use name_en if English is selected and name_en exists, otherwise use name
+                const displayName = (currentLang === 'en' && product.name_en) ? product.name_en : product.name;
+                option.value = product.name; // Keep original name as value for backend
+                option.textContent = displayName;
+                option.setAttribute('data-name-id', product.name);
+                option.setAttribute('data-name-en', product.name_en || product.name);
+                produkSelect.appendChild(option);
+            });
+            console.log(`✅ Loaded ${products.length} available products for order form (lang: ${currentLang})`);
+        } else {
+            console.warn('⚠️ No available products found in database');
+        }
+        
+        // Restore previously selected value if it's still available
+        if (currentValue) {
+            const optionExists = Array.from(produkSelect.options).some(opt => opt.value === currentValue);
+            if (optionExists) {
+                produkSelect.value = currentValue;
+            }
+        }
+        
+        // Re-apply language to ensure default option text is translated
+        if (document.getElementById('produk')) {
+            applyLanguage();
+        }
+    } catch (error) {
+        console.error('❌ Error in loadAvailableProducts:', error);
+    }
+}
+
+// Re-load products when page becomes visible (catches admin changes)
+if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && document.getElementById('produk')) {
+            console.log('📄 Page became visible, refreshing product list...');
+            setTimeout(loadAvailableProducts, 500);
+        }
+    });
+}
+
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -38,6 +374,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // =====================================================
+    // LOAD AVAILABLE PRODUCTS (for order form)
+    // =====================================================
+    loadAvailableProducts();
     
     // =====================================================
     // NAVBAR SCROLL EFFECT
@@ -91,7 +432,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderForm = document.getElementById('orderForm');
     
     if (orderForm) {
-        orderForm.addEventListener('submit', function(e) {
+        orderForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form values
@@ -140,6 +481,36 @@ document.addEventListener('DOMContentLoaded', function() {
             message += `\n━━━━━━━━━━━━━━━━━━━━\n`;
             message += `Mohon konfirmasi ketersediaan dan harga. Terima kasih! 🙏`;
             
+            // Simpan ke Supabase
+            try {
+                if (!window.supabaseClient) {
+                    throw new Error('Supabase client tidak tersedia');
+                }
+
+                const { data, error } = await window.supabaseClient
+                    .from('orders')
+                    .insert({
+                        customer_name: nama,
+                        whatsapp: whatsapp,
+                        email: email || null,
+                        product: produk,
+                        quantity: jumlah,
+                        address: alamat,
+                        note: catatan || null,
+                        status: 'pending'
+                    });
+
+                if (error) {
+                    console.error('Error inserting order:', error);
+                    throw error;
+                }
+
+                console.log('✅ Order berhasil disimpan ke Supabase dengan status: pending', data);
+            } catch (err) {
+                console.error('❌ Gagal menyimpan pesanan ke Supabase:', err);
+                alert('⚠️ Peringatan: Pesanan gagal disimpan ke database.\n\nUkuran file mungkin terlalu besar atau ada masalah koneksi.\n\nSilahkan lanjutkan dengan WhatsApp untuk detail pesanan Anda.');
+            }
+
             // Encode message for URL
             const encodedMessage = encodeURIComponent(message);
             
@@ -391,7 +762,6 @@ window.addEventListener('load', function() {
         }
     });
 });
-
 // =====================================================
 // GALLERY CAROUSEL
 // =====================================================
@@ -414,5 +784,69 @@ function moveCarousel(direction) {
     if (carouselTrack) {
         carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
     }
+}
+
+// =====================================================
+// LOAD FOOTER COMPANY INFO FROM SUPABASE
+// =====================================================
+async function loadFooterCompanyInfo() {
+    try {
+        // Wait for Supabase to be available
+        for (let i = 0; i < 50; i++) {
+            if (window.supabaseClient) break;
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        if (!window.supabaseClient) {
+            console.warn('⚠️ Supabase client not available, using footer defaults');
+            return;
+        }
+
+        // Fetch company info
+        const { data, error } = await window.supabaseClient
+            .from('company')
+            .select('*')
+            .limit(1)
+            .single();
+
+        if (error || !data) {
+            console.warn('⚠️ Company info not found in Supabase, using footer defaults');
+            return;
+        }
+
+        // Update footer with company info
+        if (data.name && document.getElementById('footerCompanyName')) {
+            document.getElementById('footerCompanyName').textContent = data.name;
+        }
+        
+        if (data.description && document.getElementById('footerCompanyDesc')) {
+            document.getElementById('footerCompanyDesc').textContent = data.description;
+        }
+        
+        if (data.address && document.getElementById('footerAddress')) {
+            document.getElementById('footerAddress').innerHTML = `<i class="fas fa-map-marker-alt"></i> <span>${data.address}</span>`;
+        }
+        
+        if (data.phone && document.getElementById('footerPhone')) {
+            document.getElementById('footerPhone').innerHTML = `<i class="fas fa-phone"></i> <span>${data.phone}</span>`;
+        }
+        
+        if (data.operating_hours && document.getElementById('footerHours')) {
+            document.getElementById('footerHours').innerHTML = `<i class="fas fa-clock"></i> <span>${data.operating_hours}</span>`;
+        }
+
+        console.log('✅ Footer company info loaded from Supabase');
+
+    } catch (error) {
+        console.warn('⚠️ Error loading footer company info:', error.message);
+        // Silently fail - use defaults
+    }
+}
+
+// Load footer info when page loads
+document.addEventListener('DOMContentLoaded', loadFooterCompanyInfo);
+// Also try loading after a short delay if DOMContentLoaded already fired
+if (document.readyState === 'complete') {
+    setTimeout(loadFooterCompanyInfo, 500);
 }
 

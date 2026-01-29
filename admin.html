@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - CV Karya Perikanan Indonesia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -439,6 +441,40 @@
             <h1>🐟 Admin Panel</h1>
             <p>CV Karya Perikanan Indonesia</p>
             <div id="loginError"></div>
+
+            <h3 style="margin:15px 0 10px; color: var(--primary);">1) Minta Kode OTP</h3>
+            <div id="otpRequestError"></div>
+            <form id="requestOtpForm" style="margin-bottom:15px;">
+                <div class="form-group">
+                    <label for="otpUsername">Username</label>
+                    <input type="text" id="otpUsername" required placeholder="Buat / pakai username">
+                </div>
+                <div class="form-group">
+                    <label for="otpPhone">Nomor Telepon</label>
+                    <input type="tel" id="otpPhone" required placeholder="08xxxxxxxxxx">
+                </div>
+                <button type="submit" class="btn btn-secondary">Kirim Kode</button>
+            </form>
+
+            <h3 style="margin:15px 0 10px; color: var(--primary);">2) Verifikasi & Atur Password</h3>
+            <div id="otpVerifyError"></div>
+            <form id="verifyOtpForm" style="margin-bottom:15px;">
+                <div class="form-group">
+                    <label for="verifyOtpUsername">Username</label>
+                    <input type="text" id="verifyOtpUsername" required placeholder="Username yang sama">
+                </div>
+                <div class="form-group">
+                    <label for="otpCode">Kode OTP</label>
+                    <input type="text" id="otpCode" required placeholder="6 digit OTP">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Password Baru</label>
+                    <input type="password" id="newPassword" required placeholder="Minimal 6 karakter">
+                </div>
+                <button type="submit" class="btn btn-success">Verifikasi & Login</button>
+            </form>
+
+            <h3 style="margin:15px 0 10px; color: var(--primary);">3) Login</h3>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -470,6 +506,9 @@
                 </button>
                 <button class="tab-button" onclick="switchTab('company')">
                     <i class="fas fa-building"></i> Info Perusahaan
+                </button>
+                <button class="tab-button" onclick="switchTab('orders')">
+                    <i class="fas fa-receipt"></i> Pesanan
                 </button>
             </div>
 
@@ -559,6 +598,34 @@
                     </form>
                 </div>
             </div>
+
+            <!-- ORDERS TAB -->
+            <div id="orders" class="tab-content">
+                <div class="card">
+                    <h3>Riwayat Pemesanan</h3>
+                    <p style="color:#666; margin-bottom:10px;">Kelola status pemesanan yang masuk dari formulir.</p>
+                    <div id="ordersError"></div>
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Pelanggan</th>
+                                    <th>WhatsApp</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Alamat</th>
+                                    <th>Status</th>
+                                    <th>Dibuat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
+                                <tr><td colspan="8" style="text-align:center; padding:15px;">Loading orders...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -578,8 +645,58 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="productNameEn">Nama Produk (English)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="productNameEn" style="flex: 1;">
+                        <button type="button" class="btn btn-secondary" id="translateNameBtn" onclick="translateProductField('productName', 'productNameEn', this)">
+                            <i class="fas fa-language"></i> Translate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="productDescription">Deskripsi</label>
                     <textarea id="productDescription"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescriptionEn">Deskripsi (English)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <textarea id="productDescriptionEn" style="flex: 1;"></textarea>
+                        <button type="button" class="btn btn-secondary" id="translateDescBtn" onclick="translateProductField('productDescription', 'productDescriptionEn', this)" style="height: fit-content;">
+                            <i class="fas fa-language"></i> Translate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productSpecifications">Spesifikasi</label>
+                    <textarea id="productSpecifications" placeholder="Contoh: 100% Kering, Bersih, Kualitas Premium"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productSpecificationsEn">Spesifikasi (English)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <textarea id="productSpecificationsEn" style="flex: 1;" placeholder="Example: 100% Dried, Clean, Premium Grade"></textarea>
+                        <button type="button" class="btn btn-secondary" onclick="translateProductField('productSpecifications', 'productSpecificationsEn', this)" style="height: fit-content;">
+                            <i class="fas fa-language"></i> Translate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productUses">Kegunaan</label>
+                    <textarea id="productUses" placeholder="Contoh: Kosmetik, Farmasi, Kerajinan"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productUsesEn">Kegunaan (English)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <textarea id="productUsesEn" style="flex: 1;" placeholder="Example: Cosmetics, Pharmaceuticals, Crafts"></textarea>
+                        <button type="button" class="btn btn-secondary" onclick="translateProductField('productUses', 'productUsesEn', this)" style="height: fit-content;">
+                            <i class="fas fa-language"></i> Translate
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-row">

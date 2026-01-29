@@ -85,7 +85,7 @@ async function migrate() {
         'Perusahaan yang bergerak di bidang pengolahan hasil perikanan',
         '0812-3456-7890',
         '6281234567890',
-        'info@karyaperikanan.com',
+        'karyaperikananindonesia@gmail.com',
         'Jl. Perikanan No. 123, Jakarta',
         'Senin - Jumat: 08:00 - 17:00'
       )

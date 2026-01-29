@@ -199,7 +199,7 @@ curl -X POST http://localhost:3000/api/admin/login \
 ## 📞 Support
 
 **CV Karya Perikanan Indonesia**
-- Email: info@karyaperikanan.com
+- Email: karyaperikananindonesia@gmail.com
 - WhatsApp: +62 812-3456-7890
 - Phone: 0812-3456-7890
 - Address: Jl. Perikanan No. 123, Jakarta

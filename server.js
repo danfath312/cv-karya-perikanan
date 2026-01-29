@@ -3,7 +3,6 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const ical = require('ical');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
@@ -64,60 +63,55 @@ app.post('/api/programs', upload.single('image'), (req, res) => {
 
 // Return parsed events from sample ICS files
 app.get('/api/calendarEvents', (req, res) => {
-  const files = [
-    path.join(__dirname, 'public', 'academic.ics'),
-    path.join(__dirname, 'public', 'national.ics')
-  ];
-  let events = [];
-  files.forEach(f => {
-    if (fs.existsSync(f)) {
-      try {
-        const parsed = ical.parseFile(f);
-        Object.values(parsed).forEach(ev => {
-          if (ev && ev.type === 'VEVENT') {
-            events.push({ title: ev.summary || 'Event', start: ev.start, end: ev.end });
-          }
-        });
-      } catch (e) {
-        console.error('Error parsing', f, e.message);
-      }
-    }
-  });
-  res.json(events);
+  res.json([]);
 });
 
 // Suggest endpoint: checks conflicts with calendar events and gives simple feedback
 app.post('/api/suggest', (req, res) => {
   const { title, date, description } = req.body;
-  const calFiles = [
-    path.join(__dirname, 'public', 'academic.ics'),
-    path.join(__dirname, 'public', 'national.ics')
-  ];
   const suggestions = [];
-  // Check for overlapping events on same date
-  calFiles.forEach(f => {
-    if (fs.existsSync(f)) {
-      try {
-        const parsed = ical.parseFile(f);
-        Object.values(parsed).forEach(ev => {
-          if (ev && ev.type === 'VEVENT') {
-            const evDate = ev.start;
-            if (evDate) {
-              const evYMD = evDate.toISOString().slice(0,10);
-              if (evYMD === date) {
-                suggestions.push(`Tanggal bertepatan dengan kalender: ${ev.summary}`);
-              }
-            }
-          }
-        });
-      } catch (e) {}
-    }
-  });
   if (!title || title.trim().length < 3) suggestions.push('Judul terlalu pendek, tambahkan detail singkat.');
   if (description && description.length < 30) suggestions.push('Deskripsi singkat — tambahkan tujuan dan output yang diinginkan.');
   if (!description) suggestions.push('Pertimbangkan menambahkan deskripsi untuk mempermudah penilaian.');
   if (suggestions.length === 0) suggestions.push('Tidak ada konflik terdeteksi. Rencana terlihat baik.');
   res.json({ suggestions });
+});
+
+// ===== TRANSLATION ENDPOINT =====
+app.post('/api/translate', async (req, res) => {
+  try {
+    const { text, source = 'id', target = 'en' } = req.body;
+
+    if (!text) {
+      return res.status(400).json({ error: 'Text is required' });
+    }
+
+    const fetch = require('node-fetch');
+    const encodedText = encodeURIComponent(text);
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodedText}&langpair=${source}|${target}`;
+
+    const translationResponse = await fetch(apiUrl);
+    const data = await translationResponse.json();
+
+    if (data.responseStatus === 200 && data.responseData.translatedText) {
+      return res.json({ 
+        success: true,
+        translatedText: data.responseData.translatedText 
+      });
+    } else {
+      return res.json({ 
+        success: false,
+        error: 'Translation service unavailable',
+        translatedText: text
+      });
+    }
+  } catch (error) {
+    console.error('Translation error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Translation failed: ' + error.message 
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3000;

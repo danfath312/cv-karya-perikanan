@@ -1,0 +1,182 @@
+🌍 MULTI-LANGUAGE SYSTEM - QUICK REFERENCE
+
+═══════════════════════════════════════════════════════════════
+
+✅ WHAT'S IMPLEMENTED:
+
+1. AUTO LANGUAGE DETECTION
+   - Indonesian user → Bahasa Indonesia (ID)
+   - International user → English (EN)
+   - Based on navigator.language
+
+2. MANUAL LANGUAGE SWITCH
+   - Click "ID" or "EN" in navbar (top right)
+   - Active language shown in bold
+   - Changes instantly without page reload
+
+3. PERSISTENT PREFERENCE
+   - Choice saved in localStorage
+   - Remembered across browser sessions
+   - Clear by: localStorage.removeItem('langPreference')
+
+4. ADMIN PANEL PROTECTED
+   - admin.html ALWAYS Bahasa Indonesia
+   - Language switch disabled on admin
+   - No impact on admin functionality
+
+═══════════════════════════════════════════════════════════════
+
+📁 FILES CREATED/MODIFIED:
+
+NEW:
+  • js/i18n.js
+    - Language dictionary (ID + EN)
+    - All translations organized by section
+
+MODIFIED:
+  • js/script.js
+    - Language detection logic
+    - Switch handler
+    - Text update function
+  
+  • index.html
+    - Added i18n.js script
+    - Added data-i18n attributes
+    - Added ID|EN switch UI in navbar
+  
+  • produk.html
+    - Added i18n.js script
+    - Added data-i18n attributes
+    - Added ID|EN switch UI in navbar
+  
+  • order.html
+    - Added i18n.js script
+    - Added ID|EN switch UI in navbar
+  
+  • css/style.css
+    - Added language switch styling
+
+═══════════════════════════════════════════════════════════════
+
+🧪 TESTING STEPS:
+
+1. Open index.html in browser
+   Console should show: "🌍 Language auto-detected: ..."
+
+2. Click "EN" in navbar
+   Page switches to English
+   Console: "🔄 Language switched to: en"
+
+3. Refresh page
+   Still in English (from localStorage)
+
+4. Click "ID" in navbar
+   Page switches to Indonesian
+   Console: "🔄 Language switched to: id"
+
+5. Open different public pages (produk.html, order.html)
+   Language preference follows (remembered from localStorage)
+
+6. Go to admin.html
+   Console: "🔒 Admin page detected - locked to Bahasa Indonesia"
+   Language switch disabled
+
+═══════════════════════════════════════════════════════════════
+
+📋 CONSOLE MESSAGES:
+
+✅ Expected messages (normal operation):
+  ✅ i18n language dictionary loaded
+  🌍 Language auto-detected: Indonesian (id)
+  🌍 Language loaded from localStorage: en
+  ✅ Page language updated to: id
+  🔄 Language switched to: en
+  🔒 Admin page detected - locked to Bahasa Indonesia
+
+❌ Error messages (check if these appear):
+  ⚠️ Language pack for 'xx' not found
+  (Means language not defined in i18n.js)
+
+═══════════════════════════════════════════════════════════════
+
+📦 TECHNICAL DETAILS:
+
+JavaScript Variables:
+  • currentLanguage = 'id' or 'en'
+  • i18n = { id: {...}, en: {...} }
+
+Functions:
+  • detectLanguage() - Auto-detect on page load
+  • switchLanguage(lang) - Manual switch
+  • updatePageLanguage() - Update all text
+  • updateLanguageSwitchUI() - Highlight active lang
+
+localStorage Key:
+  • 'langPreference' - Stores user's language choice
+
+HTML Attributes:
+  • data-i18n="keyName" - Marks translatable elements
+
+═══════════════════════════════════════════════════════════════
+
+🎯 HOW TO ADD NEW TRANSLATIONS:
+
+Example: Add "Contact Us" button translation
+
+1. Edit js/i18n.js, add to both id and en:
+   id: {
+     ...,
+     contactButton: "Hubungi Kami"
+   }
+   en: {
+     ...,
+     contactButton: "Contact Us"
+   }
+
+2. In HTML, add data-i18n:
+   <button data-i18n="contactButton">Hubungi Kami</button>
+
+3. JavaScript will auto-translate when language changes
+
+═══════════════════════════════════════════════════════════════
+
+❓ FREQUENTLY ASKED QUESTIONS:
+
+Q: How to change default language?
+A: Edit js/script.js line 11: let currentLanguage = 'en';
+
+Q: How to add more languages?
+A: Add new object in i18n.js, update switch functions
+
+Q: Where is language saved?
+A: In browser's localStorage (not sent to server)
+
+Q: Does it work offline?
+A: Yes, language preference stored locally
+
+Q: Does admin.html show language switch?
+A: No, admin is always Indonesian (secure design)
+
+Q: Can user clear language preference?
+A: Browser console: localStorage.removeItem('langPreference')
+
+═══════════════════════════════════════════════════════════════
+
+✨ FEATURES:
+
+✓ No page reload needed
+✓ Instant language switch
+✓ Auto-detect user language
+✓ Remember preference
+✓ Mobile responsive
+✓ Works offline
+✓ Clean UI (ID | EN)
+✓ No dependencies
+✓ Admin panel protected
+✓ Console logging for debugging
+
+═══════════════════════════════════════════════════════════════
+
+Version: 1.0
+Date: January 28, 2026
+Status: ✅ Ready for Production

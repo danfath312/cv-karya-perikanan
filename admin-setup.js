@@ -109,8 +109,8 @@ db.serialize(() => {
             'Perusahaan pengolahan limbah perikanan berkualitas tinggi',
             '0878-0822-8699',
             '6287808228699',
-            'info@karyaperikanan.com',
-            'Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450',
+            'karyaperikananindonesia@gmail.com',
+            'Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120',
             'Buka 24 Jam'
         ],
         (err) => {

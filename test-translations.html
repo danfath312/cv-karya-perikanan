@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Translations</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+        .test-section { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; }
+        h2 { color: #0066B3; border-bottom: 2px solid #0066B3; padding-bottom: 10px; }
+        .key { background: #e8f4f8; padding: 10px; margin: 5px 0; border-left: 3px solid #0066B3; font-family: monospace; }
+        .buttons { margin: 20px 0; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; }
+        .id-btn { background: #ff6b6b; color: white; }
+        .en-btn { background: #0066B3; color: white; }
+        .value { font-weight: bold; color: #28a745; }
+    </style>
+</head>
+<body>
+    <h1>🌍 Translation Test Suite</h1>
+    <p>Test apakah semua content sudah ter-translate dengan benar.</p>
+    
+    <div class="buttons">
+        <button class="id-btn" onclick="testLanguage('id')">🇮🇩 Test ID (Indonesia)</button>
+        <button class="en-btn" onclick="testLanguage('en')">🇬🇧 Test EN (English)</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script src="js/i18n.js"></script>
+    <script>
+        const testSections = [
+            {
+                title: "ORDER STEPS",
+                keys: ['order_step1_title', 'order_step1_desc', 'order_step2_title', 'order_step2_desc', 
+                       'order_step3_title', 'order_step3_desc', 'order_step4_title', 'order_step4_desc']
+            },
+            {
+                title: "CONTACT QUICK SECTION",
+                keys: ['contact_quick_title', 'contact_quick_subtitle', 'contact_whatsapp_title', 'contact_whatsapp_content', 
+                       'contact_whatsapp_btn', 'contact_phone_title', 'contact_phone_content', 'contact_phone_btn',
+                       'contact_order_title', 'contact_order_content', 'contact_order_btn']
+            },
+            {
+                title: "ABOUT - COMMITMENT SECTION",
+                keys: ['about_commitment_title', 'about_commitment_quality', 'about_commitment_hygiene', 
+                       'about_commitment_control', 'about_commitment_packaging']
+            },
+            {
+                title: "ABOUT - VALUES SECTION",
+                keys: ['about_values_title', 'about_value_integrity', 'about_value_quality', 'about_value_innovation',
+                       'about_value_professional', 'about_value_sustainability', 'about_value_customer']
+            },
+            {
+                title: "ABOUT - WHY CHOOSE US",
+                keys: ['about_why_title', 'about_why_operational', 'about_why_location', 'about_why_quality']
+            },
+            {
+                title: "ABOUT - GALLERY & CTA",
+                keys: ['about_gallery_title', 'about_cta_title']
+            }
+        ];
+
+        function testLanguage(lang) {
+            const translations = i18n[lang];
+            if (!translations) {
+                alert(`Language pack '${lang}' not found!`);
+                return;
+            }
+
+            let html = `<h2 style="text-align: center;">✅ Testing Language: ${lang.toUpperCase()}</h2>`;
+            
+            testSections.forEach(section => {
+                html += `<div class="test-section">`;
+                html += `<h3>${section.title}</h3>`;
+                
+                section.keys.forEach(key => {
+                    const value = translations[key];
+                    const status = value ? '✅' : '❌';
+                    const className = value ? '' : ' style="background: #ffebee; color: #c62828;"';
+                    html += `<div class="key"${className}>
+                        ${status} <strong>${key}</strong>: <span class="value">${value || 'MISSING'}</span>
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            });
+
+            document.getElementById('results').innerHTML = html;
+        }
+
+        // Auto test
+        console.log('✅ Translation test initialized');
+        console.log('ID translations count:', Object.keys(i18n.id).length);
+        console.log('EN translations count:', Object.keys(i18n.en).length);
+    </script>
+</body>
+</html>

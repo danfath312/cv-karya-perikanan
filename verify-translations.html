@@ -1,0 +1,95 @@
+<!-- Test Translation Completion -->
+<!-- Open this file in browser and press F12 to see console output -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Translation Verification</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .pass { color: green; font-weight: bold; }
+        .fail { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Translation Verification Report</h1>
+    <pre id="report"></pre>
+    <script src="js/i18n.js"></script>
+    <script>
+        const requiredKeys = {
+            'Order Steps': [
+                'order_step1_title', 'order_step1_desc',
+                'order_step2_title', 'order_step2_desc',
+                'order_step3_title', 'order_step3_desc',
+                'order_step4_title', 'order_step4_desc'
+            ],
+            'Contact Quick': [
+                'contact_quick_title', 'contact_quick_subtitle',
+                'contact_whatsapp_title', 'contact_whatsapp_content', 'contact_whatsapp_btn',
+                'contact_phone_title', 'contact_phone_content', 'contact_phone_btn',
+                'contact_order_title', 'contact_order_content', 'contact_order_btn'
+            ],
+            'About Commitment': [
+                'about_commitment_title', 'about_commitment_quality', 'about_commitment_hygiene',
+                'about_commitment_control', 'about_commitment_packaging'
+            ],
+            'About Values': [
+                'about_values_title', 'about_value_integrity', 'about_value_quality',
+                'about_value_innovation', 'about_value_professional', 'about_value_sustainability',
+                'about_value_customer'
+            ],
+            'About Why Choose': [
+                'about_why_title', 'about_why_subtitle', 'about_why_operational',
+                'about_why_operational_desc', 'about_why_location', 'about_why_location_desc',
+                'about_why_quality', 'about_why_quality_desc'
+            ],
+            'About CTA & Gallery': [
+                'about_cta_title', 'about_cta_desc', 'about_cta_view_products', 'about_cta_contact',
+                'about_gallery_title', 'about_gallery_subtitle'
+            ]
+        };
+
+        let report = '';
+        let totalKeys = 0;
+        let missingKeys = 0;
+
+        report += '====== TRANSLATION VERIFICATION REPORT ======\n\n';
+        report += `Generated: ${new Date().toLocaleString()}\n`;
+        report += `Total Languages: ${Object.keys(i18n).length}\n\n`;
+
+        for (const [section, keys] of Object.entries(requiredKeys)) {
+            report += `\n📋 ${section}\n`;
+            report += '─'.repeat(50) + '\n';
+
+            keys.forEach(key => {
+                totalKeys++;
+                const idExists = i18n.id && i18n.id[key];
+                const enExists = i18n.en && i18n.en[key];
+                
+                if (!idExists || !enExists) {
+                    missingKeys++;
+                    report += `❌ ${key}\n`;
+                    report += `   ID: ${idExists ? '✓' : '✗'} EN: ${enExists ? '✓' : '✗'}\n`;
+                } else {
+                    report += `✓ ${key}\n`;
+                }
+            });
+        }
+
+        report += '\n' + '='.repeat(50) + '\n';
+        report += `\n📊 Summary:\n`;
+        report += `Total Keys: ${totalKeys}\n`;
+        report += `Missing: ${missingKeys}\n`;
+        report += `Complete: ${totalKeys - missingKeys}/${totalKeys}\n`;
+        report += `Coverage: ${((totalKeys - missingKeys) / totalKeys * 100).toFixed(1)}%\n`;
+
+        if (missingKeys === 0) {
+            report += '\n✅ ALL TRANSLATIONS COMPLETE!\n';
+        } else {
+            report += `\n⚠️ ${missingKeys} KEY(S) STILL MISSING\n`;
+        }
+
+        document.getElementById('report').innerHTML = report;
+        console.log(report);
+    </script>
+</body>
+</html>

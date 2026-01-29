@@ -21,6 +21,12 @@
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Language/i18n Dictionary -->
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <!-- ===================================
@@ -34,11 +40,11 @@
             </a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link">Beranda</a></li>
-                <li><a href="about.html" class="nav-link">Tentang Kami</a></li>
-                <li><a href="produk.html" class="nav-link active">Produk</a></li>
-                <li><a href="order.html" class="nav-link">Pemesanan</a></li>
-                <li><a href="contact.html" class="nav-link">Kontak</a></li>
+                <li><a href="index.html" class="nav-link" data-i18n="nav_home">Beranda</a></li>
+                <li><a href="about.html" class="nav-link" data-i18n="nav_about">Tentang Kami</a></li>
+                <li><a href="produk.html" class="nav-link active" data-i18n="nav_products">Produk</a></li>
+                <li><a href="order.html" class="nav-link" data-i18n="nav_order">Pemesanan</a></li>
+                <li><a href="contact.html" class="nav-link" data-i18n="nav_contact">Kontak</a></li>
             </ul>
             
             <div class="hamburger" id="hamburger">
@@ -67,117 +73,14 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Produk Unggulan</h2>
-                <p>Hasil Pengolahan Limbah Perikanan Berkualitas Tinggi</p>
+                <h2 data-i18n="products_page_heading">Produk Unggulan</h2>
+                <p data-i18n="products_page_subtitle">Hasil Pengolahan Limbah Perikanan Berkualitas Tinggi</p>
             </div>
             
             <div class="products-grid">
-                <!-- Product 1: Sisik Ikan Kakap Merah -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">
-                            🐟
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Sisik Ikan Kakap Merah</h3>
-                        <p>
-                            Sisik ikan kakap merah kering berkualitas premium yang diolah dengan 
-                            teknologi pengeringan modern. Produk ini telah melalui proses seleksi 
-                            ketat dan standar kebersihan tinggi.
-                        </p>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--light-blue); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Spesifikasi:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kondisi: Kering sempurna</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kebersihan: Sudah dicuci bersih</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kemasan: Plastik kedap udara</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Penyimpanan: Tempat kering</li>
-                            </ul>
-                        </div>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Kegunaan:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Bahan baku industri kosmetik</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Bahan farmasi (kolagen)</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Penelitian dan pengembangan</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Suplemen kesehatan</li>
-                            </ul>
-                        </div>
-                        <a href="order.html" class="btn btn-primary" style="width: 100%; text-align: center;">Pesan Sekarang</a>
-                    </div>
-                </div>
-                
-                <!-- Product 2: Sisik Ikan Nila -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">
-                            🐠
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Sisik Ikan Nila</h3>
-                        <p>
-                            Sisik ikan nila kering dengan kualitas terbaik. Diolah dari ikan nila 
-                            segar dengan proses pengeringan yang higienis dan terkontrol untuk 
-                            memastikan kualitas optimal.
-                        </p>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--light-blue); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Spesifikasi:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kondisi: Kering optimal</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kebersihan: Higienitas terjaga</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kemasan: Aman dan rapi</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kualitas: Premium grade</li>
-                            </ul>
-                        </div>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Kegunaan:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Ekstraksi kolagen alami</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Industri kecantikan</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Bahan penelitian</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Aplikasi biomedis</li>
-                            </ul>
-                        </div>
-                        <a href="order.html" class="btn btn-primary" style="width: 100%; text-align: center;">Pesan Sekarang</a>
-                    </div>
-                </div>
-                
-                <!-- Product 3: Kulit Ikan -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">
-                            🦈
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Kulit Ikan</h3>
-                        <p>
-                            Kulit ikan kering berkualitas tinggi yang diproses dengan standar 
-                            kebersihan ketat. Produk serbaguna yang dapat dimanfaatkan untuk 
-                            berbagai keperluan industri.
-                        </p>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--light-blue); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Spesifikasi:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kondisi: Kering sempurna</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kebersihan: Standar tinggi</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kemasan: Higienis dan aman</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">✓ Kualitas: Terjamin</li>
-                            </ul>
-                        </div>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
-                            <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">Kegunaan:</h4>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Bahan pakan ternak</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Industri kerajinan kulit</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Ekstraksi gelatin</li>
-                                <li style="padding: 5px 0; color: var(--text-gray);">• Produk organik</li>
-                            </ul>
-                        </div>
-                        <a href="order.html" class="btn btn-primary" style="width: 100%; text-align: center;">Pesan Sekarang</a>
-                    </div>
+                <!-- Products will be loaded dynamically from Supabase -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <p style="color: var(--text-gray);" data-i18n="products_loading">Memuat produk...</p>
                 </div>
             </div>
         </div>
@@ -189,15 +92,15 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Jaminan Kualitas</h2>
-                <p>Komitmen Kami terhadap Standar Mutu Tinggi</p>
+                <h2 data-i18n="quality_assurance_title">Jaminan Kualitas</h2>
+                <p data-i18n="quality_assurance_subtitle">Komitmen Kami terhadap Standar Mutu Tinggi</p>
             </div>
             
             <div class="vm-grid">
                 <div class="vm-card">
                     <div class="icon">🔍</div>
-                    <h3>Seleksi Bahan Baku</h3>
-                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;">
+                    <h3 data-i18n="quality_material_selection">Seleksi Bahan Baku</h3>
+                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;" data-i18n="quality_material_desc">
                         Setiap bahan baku melalui proses seleksi ketat dari pemasok terpercaya. 
                         Kami hanya menggunakan sisik dan kulit ikan dari sumber berkualitas 
                         untuk memastikan produk akhir yang optimal.
@@ -206,8 +109,8 @@
                 
                 <div class="vm-card">
                     <div class="icon">🧼</div>
-                    <h3>Proses Pencucian</h3>
-                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;">
+                    <h3 data-i18n="quality_washing">Proses Pencucian</h3>
+                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;" data-i18n="quality_washing_desc">
                         Proses pencucian dilakukan dengan air bersih dan sanitasi yang tepat. 
                         Setiap produk dicuci hingga benar-benar bersih dari kotoran dan bau 
                         amis untuk menjamin higienitas.
@@ -216,8 +119,8 @@
                 
                 <div class="vm-card">
                     <div class="icon">☀️</div>
-                    <h3>Pengeringan Modern</h3>
-                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;">
+                    <h3 data-i18n="quality_drying">Pengeringan Modern</h3>
+                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;" data-i18n="quality_drying_desc">
                         Menggunakan teknologi pengeringan modern dengan kontrol suhu dan 
                         kelembaban yang tepat. Proses ini memastikan produk kering sempurna 
                         dan tahan lama tanpa mengurangi kualitas.
@@ -226,8 +129,8 @@
                 
                 <div class="vm-card">
                     <div class="icon">📦</div>
-                    <h3>Pengemasan Higienis</h3>
-                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;">
+                    <h3 data-i18n="quality_packaging">Pengemasan Higienis</h3>
+                    <p style="color: var(--text-gray); line-height: 1.8; margin-top: 15px;" data-i18n="quality_packaging_desc">
                         Produk dikemas dalam kemasan kedap udara dan higienis untuk menjaga 
                         kualitas dan kesegaran. Label lengkap dengan informasi produk dan 
                         tanggal produksi.
@@ -243,45 +146,45 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Manfaat Produk</h2>
-                <p>Nilai Ekonomi Tinggi dari Limbah Perikanan</p>
+                <h2 data-i18n="product_benefits_title">Manfaat Produk</h2>
+                <p data-i18n="product_benefits_subtitle">Nilai Ekonomi Tinggi dari Limbah Perikanan</p>
             </div>
             
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="icon">💎</div>
-                    <h4>Kolagen Alami</h4>
-                    <p>Sisik ikan mengandung kolagen berkualitas tinggi untuk industri kosmetik dan kesehatan</p>
+                    <h4 data-i18n="product_benefits_collagen">Kolagen Alami</h4>
+                    <p data-i18n="product_benefits_collagen_desc">Sisik ikan mengandung kolagen berkualitas tinggi untuk industri kosmetik dan kesehatan</p>
                 </div>
                 
                 <div class="stat-card">
                     <div class="icon">🧪</div>
-                    <h4>Bahan Penelitian</h4>
-                    <p>Ideal untuk penelitian biomedis, farmasi, dan pengembangan produk baru</p>
+                    <h4 data-i18n="product_benefits_research">Bahan Penelitian</h4>
+                    <p data-i18n="product_benefits_research_desc">Ideal untuk penelitian biomedis, farmasi, dan pengembangan produk baru</p>
                 </div>
                 
                 <div class="stat-card">
                     <div class="icon">🌱</div>
-                    <h4>Ramah Lingkungan</h4>
-                    <p>Memanfaatkan limbah perikanan menjadi produk bernilai ekonomi</p>
+                    <h4 data-i18n="product_benefits_eco">Ramah Lingkungan</h4>
+                    <p data-i18n="product_benefits_eco_desc">Memanfaatkan limbah perikanan menjadi produk bernilai ekonomi</p>
                 </div>
                 
                 <div class="stat-card">
                     <div class="icon">🏭</div>
-                    <h4>Aplikasi Industri</h4>
-                    <p>Dapat digunakan dalam berbagai industri dari pakan hingga kerajinan</p>
+                    <h4 data-i18n="product_benefits_industry">Aplikasi Industri</h4>
+                    <p data-i18n="product_benefits_industry_desc">Dapat digunakan dalam berbagai industri dari pakan hingga kerajinan</p>
                 </div>
                 
                 <div class="stat-card">
                     <div class="icon">💪</div>
-                    <h4>Protein Tinggi</h4>
-                    <p>Kandungan protein tinggi cocok untuk pakan ternak berkualitas</p>
+                    <h4 data-i18n="product_benefits_protein">Protein Tinggi</h4>
+                    <p data-i18n="product_benefits_protein_desc">Kandungan protein tinggi cocok untuk pakan ternak berkualitas</p>
                 </div>
                 
                 <div class="stat-card">
                     <div class="icon">✅</div>
-                    <h4>Kualitas Konsisten</h4>
-                    <p>Standar kualitas yang konsisten di setiap batch produksi</p>
+                    <h4 data-i18n="product_benefits_quality">Kualitas Konsisten</h4>
+                    <p data-i18n="product_benefits_quality_desc">Standar kualitas yang konsisten di setiap batch produksi</p>
                 </div>
             </div>
         </div>
@@ -293,8 +196,8 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Informasi Pemesanan</h2>
-                <p>Cara Mudah Memesan Produk Kami</p>
+                <h2 data-i18n="order_info_title">Informasi Pemesanan</h2>
+                <p data-i18n="order_info_subtitle">Cara Mudah Memesan Produk Kami</p>
             </div>
             
             <div class="products-grid">
@@ -303,8 +206,8 @@
                         <span style="font-size: 4rem;">📱</span>
                     </div>
                     <div class="product-info">
-                        <h3>1. Hubungi Kami</h3>
-                        <p>
+                        <h3 data-i18n="order_step_1_title">1. Hubungi Kami</h3>
+                        <p data-i18n="order_step_1_desc">
                             Hubungi kami melalui WhatsApp di nomor 0878-0822-8699 atau gunakan 
                             formulir pemesanan di halaman order.
                         </p>
@@ -313,26 +216,36 @@
                 
                 <div class="product-card">
                     <div class="product-image" style="background: var(--light-blue); height: 200px;">
-                        <span style="font-size: 4rem;">📝</span>
+                        <span style="font-size: 4rem;">📋</span>
                     </div>
                     <div class="product-info">
-                        <h3>2. Tentukan Kebutuhan</h3>
-                        <p>
-                            Beritahu kami produk yang Anda butuhkan, jumlah pesanan, dan 
-                            spesifikasi khusus jika ada.
+                        <h3 data-i18n="order_step_2_title">2. Konfirmasi Pesanan</h3>
+                        <p data-i18n="order_step_2_desc">
+                            Tim kami akan mengkonfirmasi ketersediaan produk dan detail pesanan Anda dalam waktu singkat.
                         </p>
                     </div>
                 </div>
                 
                 <div class="product-card">
                     <div class="product-image" style="background: var(--light-blue); height: 200px;">
-                        <span style="font-size: 4rem;">✅</span>
+                        <span style="font-size: 4rem;">💳</span>
                     </div>
                     <div class="product-info">
-                        <h3>3. Konfirmasi & Pengiriman</h3>
-                        <p>
-                            Setelah konfirmasi pesanan, kami akan memproses dan mengirimkan 
-                            produk sesuai kesepakatan.
+                        <h3 data-i18n="order_step_3_title">3. Pembayaran</h3>
+                        <p data-i18n="order_step_3_desc">
+                            Lakukan pembayaran sesuai dengan instruksi yang diberikan oleh tim kami.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image" style="background: var(--light-blue); height: 200px;">
+                        <span style="font-size: 4rem;">🚚</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 data-i18n="order_step_4_title">4. Pengiriman</h3>
+                        <p data-i18n="order_step_4_desc">
+                            Produk akan dikemas dengan baik dan dikirimkan ke alamat Anda sesuai jadwal yang disepakati.
                         </p>
                     </div>
                 </div>
@@ -346,14 +259,14 @@
     <section class="section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%); color: white;">
         <div class="container">
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">Tertarik dengan Produk Kami?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;" data-i18n="cta_interested">Tertarik dengan Produk Kami?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;" data-i18n="cta_subtitle">
                     Dapatkan penawaran terbaik untuk pemesanan dalam jumlah besar. Hubungi kami 
                     sekarang untuk konsultasi gratis tentang kebutuhan Anda.
                 </p>
                 <div class="hero-buttons">
-                    <a href="order.html" class="btn btn-light">Pesan Sekarang</a>
-                    <a href="contact.html" class="btn btn-secondary">Hubungi Kami</a>
+                    <a href="order.html" class="btn btn-light" data-i18n="cta_order">Pesan Sekarang</a>
+                    <a href="contact.html" class="btn btn-secondary" data-i18n="cta_contact">Hubungi Kami</a>
                 </div>
             </div>
         </div>
@@ -366,29 +279,29 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3>CV Karya Perikanan Indonesia</h3>
-                    <p>
+                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
                 </div>
                 
                 <div class="footer-links">
-                    <h4>Menu Cepat</h4>
+                    <h4 data-i18n="footer_menu_title">Menu Cepat</h4>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="about.html">Tentang Kami</a></li>
-                        <li><a href="produk.html">Produk</a></li>
-                        <li><a href="order.html">Pemesanan</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
+                        <li><a href="index.html" data-i18n="footer_home">Beranda</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">Tentang Kami</a></li>
+                        <li><a href="produk.html" data-i18n="footer_products">Produk</a></li>
+                        <li><a href="order.html" data-i18n="footer_order">Pemesanan</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact_link">Kontak</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-contact">
-                    <h4>Kontak</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450</p>
-                    <p><i class="fas fa-phone"></i> 0878-0822-8699</p>
-                    <p><i class="fas fa-clock"></i> Buka 24 Jam</p>
+                    <h4 data-i18n="footer_contact_title">Kontak</h4>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
                 </div>
             </div>
             
@@ -398,7 +311,186 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript (Loaded first to initialize Supabase) -->
     <script src="js/script.js"></script>
+
+    <!-- Load Products from Supabase -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const productsGrid = document.querySelector('.products-grid');
+            
+            if (!productsGrid) {
+                console.warn('Products grid not found on this page');
+                return;
+            }
+
+            // Wait for Supabase client to be ready (max 5 seconds)
+            let retries = 0;
+            while (!window.supabaseClient && retries < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                retries++;
+            }
+
+            // Verify Supabase client is ready
+            if (!window.supabaseClient) {
+                console.error('❌ Supabase client not initialized after 5 seconds');
+                productsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p style="color: red;">Error: Supabase client tidak tersedia.</p></div>';
+                return;
+            }
+
+            console.log('🔄 Fetching products from Supabase...');
+
+            try {
+                // Fetch products from Supabase
+                const { data: products, error } = await window.supabaseClient
+                    .from('products')
+                    .select('*')
+                    .eq('available', true);
+
+                if (error) {
+                    console.error('❌ Supabase query error:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        details: error.details,
+                        hint: error.hint,
+                        code: error.code
+                    });
+                    throw error;
+                }
+
+                // Clear loading message
+                productsGrid.innerHTML = '';
+
+                // Check if products exist
+                if (!products || products.length === 0) {
+                    const emptyMsg = i18n[currentLang]?.products_no_available || 'Belum ada produk tersedia.';
+                    productsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p style="color: var(--text-gray);">${emptyMsg}</p></div>`;
+                    return;
+                }
+
+                // Render each product
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+
+                    // Get language-specific fields
+                    const isEnglish = currentLang === 'en';
+                    const productName = isEnglish && product.name_en ? product.name_en : product.name;
+                    const productDesc = isEnglish && product.description_en ? product.description_en : product.description;
+
+                    // Handle image
+                    let imageHTML = '';
+                    if (product.image_url && product.image_url.trim() !== '') {
+                        imageHTML = `<img src="${product.image_url}" alt="${productName}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    } else {
+                        // Default placeholder if no image
+                        imageHTML = `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">🐟</div>`;
+                    }
+
+                    // Escape HTML to prevent XSS
+                    const escapeName = productName ? productName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : (isEnglish ? 'Product' : 'Produk');
+                    const escapeDesc = productDesc ? productDesc.replace(/</g, '&lt;').replace(/>/g, '&gt;') : (i18n[currentLang]?.product_default_desc || 'Produk berkualitas tinggi dari CV Karya Perikanan Indonesia.');
+                    const specLabel = isEnglish ? 'Specifications:' : 'Spesifikasi:';
+                    const usesLabel = isEnglish ? 'Uses:' : 'Kegunaan:';
+                    const orderBtnText = i18n[currentLang]?.order_now || 'Pesan Sekarang';
+                    
+                    // Build specifications section if available
+                    let specificationsHTML = '';
+                    const specsData = isEnglish && product.specifications_en ? product.specifications_en : product.specifications;
+                    if (specsData) {
+                        try {
+                            const specs = typeof specsData === 'string' 
+                                ? JSON.parse(specsData) 
+                                : specsData;
+                            
+                            if (Array.isArray(specs) && specs.length > 0) {
+                                const specItems = specs.map(spec => 
+                                    `<li style="padding: 5px 0; color: var(--text-gray);">✓ ${spec.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`
+                                ).join('');
+                                
+                                specificationsHTML = `
+                                    <div style="margin: 15px 0; padding: 15px; background: var(--light-blue); border-radius: 8px;">
+                                        <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">${specLabel}</h4>
+                                        <ul style="list-style: none; padding: 0;">
+                                            ${specItems}
+                                        </ul>
+                                    </div>
+                                `;
+                            }
+                        } catch (e) {
+                            console.warn('Could not parse specifications for product:', productName);
+                        }
+                    }
+
+                    // Build uses section if available
+                    let usesHTML = '';
+                    const usesData = isEnglish && product.uses_en ? product.uses_en : product.uses;
+                    if (usesData) {
+                        try {
+                            const uses = typeof usesData === 'string' 
+                                ? JSON.parse(usesData) 
+                                : usesData;
+                            
+                            if (Array.isArray(uses) && uses.length > 0) {
+                                const useItems = uses.map(use => 
+                                    `<li style="padding: 5px 0; color: var(--text-gray);">• ${use.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`
+                                ).join('');
+                                
+                                usesHTML = `
+                                    <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
+                                        <h4 style="color: var(--primary-blue); margin-bottom: 10px; font-size: 1.1rem;">${usesLabel}</h4>
+                                        <ul style="list-style: none; padding: 0;">
+                                            ${useItems}
+                                        </ul>
+                                    </div>
+                                `;
+                            }
+                        } catch (e) {
+                            console.warn('Could not parse uses for product:', productName);
+                        }
+                    }
+
+                    productCard.innerHTML = `
+                        <div class="product-image">
+                            ${imageHTML}
+                        </div>
+                        <div class="product-info">
+                            <h3>${escapeName}</h3>
+                            <p>${escapeDesc}</p>
+                            ${specificationsHTML}
+                            ${usesHTML}
+                            <a href="order.html" class="btn btn-primary" style="width: 100%; text-align: center;">${orderBtnText}</a>
+                        </div>
+                    `;
+
+                    productsGrid.appendChild(productCard);
+                });
+
+                console.log(`✅ Loaded ${products.length} products from Supabase`);
+
+            } catch (error) {
+                console.error('❌ Error loading products:', error);
+                console.error('Full error object:', error);
+                
+                // Detailed error message
+                let errorMessage = (i18n[currentLang]?.products_error || 'Gagal memuat produk. ');
+                if (error.message) {
+                    errorMessage += `Error: ${error.message}`;
+                }
+                if (error.hint) {
+                    errorMessage += ` Hint: ${error.hint}`;
+                }
+                
+                console.error('Error message:', errorMessage);
+                
+                // Show error message to user
+                const refreshText = i18n[currentLang]?.products_loading ? 'Please refresh the page.' : 'Silakan refresh halaman.';
+                productsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <p style="color: red; margin-bottom: 10px;">${errorMessage}</p>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Lihat console untuk detail error (tekan F12).</p>
+                </div>`;
+            }
+        });
+    </script>
 </body>
 </html>

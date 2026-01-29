@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="CV Karya Perikanan Indonesia - Perusahaan Pengolahan Limbah Perikanan Berkualitas. Spesialis Sisik Ikan Kakap, Nila & Kulit Ikan. Buka 24 Jam. Hub: 0878-0822-8699">
-    <meta name="keywords" content="perikanan, pengolahan ikan, sisik ikan, kulit ikan, sisik kakap, sisik nila, Jakarta Utara">
+    <meta name="keywords" content="perikanan, pengolahan ikan, sisik ikan, kulit ikan, sisik kakap, sisik nila, Bogor, Jawa Barat">
     <meta name="author" content="CV Karya Perikanan Indonesia">
     <meta name="theme-color" content="#0066B3">
     
@@ -33,6 +33,12 @@
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Language/i18n Dictionary -->
+    <script src="js/i18n.js"></script>
 </head>
 <body>
     <!-- ===================================
@@ -46,11 +52,11 @@
             </a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link active">Beranda</a></li>
-                <li><a href="about.html" class="nav-link">Tentang Kami</a></li>
-                <li><a href="produk.html" class="nav-link">Produk</a></li>
-                <li><a href="order.html" class="nav-link">Pemesanan</a></li>
-                <li><a href="contact.html" class="nav-link">Kontak</a></li>
+                <li><a href="index.html" class="nav-link active" data-i18n="nav_home">Beranda</a></li>
+                <li><a href="about.html" class="nav-link" data-i18n="nav_about">Tentang Kami</a></li>
+                <li><a href="produk.html" class="nav-link" data-i18n="nav_products">Produk</a></li>
+                <li><a href="order.html" class="nav-link" data-i18n="nav_order">Pemesanan</a></li>
+                <li><a href="contact.html" class="nav-link" data-i18n="nav_contact">Kontak</a></li>
             </ul>
             
             <div class="hamburger" id="hamburger">
@@ -67,13 +73,13 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <img src="images/kpi.png" alt="" class="hero-logo">
-                <h1>CV Karya Perikanan Indonesia</h1>
-                <p>Perusahaan Pengolahan Ikan Berkualitas & Terpercaya</p>
-                <p>Spesialis Pengeringan Limbah Ikan - Sisik & Kulit Ikan Berkualitas Premium</p>
+                <img src="images/kpi_y.png" alt="" class="hero-logo">
+                <h1 data-i18n="hero_title">CV Karya Perikanan Indonesia</h1>
+                <p data-i18n="hero_subtitle">Perusahaan Pengolahan Ikan Berkualitas & Terpercaya</p>
+                <p data-i18n="hero_desc">Spesialis Pengeringan Limbah Ikan - Sisik & Kulit Ikan Berkualitas Premium</p>
                 <div class="hero-buttons">
-                    <a href="produk.html" class="btn btn-light">Lihat Produk</a>
-                    <a href="order.html" class="btn btn-secondary">Pesan Sekarang</a>
+                    <a href="produk.html" class="btn btn-light" data-i18n="hero_view_products">Lihat Produk</a>
+                    <a href="order.html" class="btn btn-secondary" data-i18n="hero_order_now">Pesan Sekarang</a>
                 </div>
             </div>
         </div>
@@ -85,30 +91,30 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Tentang Kami</h2>
-                <p>Mitra Terpercaya dalam Pengolahan Limbah Perikanan</p>
+                <h2 data-i18n="about_preview_title">Tentang Kami</h2>
+                <p data-i18n="about_preview_subtitle">Mitra Terpercaya dalam Pengolahan Limbah Perikanan</p>
             </div>
             
             <div class="about-content">
                 <div class="about-text">
-                    <h3>CV Karya Perikanan Indonesia</h3>
-                    <p>
+                    <h3 data-i18n="about_company_name">CV Karya Perikanan Indonesia</h3>
+                    <p data-i18n="about_text_1">
                         CV Karya Perikanan Indonesia adalah perusahaan yang bergerak di bidang pengolahan 
                         limbah perikanan, khususnya pengeringan sisik dan kulit ikan. Kami berkomitmen 
                         untuk menghasilkan produk berkualitas tinggi dengan standar kebersihan dan mutu 
                         yang terjaga.
                     </p>
-                    <p>
+                    <p data-i18n="about_text_2">
                         Dengan pengalaman bertahun-tahun di industri perikanan, kami memproses limbah 
                         ikan menjadi produk bernilai ekonomi tinggi yang dapat dimanfaatkan untuk 
                         berbagai keperluan industri seperti kosmetik, farmasi, dan pakan ternak.
                     </p>
-                    <p>
-                        Lokasi strategis kami di Jakarta Utara memudahkan akses ke berbagai pelabuhan 
-                        dan pasar ikan, sehingga kami dapat memastikan ketersediaan bahan baku yang 
+                    <p data-i18n="about_text_3">
+                        Lokasi strategis kami di Kabupaten Bogor, Jawa Barat memudahkan akses ke berbagai 
+                        sumber bahan baku, sehingga kami dapat memastikan ketersediaan bahan baku yang 
                         segar dan berkualitas.
                     </p>
-                    <a href="about.html" class="btn btn-primary">Selengkapnya</a>
+                    <a href="about.html" class="btn btn-primary" data-i18n="about_more">Selengkapnya</a>
                 </div>
                 
                 <div class="about-image">
@@ -123,17 +129,17 @@
                 <div class="stat-card">
                     <div class="icon">⭐</div>
                     <h4>100%</h4>
-                    <p>Kualitas Terjamin</p>
+                    <p data-i18n="stats_quality">Kualitas Terjamin</p>
                 </div>
                 <div class="stat-card">
                     <div class="icon">🏭</div>
                     <h4>24/7</h4>
-                    <p>Operasional</p>
+                    <p data-i18n="stats_operational">Operasional</p>
                 </div>
                 <div class="stat-card">
                     <div class="icon">✓</div>
-                    <h4>Bersih</h4>
-                    <p>Standar Higienitas</p>
+                    <h4 data-i18n="stats_clean">Bersih</h4>
+                    <p data-i18n="stats_hygiene">Standar Higienitas</p>
                 </div>
             </div>
         </div>
@@ -145,8 +151,8 @@
     <section class="section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-title">
-                <h2>Produk Unggulan</h2>
-                <p>Produk Berkualitas Tinggi dari CV Karya Perikanan Indonesia</p>
+                <h2 data-i18n="products_featured">Produk Unggulan</h2>
+                <p data-i18n="products_featured_desc">Produk Berkualitas Tinggi dari CV Karya Perikanan Indonesia</p>
             </div>
             
             <div class="products-grid">
@@ -158,13 +164,13 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3>Sisik Ikan Kakap Merah</h3>
-                        <p>
+                        <h3 data-i18n="prod_scale_red_title">Sisik Ikan Kakap Merah</h3>
+                        <p data-i18n="prod_scale_red_desc">
                             Sisik ikan kakap merah kering berkualitas premium. Diproses dengan 
                             teknologi pengeringan modern dan higienis. Ideal untuk industri 
                             kosmetik dan farmasi.
                         </p>
-                        <a href="order.html" class="btn btn-primary">Pesan Sekarang</a>
+                        <a href="order.html" class="btn btn-primary" data-i18n="order_now">Pesan Sekarang</a>
                     </div>
                 </div>
                 
@@ -176,12 +182,12 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3>Sisik Ikan Nila</h3>
-                        <p>
+                        <h3 data-i18n="prod_scale_tilapia_title">Sisik Ikan Nila</h3>
+                        <p data-i18n="prod_scale_tilapia_desc">
                             Sisik ikan nila kering dengan kualitas terbaik. Bersih, kering sempurna, 
                             dan siap diolah. Cocok untuk berbagai aplikasi industri dan penelitian.
                         </p>
-                        <a href="order.html" class="btn btn-primary">Pesan Sekarang</a>
+                        <a href="order.html" class="btn btn-primary" data-i18n="order_now">Pesan Sekarang</a>
                     </div>
                 </div>
                 
@@ -193,18 +199,18 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3>Kulit Ikan</h3>
-                        <p>
+                        <h3 data-i18n="prod_skin_title">Kulit Ikan</h3>
+                        <p data-i18n="prod_skin_desc">
                             Kulit ikan kering berkualitas tinggi. Diproses dengan standar kebersihan 
                             ketat. Dapat digunakan untuk industri pakan ternak dan kerajinan.
                         </p>
-                        <a href="order.html" class="btn btn-primary">Pesan Sekarang</a>
+                        <a href="order.html" class="btn btn-primary" data-i18n="order_now">Pesan Sekarang</a>
                     </div>
                 </div>
             </div>
             
             <div style="text-align: center; margin-top: 40px;">
-                <a href="produk.html" class="btn btn-outline">Lihat Semua Produk</a>
+                <a href="produk.html" class="btn btn-outline" data-i18n="view_all_products">Lihat Semua Produk</a>
             </div>
         </div>
     </section>
@@ -215,52 +221,52 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Mengapa Memilih Kami?</h2>
-                <p>Keunggulan CV Karya Perikanan Indonesia</p>
+                <h2 data-i18n="why_choose_us_title">Mengapa Memilih Kami?</h2>
+                <p data-i18n="why_choose_us_subtitle">Keunggulan CV Karya Perikanan Indonesia</p>
             </div>
             
             <div class="vm-grid">
                 <div class="vm-card">
                     <div class="icon">✨</div>
-                    <h3>Kualitas Premium</h3>
+                    <h3 data-i18n="why_quality_title">Kualitas Premium</h3>
                     <ul>
-                        <li>Proses pengeringan dengan teknologi modern</li>
-                        <li>Standar kebersihan dan higienitas tinggi</li>
-                        <li>Produk terjamin kualitasnya</li>
-                        <li>Kontrol kualitas ketat di setiap tahap produksi</li>
+                        <li data-i18n="why_quality_1">Proses pengeringan dengan teknologi modern</li>
+                        <li data-i18n="why_quality_2">Standar kebersihan dan higienitas tinggi</li>
+                        <li data-i18n="why_quality_3">Produk terjamin kualitasnya</li>
+                        <li data-i18n="why_quality_4">Kontrol kualitas ketat di setiap tahap produksi</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">⚡</div>
-                    <h3>Pelayanan Terbaik</h3>
+                    <h3 data-i18n="why_service_title">Pelayanan Terbaik</h3>
                     <ul>
-                        <li>Operasional 24 jam setiap hari</li>
-                        <li>Respon cepat terhadap pesanan</li>
-                        <li>Tim profesional dan berpengalaman</li>
-                        <li>Pengiriman tepat waktu</li>
+                        <li data-i18n="why_service_1">Operasional 24 jam setiap hari</li>
+                        <li data-i18n="why_service_2">Respon cepat terhadap pesanan</li>
+                        <li data-i18n="why_service_3">Tim profesional dan berpengalaman</li>
+                        <li data-i18n="why_service_4">Pengiriman tepat waktu</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">🌊</div>
-                    <h3>Sumber Terpercaya</h3>
+                    <h3 data-i18n="why_source_title">Sumber Terpercaya</h3>
                     <ul>
-                        <li>Bahan baku dari pemasok terpilih</li>
-                        <li>Lokasi strategis di Jakarta Utara</li>
-                        <li>Akses mudah ke pelabuhan dan pasar ikan</li>
-                        <li>Ketersediaan stok terjamin</li>
+                        <li data-i18n="why_source_1">Bahan baku dari pemasok terpilih</li>
+                        <li data-i18n="why_source_2">Lokasi strategis di Kabupaten Bogor</li>
+                        <li data-i18n="why_source_3">Akses mudah ke berbagai sumber bahan baku</li>
+                        <li data-i18n="why_source_4">Ketersediaan stok terjamin</li>
                     </ul>
                 </div>
                 
                 <div class="vm-card">
                     <div class="icon">💰</div>
-                    <h3>Harga Kompetitif</h3>
+                    <h3 data-i18n="why_price_title">Harga Kompetitif</h3>
                     <ul>
-                        <li>Harga bersaing di pasaran</li>
-                        <li>Sistem pemesanan yang mudah</li>
-                        <li>Diskon untuk pemesanan dalam jumlah besar</li>
-                        <li>Nilai terbaik untuk investasi Anda</li>
+                        <li data-i18n="why_price_1">Harga bersaing di pasaran</li>
+                        <li data-i18n="why_price_2">Sistem pemesanan yang mudah</li>
+                        <li data-i18n="why_price_3">Diskon untuk pemesanan dalam jumlah besar</li>
+                        <li data-i18n="why_price_4">Nilai terbaik untuk investasi Anda</li>
                     </ul>
                 </div>
             </div>
@@ -273,14 +279,14 @@
     <section class="section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%); color: white;">
         <div class="container">
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">Siap Bekerja Sama dengan Kami?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: white;" data-i18n="cta_title">Siap Bekerja Sama dengan Kami?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;" data-i18n="cta_desc">
                     Hubungi kami sekarang untuk mendapatkan produk berkualitas tinggi dengan harga terbaik. 
                     Tim kami siap melayani kebutuhan Anda 24/7.
                 </p>
                 <div class="hero-buttons">
-                    <a href="order.html" class="btn btn-light">Pesan Sekarang</a>
-                    <a href="contact.html" class="btn btn-secondary">Hubungi Kami</a>
+                    <a href="order.html" class="btn btn-light" data-i18n="order_now">Pesan Sekarang</a>
+                    <a href="contact.html" class="btn btn-secondary" data-i18n="contact_us">Hubungi Kami</a>
                 </div>
             </div>
         </div>
@@ -293,39 +299,123 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3>CV Karya Perikanan Indonesia</h3>
-                    <p>
+                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
                 </div>
                 
                 <div class="footer-links">
-                    <h4>Menu Cepat</h4>
+                    <h4 data-i18n="footer_menu_title">Menu Cepat</h4>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="about.html">Tentang Kami</a></li>
-                        <li><a href="produk.html">Produk</a></li>
-                        <li><a href="order.html">Pemesanan</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
+                        <li><a href="index.html" data-i18n="footer_home">Beranda</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">Tentang Kami</a></li>
+                        <li><a href="produk.html" data-i18n="footer_products">Produk</a></li>
+                        <li><a href="order.html" data-i18n="footer_order">Pemesanan</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact_link">Kontak</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-contact">
-                    <h4>Kontak</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Blk. D No.14, Pengasinan, Kec. Tj. Priok, Jakarta Utara 14450</p>
-                    <p><i class="fas fa-phone"></i> 0878-0822-8699</p>
-                    <p><i class="fas fa-clock"></i> Buka 24 Jam</p>
+                    <h4 data-i18n="footer_contact_title">Kontak</h4>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-i18n="footer_address">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-i18n="footer_hours">Buka 24 Jam</span></p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+                <p data-i18n="footer_copyright">&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript (Loaded first to initialize Supabase) -->
     <script src="js/script.js"></script>
+
+    <!-- Load Products from Supabase -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const productsGrid = document.querySelector('.products-grid');
+            
+            if (!productsGrid) {
+                console.warn('Products grid not found on this page');
+                return;
+            }
+
+            // Wait for Supabase client to be ready (max 5 seconds)
+            let retries = 0;
+            while (!window.supabaseClient && retries < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                retries++;
+            }
+
+            // Verify Supabase client is ready
+            if (!window.supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+
+            try {
+                // Fetch products from Supabase
+                const { data: products, error } = await window.supabaseClient
+                    .from('products')
+                    .select('*')
+                    .eq('available', true);
+
+                if (error) throw error;
+
+                // Clear existing products (optional, if you want to replace static content)
+                productsGrid.innerHTML = '';
+
+                // Check if products exist
+                if (!products || products.length === 0) {
+                    const emptyMsg = i18n[currentLang]?.products_no_available || 'Belum ada produk tersedia.';
+                    productsGrid.innerHTML = `<p style="text-align: center; grid-column: 1/-1;">${emptyMsg}</p>`;
+                    return;
+                }
+
+                // Render each product
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+
+                    // Handle image
+                    let imageHTML = '';
+                    if (product.image_url && product.image_url.trim() !== '') {
+                        imageHTML = `<img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    } else {
+                        // Default placeholder if no image
+                        imageHTML = `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">🐟</div>`;
+                    }
+
+                    const orderNowText = i18n[currentLang]?.order_now || 'Pesan Sekarang';
+                    const defaultDesc = i18n[currentLang]?.product_default_desc || 'Produk berkualitas tinggi dari CV Karya Perikanan Indonesia.';
+
+                    productCard.innerHTML = `
+                        <div class="product-image">
+                            ${imageHTML}
+                        </div>
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>${product.description || defaultDesc}</p>
+                            <a href="order.html" class="btn btn-primary">${orderNowText}</a>
+                        </div>
+                    `;
+
+                    productsGrid.appendChild(productCard);
+                });
+
+                console.log(`✅ Loaded ${products.length} products from Supabase`);
+
+            } catch (error) {
+                console.error('❌ Error loading products:', error.message);
+                // Show error message to user
+                const errorMsg = i18n[currentLang]?.products_error || 'Gagal memuat produk. Silakan refresh halaman.';
+                productsGrid.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: red;">${errorMsg}</p>`;
+            }
+        });
+    </script>
 </body>
 </html>
