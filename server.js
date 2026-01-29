@@ -5,6 +5,11 @@ const fs = require('fs');
 const multer = require('multer');
 const sqlite3 = require('sqlite3').verbose();
 
+// Import admin API handlers
+const productsHandler = require('./api/admin/products');
+const ordersHandler = require('./api/admin/orders');
+const companyHandler = require('./api/admin/company');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -113,6 +118,66 @@ app.post('/api/translate', async (req, res) => {
     });
   }
 });
+
+// ===== ADMIN LOGIN ENDPOINT =====
+// Returns admin token and admin secret for API authentication
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username dan password diperlukan' });
+  }
+
+  db.get(
+    'SELECT * FROM admins WHERE username = ? AND password = ?',
+    [username, password],
+    (err, admin) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (!admin) {
+        return res.status(401).json({ error: 'Username atau password salah' });
+      }
+
+      // Return token for API authentication
+      const token = Buffer.from(username + ':' + Date.now()).toString('base64');
+      const adminSecret = process.env.ADMIN_SECRET || 'default-secret-change-me';
+      
+      res.json({
+        success: true,
+        token: token,
+        admin_secret: adminSecret, // Send admin secret for API authentication
+        username: admin.username
+      });
+    }
+  );
+});
+
+// ===== ADMIN API ROUTES - SECURED WITH ADMIN_SECRET =====
+// All admin endpoints require x-admin-secret header with ADMIN_SECRET value
+
+// Products endpoints
+app.get('/api/admin/products', productsHandler.authMiddleware, productsHandler.getProducts);
+app.get('/api/admin/products/:id', productsHandler.authMiddleware, productsHandler.getProduct);
+app.post('/api/admin/products', productsHandler.authMiddleware, productsHandler.createProduct);
+app.put('/api/admin/products/:id', productsHandler.authMiddleware, productsHandler.updateProduct);
+app.delete('/api/admin/products/:id', productsHandler.authMiddleware, productsHandler.deleteProduct);
+app.patch('/api/admin/products/:id/toggle-availability', productsHandler.authMiddleware, productsHandler.toggleAvailability);
+app.post('/api/admin/upload-product-image', productsHandler.authMiddleware, upload.single('file'), productsHandler.uploadProductImage);
+
+// Orders endpoints
+app.get('/api/admin/orders', ordersHandler.authMiddleware, ordersHandler.getOrders);
+app.get('/api/admin/orders/:id', ordersHandler.authMiddleware, ordersHandler.getOrder);
+app.put('/api/admin/orders/:id', ordersHandler.authMiddleware, ordersHandler.updateOrder);
+app.patch('/api/admin/orders/:id/status', ordersHandler.authMiddleware, ordersHandler.updateOrderStatus);
+app.delete('/api/admin/orders/:id', ordersHandler.authMiddleware, ordersHandler.deleteOrder);
+
+// Company info endpoints
+app.get('/api/admin/company', companyHandler.authMiddleware, companyHandler.getCompanyInfo);
+app.post('/api/admin/company', companyHandler.authMiddleware, companyHandler.saveCompanyInfo);
+app.put('/api/admin/company', companyHandler.authMiddleware, companyHandler.saveCompanyInfo);
+
+// ===== END ADMIN API ROUTES =====
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

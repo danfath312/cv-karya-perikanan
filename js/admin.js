@@ -1,30 +1,17 @@
 // =====================================================
-// ADMIN PANEL JAVASCRIPT - SUPABASE ORDERS MANAGEMENT
+// ADMIN PANEL JAVASCRIPT - API CLIENT
 // =====================================================
-// ⚠️  SECURITY WARNING - ADMIN PANEL PRIVATE
-// This file uses SERVICE_ROLE_KEY - for LOCAL/INTERNAL use only
-// DO NOT PUBLISH THIS TO PRODUCTION/PUBLIC WEB
-// DO NOT COMMIT TO PUBLIC GITHUB REPOSITORY
+// ✅ SECURITY: Admin Secret based login
+// - Store admin secret in sessionStorage
+// - Send via x-admin-secret header
+// - No service_role in frontend
 // =====================================================
 
-// Supabase Configuration
-const SUPABASE_URL = 'https://pmegvhlyabddfxxoyjrq.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtZWd2aGx5YWJkZGZ4eG95anJxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTQyODQwOCwiZXhwIjoyMDg1MDA0NDA4fQ.oIrYBzBaHQAzEfwaEJ2hpuQLFgBVJJtdFWQxxLfRjAA';
+// API Configuration
+const API_URL = window.location.origin;
 
-// Initialize Supabase - will be set when window.supabase is available
-let supabaseOrderClient = null;
-function initSupabaseOrderClient() {
-    if (window.supabase && !supabaseOrderClient) {
-        supabaseOrderClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-        console.warn('⚠️ ADMIN PANEL - Supabase Orders Client Initialized (SERVICE_ROLE_KEY Active)');
-    }
-}
-
-// Use backend origin; if served via live-server (port 5500), target Flask at 5000 (localhost/127.0.0.1)
-const API_URL = (window.location.port === '5500')
-    ? (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : 'http://localhost:5000')
-    : window.location.origin;
-let authToken = localStorage.getItem('adminToken');
+// Get admin secret from sessionStorage
+let adminSecret = sessionStorage.getItem('admin_secret');
 let currentProductId = null;
 
 // Status options for orders
@@ -39,10 +26,7 @@ const ORDER_STATUS_OPTIONS = [
 
 // ===== PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Supabase client for orders management
-    initSupabaseOrderClient();
-    
-    if (authToken) {
+    if (adminSecret) {
         showDashboard();
         loadProducts();
         loadCompanyInfo();
@@ -54,117 +38,86 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     const loginForm = document.getElementById('loginForm');
     if (loginForm) loginForm.addEventListener('submit', handleLogin);
-    const requestOtpForm = document.getElementById('requestOtpForm');
-    if (requestOtpForm) requestOtpForm.addEventListener('submit', handleRequestOtp);
-    const verifyOtpForm = document.getElementById('verifyOtpForm');
-    if (verifyOtpForm) verifyOtpForm.addEventListener('submit', handleVerifyOtp);
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
     document.getElementById('companyForm').addEventListener('submit', handleCompanySubmit);
     document.getElementById('productImage').addEventListener('change', previewProductImage);
     document.getElementById('companyLogo').addEventListener('change', previewCompanyLogo);
 });
 
-// ===== LOGIN HANDLER =====
+// ===== LOGIN HANDLER (ADMIN SECRET) =====
 async function handleLogin(e) {
     e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const secret = document.getElementById('adminSecret').value.trim();
+
+    if (!secret) {
+        showAlert('loginError', 'Admin secret tidak boleh kosong', 'danger');
+        return;
+    }
 
     try {
-        const response = await fetch(`${API_URL}/api/admin/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+        // Verify secret dengan API test call
+        const response = await fetch(`${API_URL}/api/admin/products`, {
+            headers: {
+                'x-admin-secret': secret
+            }
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-            showAlert('loginError', data.error, 'danger');
-            return;
+            if (response.status === 401 || response.status === 403) {
+                showAlert('loginError', 'Admin secret salah', 'danger');
+                return;
+            }
+            throw new Error('Koneksi error');
         }
 
-        authToken = data.token;
-        localStorage.setItem('adminToken', authToken);
-        localStorage.setItem('adminUsername', data.username);
+        // Jika valid, simpan ke sessionStorage
+        sessionStorage.setItem('admin_secret', secret);
+        adminSecret = secret;
 
+        // Bersihkan form
+        document.getElementById('loginForm').reset();
+
+        // Tampilkan dashboard
         showDashboard();
         loadProducts();
         loadCompanyInfo();
         loadOrders();
     } catch (error) {
-        showAlert('loginError', 'Gagal terhubung ke server', 'danger');
-    }
-}
-
-// ===== OTP FLOW =====
-async function handleRequestOtp(e) {
-    e.preventDefault();
-    const username = document.getElementById('otpUsername').value.trim();
-    const phone = document.getElementById('otpPhone').value.trim();
-
-    try {
-        const res = await fetch(`${API_URL}/api/admin/request-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, phone })
-        });
-        const data = await res.json();
-        if (!res.ok) {
-            showAlert('otpRequestError', data.error || `Gagal mengirim OTP (status ${res.status})`, 'danger');
-            return;
-        }
-        // Tampilkan OTP (simulasi) dan autofill ke form verifikasi agar mudah dilanjutkan
-        const otpMsg = `Kode OTP: ${data.otp} (simulasi, berlaku 10 menit)`;
-        showAlert('otpRequestError', otpMsg, 'success');
-        document.getElementById('verifyOtpUsername').value = username;
-        if (data.otp) {
-            const otpField = document.getElementById('otpCode');
-            if (otpField) otpField.value = data.otp;
-            console.log(otpMsg);
-            alert(otpMsg);
-        }
-    } catch (err) {
-        showAlert('otpRequestError', `Gagal mengirim OTP: ${err.message}. Pastikan server http://localhost:5000 sedang berjalan.`, 'danger');
-    }
-}
-
-async function handleVerifyOtp(e) {
-    e.preventDefault();
-    const username = document.getElementById('verifyOtpUsername').value.trim();
-    const otp = document.getElementById('otpCode').value.trim();
-    const password = document.getElementById('newPassword').value.trim();
-
-    try {
-        const res = await fetch(`${API_URL}/api/admin/verify-otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, otp, password })
-        });
-        const data = await res.json();
-        if (!res.ok) {
-            showAlert('otpVerifyError', data.error, 'danger');
-            return;
-        }
-        authToken = data.token;
-        localStorage.setItem('adminToken', authToken);
-        localStorage.setItem('adminUsername', username);
-        showAlert('otpVerifyError', 'Password tersimpan. Anda sudah login.', 'success');
-        showDashboard();
-        loadProducts();
-        loadCompanyInfo();
-        loadOrders();
-    } catch (err) {
-        showAlert('otpVerifyError', 'Gagal verifikasi OTP', 'danger');
+        showAlert('loginError', 'Gagal terhubung ke server: ' + error.message, 'danger');
     }
 }
 
 // ===== LOGOUT =====
 function logout() {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUsername');
-    authToken = null;
+    sessionStorage.removeItem('admin_secret');
+    adminSecret = null;
     location.reload();
+}
+
+// ===== API CALL HELPER WITH AUTH ERROR HANDLING =====
+async function apiCall(url, options = {}) {
+    const headers = options.headers || {};
+    headers['x-admin-secret'] = adminSecret;
+    
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+    
+    // Handle auth failures
+    if (response.status === 401 || response.status === 403) {
+        console.warn('❌ Auth failed: Redirecting to login');
+        showAlert('generalError', 'Session expired. Silakan login kembali.', 'danger');
+        sessionStorage.removeItem('admin_secret');
+        adminSecret = null;
+        setTimeout(() => {
+            showLogin();
+            document.getElementById('loginForm').reset();
+        }, 1500);
+        return null;
+    }
+    
+    return response;
 }
 
 // ===== UI HELPERS =====
@@ -176,7 +129,6 @@ function showLogin() {
 function showDashboard() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('adminUsername').textContent = localStorage.getItem('adminUsername') || 'Admin';
 }
 
 function switchTab(tabName) {
@@ -208,29 +160,22 @@ function showAlert(elementId, message, type) {
 // ===== PRODUCTS =====
 async function loadProducts() {
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
-        if (!supabaseOrderClient) {
-            throw new Error('Supabase client not available');
-        }
-
         const tbody = document.getElementById('productsTable');
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Loading...</td></tr>';
 
-        // Fetch products from Supabase
-        const { data: products, error } = await supabaseOrderClient
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: false });
+        // Fetch products from API
+        const response = await fetch(`${API_URL}/api/admin/products`, {
+            headers: {
+                'x-admin-secret': adminSecret
+            }
+        });
 
-        if (error) {
-            throw error;
+        if (!response.ok) {
+            throw new Error('Failed to load products');
         }
 
-        console.log(`✅ Loaded ${products ? products.length : 0} products from Supabase`);
+        const products = await response.json();
+        console.log(`✅ Loaded ${products ? products.length : 0} products from API`);
 
         tbody.innerHTML = '';
 
@@ -284,27 +229,18 @@ function openAddProductModal() {
 async function openEditProductModal(id) {
     currentProductId = id;
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
+        // Fetch product from API
+        const response = await fetch(`${API_URL}/api/admin/products/${id}`, {
+            headers: {
+                'x-admin-secret': adminSecret
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load product');
         }
 
-        if (!supabaseOrderClient) {
-            throw new Error('Supabase client tidak tersedia');
-        }
-
-        // Fetch product from Supabase
-        const { data, error } = await supabaseOrderClient
-            .from('products')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            throw error;
-        }
-
-        const product = data;
+        const product = await response.json();
         console.log('📦 Loading product:', product);
         
         document.getElementById('productModalTitle').textContent = 'Edit Produk';
@@ -345,37 +281,39 @@ async function openEditProductModal(id) {
     }
 }
 
-// ===== UPLOAD IMAGE TO SUPABASE STORAGE =====
+// ===== UPLOAD IMAGE TO BACKEND API =====
 async function uploadProductImage(file, productName) {
     if (!file) return null;
     
     try {
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
         // Create unique filename
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${productName.replace(/\s+/g, '_')}.${fileExt}`;
-        const filePath = `products/${fileName}`;
 
-        console.log('📤 Uploading image:', filePath);
+        console.log('📤 Uploading image:', fileName);
 
-        // Upload to Supabase Storage
-        const { data, error } = await supabaseOrderClient.storage
-            .from('product_images') // bucket name
-            .upload(filePath, file, { upsert: true });
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('productName', productName);
+        formData.append('fileName', fileName);
 
-        if (error) {
-            throw error;
+        // Send to backend API
+        const response = await fetch(`${API_URL}/api/admin/upload-product-image`, {
+            method: 'POST',
+            headers: {
+                'x-admin-secret': adminSecret
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to upload image');
         }
 
-        // Get public URL
-        const { data: publicUrlData } = supabaseOrderClient.storage
-            .from('product_images')
-            .getPublicUrl(filePath);
-
-        const imageUrl = publicUrlData.publicUrl;
+        const data = await response.json();
+        const imageUrl = data.imageUrl;
         console.log('✅ Image uploaded:', imageUrl);
         return imageUrl;
     } catch (error) {
@@ -393,15 +331,6 @@ async function handleProductSubmit(e) {
     e.preventDefault();
 
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
-        if (!supabaseOrderClient) {
-            throw new Error('Supabase client tidak tersedia');
-        }
-
         const name = document.getElementById('productName').value;
         const nameEn = document.getElementById('productNameEn').value;
         const description = document.getElementById('productDescription').value;
@@ -453,29 +382,35 @@ async function handleProductSubmit(e) {
             productData.image_url = imageUrl;
         }
 
-        let result;
+        let method = 'POST';
+        let url = `${API_URL}/api/admin/products`;
+
         if (currentProductId) {
             // Update existing product
+            method = 'PUT';
+            url = `${API_URL}/api/admin/products/${currentProductId}`;
             console.log('🔄 Updating product:', currentProductId, productData);
-            result = await supabaseOrderClient
-                .from('products')
-                .update(productData)
-                .eq('id', currentProductId)
-                .select();
         } else {
             // Insert new product
             console.log('✨ Creating new product:', productData);
-            result = await supabaseOrderClient
-                .from('products')
-                .insert([productData])
-                .select();
         }
 
-        if (result.error) {
-            throw result.error;
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-secret': adminSecret
+            },
+            body: JSON.stringify(productData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save product');
         }
 
-        console.log(`✅ Product ${currentProductId ? 'updated' : 'created'}:`, result.data);
+        const result = await response.json();
+        console.log(`✅ Product ${currentProductId ? 'updated' : 'created'}:`, result);
         showAlert('productFormError', currentProductId ? 'Produk berhasil diperbarui' : 'Produk berhasil ditambahkan', 'success');
         closeProductModal();
         loadProducts();
@@ -489,22 +424,16 @@ async function deleteProduct(id) {
     if (!confirm('Yakin ingin menghapus produk ini?')) return;
 
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
+        const response = await fetch(`${API_URL}/api/admin/products/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'x-admin-secret': adminSecret
+            }
+        });
 
-        if (!supabaseOrderClient) {
-            throw new Error('Supabase client tidak tersedia');
-        }
-
-        const { error } = await supabaseOrderClient
-            .from('products')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            throw error;
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete product');
         }
 
         console.log(`✅ Product ${id} deleted`);
@@ -519,33 +448,24 @@ async function deleteProduct(id) {
 // ===== ORDERS =====
 async function loadOrders() {
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
-        if (!supabaseOrderClient) {
-            console.error('Supabase client not available');
-            const tbody = document.getElementById('ordersTable');
-            if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red;">Error: Supabase not initialized</td></tr>`;
-            return;
-        }
-
         const tbody = document.getElementById('ordersTable');
         const ordersError = document.getElementById('ordersError');
         
         if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:15px;">Loading...</td></tr>`;
         if (ordersError) ordersError.innerHTML = '';
 
-        // Fetch orders from Supabase
-        const { data, error } = await supabaseOrderClient
-            .from('orders')
-            .select('*')
-            .order('created_at', { ascending: false });
+        // Fetch orders from API
+        const response = await fetch(`${API_URL}/api/admin/orders`, {
+            headers: {
+                'x-admin-secret': adminSecret
+            }
+        });
 
-        if (error) {
-            throw error;
+        if (!response.ok) {
+            throw new Error('Failed to load orders');
         }
+
+        const data = await response.json();
 
         if (!tbody) return;
 
@@ -579,7 +499,7 @@ async function loadOrders() {
             </tr>
         `).join('');
 
-        console.log(`✅ Loaded ${data.length} orders from Supabase`);
+        console.log(`✅ Loaded ${data.length} orders from API`);
 
     } catch (err) {
         console.error('❌ Error loading orders:', err);
@@ -597,28 +517,23 @@ async function loadOrders() {
 
 async function updateOrderStatus(orderId, newStatus) {
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
-        if (!supabaseOrderClient) {
-            alert('Error: Supabase not initialized');
-            return;
-        }
-
         console.log(`Updating order ${orderId} status to: ${newStatus}`);
 
-        const { data, error } = await supabaseOrderClient
-            .from('orders')
-            .update({ status: newStatus })
-            .eq('id', orderId)
-            .select();
+        const response = await fetch(`${API_URL}/api/admin/orders/${orderId}/status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-secret': adminSecret
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
 
-        if (error) {
-            throw error;
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to update order status');
         }
 
+        const data = await response.json();
         console.log(`✅ Order ${orderId} status updated to: ${newStatus}`, data);
         
         // Highlight the changed select for visual feedback
@@ -660,23 +575,21 @@ function formatOrderDate(dateString) {
 
 async function toggleAvailability(id, currentStatus) {
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
+        // Toggle availability and update via API
+        const response = await fetch(`${API_URL}/api/admin/products/${id}/toggle-availability`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-secret': adminSecret
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to toggle availability');
         }
 
-        // Toggle availability and update in Supabase
-        const { data, error } = await supabaseOrderClient
-            .from('products')
-            .update({ available: !currentStatus })
-            .eq('id', id);
-
-        if (error) {
-            console.error('❌ Error toggling availability:', error);
-            alert('Error: ' + error.message);
-            return;
-        }
-
+        const data = await response.json();
         console.log(`✅ Product ${id} availability toggled to: ${!currentStatus}`, data);
         loadProducts();
     } catch (error) {
@@ -688,30 +601,21 @@ async function toggleAvailability(id, currentStatus) {
 // ===== COMPANY INFO =====
 async function loadCompanyInfo() {
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
+        // Fetch company info from API
+        const response = await fetch(`${API_URL}/api/admin/company`, {
+            headers: {
+                'x-admin-secret': adminSecret
+            }
+        });
 
-        if (!supabaseOrderClient) {
-            console.warn('⚠️ Supabase client not available for company info');
+        if (!response.ok) {
+            console.warn('Company info not loaded: API error');
             return;
         }
 
-        // Fetch company info from Supabase (assuming table name is 'company')
-        const { data: companies, error } = await supabaseOrderClient
-            .from('company')
-            .select('*')
-            .limit(1);
+        const company = await response.json();
 
-        if (error) {
-            console.warn('Company info not loaded:', error.message);
-            return;
-        }
-
-        const company = companies && companies.length > 0 ? companies[0] : null;
-
-        if (company) {
+        if (company && company.id) {
             document.getElementById('companyName').value = company.name || '';
             document.getElementById('companyDescription').value = company.description || '';
             document.getElementById('companyPhone').value = company.phone || '';
@@ -724,7 +628,7 @@ async function loadCompanyInfo() {
                 document.getElementById('logoPreview').innerHTML = `<img src="${company.logo_path}" alt="Logo">`;
             }
             
-            console.log('✅ Company info loaded from Supabase');
+            console.log('✅ Company info loaded from API');
         }
     } catch (error) {
         console.error('❌ Error loading company info:', error);
@@ -735,16 +639,6 @@ async function handleCompanySubmit(e) {
     e.preventDefault();
 
     try {
-        // Initialize Supabase if not already done
-        if (!supabaseOrderClient) {
-            initSupabaseOrderClient();
-        }
-
-        if (!supabaseOrderClient) {
-            alert('❌ Error: Supabase client tidak tersedia');
-            return;
-        }
-
         const companyData = {
             name: document.getElementById('companyName').value,
             description: document.getElementById('companyDescription').value,
@@ -755,34 +649,21 @@ async function handleCompanySubmit(e) {
             operating_hours: document.getElementById('companyHours').value
         };
 
-        // Check if company record exists
-        const { data: existingCompany } = await supabaseOrderClient
-            .from('company')
-            .select('id')
-            .limit(1)
-            .single();
+        const response = await fetch(`${API_URL}/api/admin/company`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-secret': adminSecret
+            },
+            body: JSON.stringify(companyData)
+        });
 
-        let result;
-        if (existingCompany) {
-            // Update existing record
-            result = await supabaseOrderClient
-                .from('company')
-                .update(companyData)
-                .eq('id', existingCompany.id)
-                .select();
-        } else {
-            // Insert new record
-            result = await supabaseOrderClient
-                .from('company')
-                .insert([companyData])
-                .select();
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save company info');
         }
 
-        if (result.error) {
-            throw result.error;
-        }
-
-        console.log('✅ Company info saved to Supabase');
+        console.log('✅ Company info saved via API');
         alert('✅ Informasi perusahaan berhasil disimpan!');
         loadCompanyInfo();
 

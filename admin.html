@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - CV Karya Perikanan Indonesia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -440,49 +438,13 @@
         <div class="login-box">
             <h1>🐟 Admin Panel</h1>
             <p>CV Karya Perikanan Indonesia</p>
+            <p style="font-size: 12px; color: #666; margin: 10px 0;">Secure Admin Access</p>
             <div id="loginError"></div>
 
-            <h3 style="margin:15px 0 10px; color: var(--primary);">1) Minta Kode OTP</h3>
-            <div id="otpRequestError"></div>
-            <form id="requestOtpForm" style="margin-bottom:15px;">
-                <div class="form-group">
-                    <label for="otpUsername">Username</label>
-                    <input type="text" id="otpUsername" required placeholder="Buat / pakai username">
-                </div>
-                <div class="form-group">
-                    <label for="otpPhone">Nomor Telepon</label>
-                    <input type="tel" id="otpPhone" required placeholder="08xxxxxxxxxx">
-                </div>
-                <button type="submit" class="btn btn-secondary">Kirim Kode</button>
-            </form>
-
-            <h3 style="margin:15px 0 10px; color: var(--primary);">2) Verifikasi & Atur Password</h3>
-            <div id="otpVerifyError"></div>
-            <form id="verifyOtpForm" style="margin-bottom:15px;">
-                <div class="form-group">
-                    <label for="verifyOtpUsername">Username</label>
-                    <input type="text" id="verifyOtpUsername" required placeholder="Username yang sama">
-                </div>
-                <div class="form-group">
-                    <label for="otpCode">Kode OTP</label>
-                    <input type="text" id="otpCode" required placeholder="6 digit OTP">
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">Password Baru</label>
-                    <input type="password" id="newPassword" required placeholder="Minimal 6 karakter">
-                </div>
-                <button type="submit" class="btn btn-success">Verifikasi & Login</button>
-            </form>
-
-            <h3 style="margin:15px 0 10px; color: var(--primary);">3) Login</h3>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required placeholder="Masukkan username">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="Masukkan password">
+                    <label for="adminSecret">Admin Secret</label>
+                    <input type="password" id="adminSecret" required placeholder="Masukkan admin secret">
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
