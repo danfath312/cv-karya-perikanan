@@ -48,7 +48,7 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <img src="images/logo.png" alt="" class="logo-image">
-                <span>CV Karya Perikanan Indonesia</span>
+                <span data-company-field="name">CV Karya Perikanan Indonesia</span>
             </a>
             
             <ul class="nav-menu" id="navMenu">
@@ -74,9 +74,9 @@
         <div class="container">
             <div class="hero-content">
                 <img src="images/kpi_y.png" alt="" class="hero-logo">
-                <h1 data-i18n="hero_title">CV Karya Perikanan Indonesia</h1>
-                <p data-i18n="hero_subtitle">Perusahaan Pengolahan Ikan Berkualitas & Terpercaya</p>
-                <p data-i18n="hero_desc">Spesialis Pengeringan Limbah Ikan - Sisik & Kulit Ikan Berkualitas Premium</p>
+                <h1 data-i18n="hero_title" data-company-field="name">CV Karya Perikanan Indonesia</h1>
+                <p data-i18n="hero_subtitle" data-company-field="tagline">Perusahaan Pengolahan Ikan Berkualitas & Terpercaya</p>
+                <p data-i18n="hero_desc" data-company-field="description">Spesialis Pengeringan Limbah Ikan - Sisik & Kulit Ikan Berkualitas Premium</p>
                 <div class="hero-buttons">
                     <a href="produk.html" class="btn btn-light" data-i18n="hero_view_products">Lihat Produk</a>
                     <a href="order.html" class="btn btn-secondary" data-i18n="hero_order_now">Pesan Sekarang</a>
@@ -97,8 +97,8 @@
             
             <div class="about-content">
                 <div class="about-text">
-                    <h3 data-i18n="about_company_name">CV Karya Perikanan Indonesia</h3>
-                    <p data-i18n="about_text_1">
+                    <h3 data-i18n="about_company_name" data-company-field="name">CV Karya Perikanan Indonesia</h3>
+                    <p data-i18n="about_text_1" data-company-field="description">
                         CV Karya Perikanan Indonesia adalah perusahaan yang bergerak di bidang pengolahan 
                         limbah perikanan, khususnya pengeringan sisik dan kulit ikan. Kami berkomitmen 
                         untuk menghasilkan produk berkualitas tinggi dengan standar kebersihan dan mutu 
@@ -299,8 +299,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
-                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
+                    <h3 id="footerCompanyName" data-company-field="name">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc" data-company-field="description">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
@@ -319,19 +319,20 @@
                 
                 <div class="footer-contact">
                     <h4 data-i18n="footer_contact_title">Kontak</h4>
-                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-i18n="footer_address">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
-                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
-                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-i18n="footer_hours">Buka 24 Jam</span></p>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-i18n="footer_address" data-company-field="address" data-company-html="true">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span data-company-field="phone">0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-i18n="footer_hours" data-company-field="operating_hours">Buka 24 Jam</span></p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p data-i18n="footer_copyright">&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+                <p data-i18n="footer_copyright">&copy; 2026 <span data-company-field="name">CV Karya Perikanan Indonesia</span>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript (Loaded first to initialize Supabase) -->
+    <script src="js/company-loader.js"></script>
     <script src="js/script.js"></script>
 
     <!-- Load Products from Supabase -->

@@ -18,6 +18,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/whatsapp-bubble.css">
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +37,7 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <img src="images/logo.png" alt="" class="logo-image">
-                <span>CV Karya Perikanan Indonesia</span>
+                <span data-company-field="name">CV Karya Perikanan Indonesia</span>
             </a>
             
             <ul class="nav-menu" id="navMenu">
@@ -62,7 +63,7 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Produk Kami</h1>
-                <p>Produk Berkualitas Premium dari CV Karya Perikanan Indonesia</p>
+                <p data-company-field="tagline">Produk Berkualitas Premium dari CV Karya Perikanan Indonesia</p>
             </div>
         </div>
     </section>
@@ -208,7 +209,7 @@
                     <div class="product-info">
                         <h3 data-i18n="order_step_1_title">1. Hubungi Kami</h3>
                         <p data-i18n="order_step_1_desc">
-                            Hubungi kami melalui WhatsApp di nomor 0878-0822-8699 atau gunakan 
+                            Hubungi kami melalui WhatsApp di nomor <span data-company-field="whatsapp_number">0878-0822-8699</span> atau gunakan 
                             formulir pemesanan di halaman order.
                         </p>
                     </div>
@@ -279,8 +280,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
-                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
+                    <h3 id="footerCompanyName" data-company-field="name">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc" data-company-field="description">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
@@ -299,20 +300,22 @@
                 
                 <div class="footer-contact">
                     <h4 data-i18n="footer_contact_title">Kontak</h4>
-                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
-                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
-                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-company-field="address" data-company-html="true">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span data-company-field="phone">0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-company-field="operating_hours">Buka 24 Jam</span></p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+                <p>&copy; 2026 <span data-company-field="name">CV Karya Perikanan Indonesia</span>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript (Loaded first to initialize Supabase) -->
+    <script src="js/company-loader.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/whatsapp-bubble.js"></script>
 
     <!-- Load Products from Supabase -->
     <script>

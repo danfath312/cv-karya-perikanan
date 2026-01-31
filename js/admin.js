@@ -158,6 +158,33 @@ function showAlert(elementId, message, type) {
     }, 5000);
 }
 
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.right = '20px';
+    toast.style.bottom = '20px';
+    toast.style.padding = '12px 16px';
+    toast.style.borderRadius = '8px';
+    toast.style.background = type === 'success' ? '#5CB85C' : '#D9534F';
+    toast.style.color = '#fff';
+    toast.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+    toast.style.zIndex = '2000';
+    toast.style.fontSize = '14px';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.2s ease';
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
+
 // ===== PRODUCTS =====
 async function loadProducts() {
     try {
@@ -645,15 +672,28 @@ async function loadCompanyInfo() {
 
         if (company && company.id) {
             document.getElementById('companyName').value = company.name || '';
+            document.getElementById('companyNameEn').value = company.name_en || '';
+            document.getElementById('companyTagline').value = company.tagline || '';
+            document.getElementById('companyTaglineEn').value = company.tagline_en || '';
             document.getElementById('companyDescription').value = company.description || '';
-            document.getElementById('companyPhone').value = company.phone || '';
-            document.getElementById('companyWhatsapp').value = company.whatsapp || '';
-            document.getElementById('companyEmail').value = company.email || '';
+            document.getElementById('companyDescriptionEn').value = company.description_en || '';
             document.getElementById('companyAddress').value = company.address || '';
+            document.getElementById('companyAddressEn').value = company.address_en || '';
+            document.getElementById('companyPhone').value = company.phone || '';
+            document.getElementById('companyWhatsapp').value = company.whatsapp_number || company.whatsapp || '';
+            document.getElementById('companyWhatsappMessage').value = company.whatsapp_message || '';
+            document.getElementById('companyWhatsappMessageEn').value = company.whatsapp_message_en || '';
+            document.getElementById('companyEmail').value = company.email || '';
             document.getElementById('companyHours').value = company.operating_hours || '';
+            document.getElementById('companyMaps').value = company.google_maps_url || '';
+            document.getElementById('companyLogoUrl').value = company.logo_url || company.logo_path || '';
+            document.getElementById('companyInstagram').value = company.social_instagram || '';
+            document.getElementById('companyFacebook').value = company.social_facebook || '';
+            document.getElementById('companyLinkedin').value = company.social_linkedin || '';
 
-            if (company.logo_path) {
-                document.getElementById('logoPreview').innerHTML = `<img src="${company.logo_path}" alt="Logo">`;
+            const logo = company.logo_url || company.logo_path;
+            if (logo) {
+                document.getElementById('logoPreview').innerHTML = `<img src="${logo}" alt="Logo">`;
             }
             
             console.log('✅ Company info loaded from API');
@@ -669,12 +709,24 @@ async function handleCompanySubmit(e) {
     try {
         const companyData = {
             name: document.getElementById('companyName').value,
+            name_en: document.getElementById('companyNameEn').value,
+            tagline: document.getElementById('companyTagline').value,
+            tagline_en: document.getElementById('companyTaglineEn').value,
             description: document.getElementById('companyDescription').value,
-            phone: document.getElementById('companyPhone').value,
-            whatsapp: document.getElementById('companyWhatsapp').value,
-            email: document.getElementById('companyEmail').value,
+            description_en: document.getElementById('companyDescriptionEn').value,
             address: document.getElementById('companyAddress').value,
-            operating_hours: document.getElementById('companyHours').value
+            address_en: document.getElementById('companyAddressEn').value,
+            phone: document.getElementById('companyPhone').value,
+            whatsapp_number: document.getElementById('companyWhatsapp').value,
+            whatsapp_message: document.getElementById('companyWhatsappMessage').value,
+            whatsapp_message_en: document.getElementById('companyWhatsappMessageEn').value,
+            email: document.getElementById('companyEmail').value,
+            operating_hours: document.getElementById('companyHours').value,
+            google_maps_url: document.getElementById('companyMaps').value,
+            logo_url: document.getElementById('companyLogoUrl').value,
+            social_instagram: document.getElementById('companyInstagram').value,
+            social_facebook: document.getElementById('companyFacebook').value,
+            social_linkedin: document.getElementById('companyLinkedin').value
         };
 
         const response = await fetch(`${API_URL}/api/admin/company`, {
@@ -692,7 +744,7 @@ async function handleCompanySubmit(e) {
         }
 
         console.log('✅ Company info saved via API');
-        alert('✅ Informasi perusahaan berhasil disimpan!');
+        showToast('Berhasil diperbarui', 'success');
         loadCompanyInfo();
 
         // Note: File upload for logo would need Supabase Storage implementation
@@ -703,7 +755,7 @@ async function handleCompanySubmit(e) {
 
     } catch (error) {
         console.error('❌ Error saving company info:', error);
-        alert('❌ Gagal menyimpan: ' + error.message);
+        showToast('Gagal menyimpan', 'error');
     }
 }
 

@@ -507,14 +507,48 @@
                 <div class="card">
                     <h3>Informasi Perusahaan</h3>
                     <form id="companyForm">
-                        <div class="form-group">
-                            <label for="companyName">Nama Perusahaan</label>
-                            <input type="text" id="companyName" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyName">Nama Perusahaan (ID)</label>
+                                <input type="text" id="companyName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyNameEn">Nama Perusahaan (EN)</label>
+                                <input type="text" id="companyNameEn">
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="companyDescription">Deskripsi</label>
-                            <textarea id="companyDescription"></textarea>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyTagline">Tagline / Subtitle (ID)</label>
+                                <input type="text" id="companyTagline">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyTaglineEn">Tagline / Subtitle (EN)</label>
+                                <input type="text" id="companyTaglineEn">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyDescription">Deskripsi (ID)</label>
+                                <textarea id="companyDescription"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyDescriptionEn">Deskripsi (EN)</label>
+                                <textarea id="companyDescriptionEn"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyAddress">Alamat (ID)</label>
+                                <textarea id="companyAddress"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyAddressEn">Alamat (EN)</label>
+                                <textarea id="companyAddressEn"></textarea>
+                            </div>
                         </div>
 
                         <div class="form-row">
@@ -523,28 +557,64 @@
                                 <input type="text" id="companyPhone">
                             </div>
                             <div class="form-group">
-                                <label for="companyWhatsapp">WhatsApp</label>
+                                <label for="companyWhatsapp">WhatsApp Number</label>
                                 <input type="text" id="companyWhatsapp">
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="companyEmail">Email</label>
-                            <input type="email" id="companyEmail">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyWhatsappMessage">Pesan WhatsApp (ID)</label>
+                                <textarea id="companyWhatsappMessage"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyWhatsappMessageEn">Pesan WhatsApp (EN)</label>
+                                <textarea id="companyWhatsappMessageEn"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyEmail">Email</label>
+                                <input type="email" id="companyEmail">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyHours">Jam Operasional</label>
+                                <input type="text" id="companyHours">
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="companyAddress">Alamat</label>
-                            <textarea id="companyAddress"></textarea>
+                            <label for="companyMaps">Google Maps URL</label>
+                            <input type="text" id="companyMaps" placeholder="https://www.google.com/maps?q=...">
                         </div>
 
                         <div class="form-group">
-                            <label for="companyHours">Jam Operasional</label>
-                            <input type="text" id="companyHours">
+                            <label for="companyLogoUrl">Logo URL</label>
+                            <input type="text" id="companyLogoUrl" placeholder="https://...">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyInstagram">Instagram</label>
+                                <input type="text" id="companyInstagram" placeholder="https://instagram.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyFacebook">Facebook</label>
+                                <input type="text" id="companyFacebook" placeholder="https://facebook.com/...">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="companyLinkedin">LinkedIn</label>
+                                <input type="text" id="companyLinkedin" placeholder="https://linkedin.com/...">
+                            </div>
+                            <div class="form-group"></div>
                         </div>
 
                         <div class="form-group">
-                            <label>Logo Perusahaan</label>
+                            <label>Logo Perusahaan (Upload)</label>
                             <div class="file-input-wrapper">
                                 <input type="file" id="companyLogo" accept="image/*">
                                 <label for="companyLogo" class="file-input-label">

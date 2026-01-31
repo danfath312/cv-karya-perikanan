@@ -36,7 +36,7 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <img src="images/logo.png" alt="" class="logo-image">
-                <span>CV Karya Perikanan Indonesia</span>
+                <span data-company-field="name">CV Karya Perikanan Indonesia</span>
             </a>
             
             <ul class="nav-menu" id="navMenu">
@@ -324,12 +324,12 @@
                     <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">📱</div>
                         <h4 style="color: white; margin-bottom: 5px;" data-i18n="order_help_whatsapp">WhatsApp</h4>
-                        <p style="opacity: 0.9;">0878-0822-8699</p>
+                        <p style="opacity: 0.9;" data-company-field="whatsapp_number">0878-0822-8699</p>
                     </div>
                     <div style="flex: 1; min-width: 250px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">⏰</div>
                         <h4 style="color: white; margin-bottom: 5px;" data-i18n="order_help_operational">Jam Operasional</h4>
-                        <p style="opacity: 0.9;" data-i18n="footer_hours">Buka 24 Jam</p>
+                        <p style="opacity: 0.9;" data-i18n="footer_hours" data-company-field="operating_hours">Buka 24 Jam</p>
                     </div>
                 </div>
                 <a href="contact.html" class="btn btn-light" data-i18n="contact_order_btn">Lihat Info Kontak Lengkap</a>
@@ -344,8 +344,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
-                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
+                    <h3 id="footerCompanyName" data-company-field="name">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc" data-company-field="description">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
@@ -364,19 +364,20 @@
                 
                 <div class="footer-contact">
                     <h4 data-i18n="footer_contact_title">Kontak</h4>
-                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
-                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
-                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-company-field="address" data-company-html="true">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span data-company-field="phone">0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-company-field="operating_hours">Buka 24 Jam</span></p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+                <p>&copy; 2026 <span data-company-field="name">CV Karya Perikanan Indonesia</span>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
+    <script src="js/company-loader.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

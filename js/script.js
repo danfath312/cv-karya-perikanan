@@ -38,6 +38,9 @@ function initLanguageSystem() {
 
     // Apply language to page
     applyLanguage();
+    if (typeof window.loadCompanyInfo === 'function') {
+        window.loadCompanyInfo();
+    }
     
     // Create and inject language switch UI
     createLanguageSwitchUI();
@@ -119,6 +122,10 @@ function setLanguage(lang) {
     // Refresh home products preview if available
     if (typeof window.loadHomeProducts === 'function') {
         setTimeout(() => window.loadHomeProducts(), 100);
+    }
+
+    if (typeof window.loadCompanyInfo === 'function') {
+        setTimeout(() => window.loadCompanyInfo(true), 100);
     }
 }
 

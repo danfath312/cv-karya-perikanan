@@ -62,6 +62,7 @@ async function handleGet(res) {
         const { data: companies, error } = await supabase
             .from('company')
             .select('*')
+            .eq('is_active', true)
             .limit(1);
 
         if (error) {
@@ -82,20 +83,46 @@ async function handleGet(res) {
  */
 async function handlePostPut(req, res) {
     try {
-        const companyData = await parseBody(req);
+        const payload = await parseBody(req);
+        const companyData = {
+            name: payload.name || '',
+            name_en: payload.name_en || '',
+            tagline: payload.tagline || '',
+            tagline_en: payload.tagline_en || '',
+            description: payload.description || '',
+            description_en: payload.description_en || '',
+            address: payload.address || '',
+            address_en: payload.address_en || '',
+            phone: payload.phone || '',
+            whatsapp_number: payload.whatsapp_number || payload.whatsapp || '',
+            whatsapp_message: payload.whatsapp_message || '',
+            whatsapp_message_en: payload.whatsapp_message_en || '',
+            email: payload.email || '',
+            google_maps_url: payload.google_maps_url || '',
+            logo_url: payload.logo_url || payload.logo_path || '',
+            social_instagram: payload.social_instagram || '',
+            social_facebook: payload.social_facebook || '',
+            social_linkedin: payload.social_linkedin || '',
+            operating_hours: payload.operating_hours || '',
+            is_active: true
+        };
 
-        const { data: existingCompany, error: checkError } = await supabase
+        const { data: activeCompanies } = await supabase
             .from('company')
             .select('id')
-            .limit(1)
-            .single();
+            .eq('is_active', true)
+            .limit(1);
 
-        if (existingCompany) {
-            // Update existing
+        const activeCompany = activeCompanies && activeCompanies.length > 0 ? activeCompanies[0] : null;
+
+        // Ensure only one active row
+        await supabase.from('company').update({ is_active: false }).neq('id', activeCompany?.id || '');
+
+        if (activeCompany && activeCompany.id) {
             const { data: updated, error } = await supabase
                 .from('company')
                 .update(companyData)
-                .eq('id', existingCompany.id)
+                .eq('id', activeCompany.id)
                 .select();
 
             if (error) {
@@ -106,7 +133,6 @@ async function handlePostPut(req, res) {
             return res.status(200).json(updated[0] || {});
         }
 
-        // Create new
         const { data: created, error } = await supabase
             .from('company')
             .insert([companyData])

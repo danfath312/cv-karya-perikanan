@@ -18,6 +18,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/whatsapp-bubble.css">
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -33,7 +34,7 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <img src="images/logo.png" alt="" class="logo-image">
-                <span>CV Karya Perikanan Indonesia</span>
+                <span data-company-field="name">CV Karya Perikanan Indonesia</span>
             </a>
             
             <ul class="nav-menu" id="navMenu">
@@ -84,10 +85,7 @@
                         <div class="details">
                             <h4 data-i18n="contact_address">Alamat</h4>
                             <p>
-                                <span data-i18n="contact_address_line1">Gunung Calincing, Kuripan</span><br>
-                                <span data-i18n="contact_address_line2">Kec. Ciseeng</span><br>
-                                <span data-i18n="contact_address_line3">Kabupaten Bogor, Jawa Barat 16120</span><br>
-                                Indonesia
+                                <span data-company-field="address" data-company-html="true">Gunung Calincing, Kuripan<br>Kec. Ciseeng<br>Kabupaten Bogor, Jawa Barat 16120<br>Indonesia</span>
                             </p>
                         </div>
                     </div>
@@ -100,8 +98,8 @@
                         <div class="details">
                             <h4 data-i18n="contact_whatsapp">WhatsApp</h4>
                             <p>
-                                <a href="https://wa.me/6287808228699" target="_blank" style="color: var(--primary-blue); font-weight: 500;">
-                                    0878-0822-8699
+                                <a href="https://wa.me/6287808228699" target="_blank" style="color: var(--primary-blue); font-weight: 500;" data-company-href="whatsapp">
+                                    <span data-company-field="whatsapp_number">0878-0822-8699</span>
                                 </a>
                             </p>
                             <p style="font-size: 0.9rem; margin-top: 5px;" data-i18n="contact_whatsapp_desc">
@@ -118,8 +116,8 @@
                         <div class="details">
                             <h4 data-i18n="contact_phone">Telepon</h4>
                             <p>
-                                <a href="tel:+6287808228699" style="color: var(--primary-blue); font-weight: 500;">
-                                    0878-0822-8699
+                                <a href="tel:+6287808228699" style="color: var(--primary-blue); font-weight: 500;" data-company-href="phone">
+                                    <span data-company-field="phone">0878-0822-8699</span>
                                 </a>
                             </p>
                             <p style="font-size: 0.9rem; margin-top: 5px;" data-i18n="contact_phone_desc">
@@ -136,7 +134,7 @@
                         <div class="details">
                             <h4 data-i18n="contact_hours">Jam Operasional</h4>
                             <p>
-                                <strong data-i18n="contact_hours_desc">Buka 24 Jam</strong><br>
+                                <strong data-i18n="contact_hours_desc" data-company-field="operating_hours">Buka 24 Jam</strong><br>
                                 Setiap Hari<br>
                                 Senin - Minggu
                             </p>
@@ -151,8 +149,8 @@
                         <div class="details">
                             <h4 data-i18n="contact_email">Email</h4>
                             <p>
-                                <a href="mailto:karyaperikananindonesia@gmail.com" style="color: var(--primary-blue); font-weight: 500;">
-                                    karyaperikananindonesia@gmail.com
+                                <a href="mailto:karyaperikananindonesia@gmail.com" style="color: var(--primary-blue); font-weight: 500;" data-company-href="email">
+                                    <span data-company-field="email">karyaperikananindonesia@gmail.com</span>
                                 </a>
                             </p>
                             <p style="font-size: 0.9rem; margin-top: 5px;">
@@ -168,7 +166,8 @@
                         src="https://www.google.com/maps?q=HM98%2BMV+Kuripan,+Kabupaten+Bogor,+Jawa+Barat&output=embed"
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade"
-                        title="Lokasi CV Karya Perikanan Indonesia - HM98+MV Kuripan, Kabupaten Bogor, Jawa Barat">
+                        title="Lokasi CV Karya Perikanan Indonesia - HM98+MV Kuripan, Kabupaten Bogor, Jawa Barat"
+                        data-company-map>
                     </iframe>
                 </div>
             </div>
@@ -196,10 +195,11 @@
                             Chat langsung dengan tim customer service kami melalui WhatsApp. 
                             Respon cepat dan mudah!
                         </p>
-                        <a href="https://wa.me/6287808228699?text=Halo%20CV%20Karya%20Perikanan%20Indonesia,%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" 
-                           target="_blank" 
-                           class="btn btn-secondary" 
-                           style="width: 100%; text-align: center;">
+                                <a href="https://wa.me/6287808228699?text=Halo%20CV%20Karya%20Perikanan%20Indonesia,%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" 
+                                    target="_blank" 
+                                    class="btn btn-secondary" 
+                                    style="width: 100%; text-align: center;"
+                                    data-company-href="whatsapp">
                             <i class="fab fa-whatsapp"></i> <span data-i18n="contact_whatsapp_btn">Chat Sekarang</span>
                         </a>
                     </div>
@@ -382,9 +382,10 @@
                     untuk kebutuhan produk perikanan Anda. Hubungi kami sekarang!
                 </p>
                 <div class="hero-buttons">
-                    <a href="https://wa.me/6287808228699?text=Halo%20CV%20Karya%20Perikanan%20Indonesia" 
-                       target="_blank" 
-                       class="btn btn-light">
+                          <a href="https://wa.me/6287808228699?text=Halo%20CV%20Karya%20Perikanan%20Indonesia" 
+                              target="_blank" 
+                              class="btn btn-light"
+                              data-company-href="whatsapp">
                         <i class="fab fa-whatsapp"></i> Chat WhatsApp
                     </a>
                     <a href="order.html" class="btn btn-secondary">Pesan Sekarang</a>
@@ -400,8 +401,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <h3 id="footerCompanyName">CV Karya Perikanan Indonesia</h3>
-                    <p id="footerCompanyDesc" data-i18n="footer_company_desc">
+                    <h3 id="footerCompanyName" data-company-field="name">CV Karya Perikanan Indonesia</h3>
+                    <p id="footerCompanyDesc" data-i18n="footer_company_desc" data-company-field="description">
                         Perusahaan pengolahan limbah perikanan yang berkomitmen menghasilkan 
                         produk berkualitas tinggi dengan standar kebersihan dan mutu terjaga.
                     </p>
@@ -420,19 +421,21 @@
                 
                 <div class="footer-contact">
                     <h4 data-i18n="footer_contact_title">Kontak</h4>
-                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span>Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
-                    <p id="footerPhone"><i class="fas fa-phone"></i> <span>0878-0822-8699</span></p>
-                    <p id="footerHours"><i class="fas fa-clock"></i> <span>Buka 24 Jam</span></p>
+                    <p id="footerAddress"><i class="fas fa-map-marker-alt"></i> <span data-company-field="address" data-company-html="true">Gunung Calincing, Kuripan, Kec. Ciseeng, Kabupaten Bogor, Jawa Barat 16120</span></p>
+                    <p id="footerPhone"><i class="fas fa-phone"></i> <span data-company-field="phone">0878-0822-8699</span></p>
+                    <p id="footerHours"><i class="fas fa-clock"></i> <span data-company-field="operating_hours">Buka 24 Jam</span></p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 CV Karya Perikanan Indonesia. All Rights Reserved.</p>
+                <p>&copy; 2026 <span data-company-field="name">CV Karya Perikanan Indonesia</span>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
+    <script src="js/company-loader.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/whatsapp-bubble.js"></script>
 </body>
 </html>
