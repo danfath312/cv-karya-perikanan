@@ -336,7 +336,7 @@
 
     <!-- Load Products from Supabase -->
     <script>
-        document.addEventListener('DOMContentLoaded', async function() {
+        async function loadHomeProducts() {
             const productsGrid = document.querySelector('.products-grid');
             
             if (!productsGrid) {
@@ -381,10 +381,15 @@
                     const productCard = document.createElement('div');
                     productCard.className = 'product-card';
 
+                    // Use language-specific fields
+                    const isEnglish = currentLang === 'en';
+                    const productName = isEnglish && product.name_en ? product.name_en : product.name;
+                    const productDesc = isEnglish && product.description_en ? product.description_en : product.description;
+
                     // Handle image
                     let imageHTML = '';
                     if (product.image_url && product.image_url.trim() !== '') {
-                        imageHTML = `<img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        imageHTML = `<img src="${product.image_url}" alt="${productName}" style="width: 100%; height: 100%; object-fit: cover;">`;
                     } else {
                         // Default placeholder if no image
                         imageHTML = `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E6F2FF 0%, #B3D9FF 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">🐟</div>`;
@@ -398,8 +403,8 @@
                             ${imageHTML}
                         </div>
                         <div class="product-info">
-                            <h3>${product.name}</h3>
-                            <p>${product.description || defaultDesc}</p>
+                            <h3>${productName}</h3>
+                            <p>${productDesc || defaultDesc}</p>
                             <a href="order.html" class="btn btn-primary">${orderNowText}</a>
                         </div>
                     `;
@@ -415,6 +420,10 @@
                 const errorMsg = i18n[currentLang]?.products_error || 'Gagal memuat produk. Silakan refresh halaman.';
                 productsGrid.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: red;">${errorMsg}</p>`;
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHomeProducts();
         });
     </script>
 </body>

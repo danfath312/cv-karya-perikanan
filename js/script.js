@@ -115,6 +115,11 @@ function setLanguage(lang) {
     if (document.getElementById('produk')) {
         setTimeout(() => loadAvailableProducts(), 100);
     }
+
+    // Refresh home products preview if available
+    if (typeof window.loadHomeProducts === 'function') {
+        setTimeout(() => window.loadHomeProducts(), 100);
+    }
 }
 
 // Create language switch UI dynamically

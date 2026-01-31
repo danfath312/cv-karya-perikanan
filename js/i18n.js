@@ -44,6 +44,7 @@ const i18n = {
         prod_scale_tilapia_desc: "Sisik ikan nila kering dengan kualitas terbaik. Bersih, kering sempurna, dan siap diolah. Cocok untuk berbagai aplikasi industri dan penelitian.",
         prod_skin_title: "Kulit Ikan",
         prod_skin_desc: "Kulit ikan kering berkualitas tinggi. Diproses dengan standar kebersihan ketat. Dapat digunakan untuk industri pakan ternak dan kerajinan.",
+        product_default_desc: "Produk berkualitas tinggi dari CV Karya Perikanan Indonesia.",
         view_all_products: "Lihat Semua Produk",
         order_now: "Pesan Sekarang",
 
@@ -411,6 +412,7 @@ const i18n = {
         prod_scale_tilapia_desc: "Best quality dried tilapia fish scales. Clean, perfectly dry, and ready for processing. Suitable for various industrial applications and research.",
         prod_skin_title: "Fish Skin",
         prod_skin_desc: "High quality dried fish skin. Processed with strict hygiene standards. Can be used for animal feed industry and crafts.",
+        product_default_desc: "High quality products from CV Karya Perikanan Indonesia.",
         view_all_products: "View All Products",
         order_now: "Order Now",
 
