@@ -1,26 +1,23 @@
 /**
  * /api/admin/products/[id] - GET, PUT, DELETE single product
  * Vercel Serverless Handler (ESM)
+ * 
+ * ⚠️ Changing ENV requires redeploy on Vercel
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { authMiddleware, validateEnv } from '../_middleware/auth.js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminSecret = process.env.ADMIN_SECRET;
 
-if (!supabaseUrl || !supabaseKey || !adminSecret) {
-    console.error('❌ Missing env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or ADMIN_SECRET');
-}
+// Fail-fast: Don't create Supabase client if ENV missing
+const envCheck = validateEnv(supabaseUrl, supabaseKey);
+let supabase = null;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-/**
- * Check authorization
- */
-function isAuthorized(req) {
-    const token = req.headers['x-admin-secret'];
-    return Boolean(token && adminSecret && token === adminSecret);
+if (envCheck.ok) {
+    supabase = createClient(supabaseUrl, supabaseKey);
 }
 
 /**
@@ -74,6 +71,11 @@ async function parseBody(req) {
  * GET /api/admin/products/[id] - Get single product
  */
 async function handleGet(id, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     if (!id) {
         console.error('❌ GET: Product ID is missing');
         return res.status(400).json({ error: 'Product ID is required' });
@@ -115,6 +117,11 @@ async function handleGet(id, res) {
  * PUT /api/admin/products/[id] - Update product
  */
 async function handlePut(id, req, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     if (!id) {
         console.error('❌ PUT: Product ID is missing');
         return res.status(400).json({ error: 'Product ID is required' });
@@ -165,6 +172,11 @@ async function handlePut(id, req, res) {
  * DELETE /api/admin/products/[id] - Delete product
  */
 async function handleDelete(id, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     if (!id) {
         console.error('❌ DELETE: Product ID is missing');
         return res.status(400).json({ error: 'Product ID is required' });
@@ -195,13 +207,8 @@ async function handleDelete(id, res) {
  * Main handler - Vercel Serverless
  */
 export default async function handler(req, res) {
-    // Add CORS headers
-    res.setHeader('Content-Type', 'application/json');
-
-    // Auth check
-    if (!isAuthorized(req)) {
-        return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
-    }
+    // Auth & rate limit check
+    if (!authMiddleware(req, res, adminSecret)) return;
 
     // Extract ID
     const id = getId(req);

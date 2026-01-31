@@ -1,30 +1,23 @@
 /**
  * /api/admin/products - GET list, POST create
  * Vercel Serverless Handler (ESM)
+ * 
+ * ⚠️ Changing ENV requires redeploy on Vercel
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { authMiddleware, validateEnv } from '../_middleware/auth.js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminSecret = process.env.ADMIN_SECRET;
 
-// Validate env vars on startup
-if (!supabaseUrl || !supabaseKey || !adminSecret) {
-    console.error('❌ Missing env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or ADMIN_SECRET');
-}
+// Validate env vars on startup - Fail-fast guard
+const envCheck = validateEnv(supabaseUrl, supabaseKey);
+let supabase = null;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-/**
- * Check authorization via x-admin-secret header
- */
-function isAuthorized(req) {
-    const token = req.headers['x-admin-secret'];
-    if (!token || !adminSecret || token !== adminSecret) {
-        return false;
-    }
-    return true;
+if (envCheck.ok) {
+    supabase = createClient(supabaseUrl, supabaseKey);
 }
 
 /**
@@ -63,6 +56,11 @@ async function parseBody(req) {
  * GET /api/admin/products - List all products
  */
 async function handleGet(req, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     console.log('📦 GET: Fetching all products');
     
     try {
@@ -87,7 +85,10 @@ async function handleGet(req, res) {
 /**
  * POST /api/admin/products - Create new product
  */
-async function handlePost(req, res) {
+async function handlePost(req, res) {    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
     console.log('✨ POST: Creating new product');
     
     try {
@@ -158,13 +159,8 @@ async function handlePost(req, res) {
  * @param {*} res - Vercel response object
  */
 export default async function handler(req, res) {
-    // Add CORS headers
-    res.setHeader('Content-Type', 'application/json');
-
-    // Auth check
-    if (!isAuthorized(req)) {
-        return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
-    }
+    // Auth & rate limit check
+    if (!authMiddleware(req, res, adminSecret)) return;
 
     // Route by method
     if (req.method === 'GET') {

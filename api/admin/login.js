@@ -1,19 +1,21 @@
 /**
  * /api/admin/login - POST verify admin secret
  * Vercel Serverless Handler (ESM)
+ * 
+ * ⚠️ Changing ENV requires redeploy on Vercel
  */
+
+import { validateAuth } from './_middleware/auth.js';
 
 const adminSecret = process.env.ADMIN_SECRET;
 
-if (!adminSecret) {
-    console.error('❌ Missing env var: ADMIN_SECRET');
-}
-
 /**
  * POST /api/admin/login - Verify admin secret
+ * 
+ * This endpoint validates credentials without enforcing rate limits
+ * (rate limiting is applied after successful login on other endpoints)
  */
 export default async function handler(req, res) {
-    // Set response headers
     res.setHeader('Content-Type', 'application/json');
 
     // Only allow POST
@@ -22,17 +24,20 @@ export default async function handler(req, res) {
     }
 
     try {
-        const token = req.headers['x-admin-secret'];
+        // Validate auth using shared middleware logic
+        const authResult = validateAuth(req, adminSecret);
 
-        // Validate token
-        if (!token || !adminSecret || token !== adminSecret) {
-            return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
+        if (!authResult.success) {
+            return res.status(authResult.statusCode).json({ error: authResult.error });
         }
 
         // Success - return ok status
         return res.status(200).json({ ok: true });
     } catch (err) {
-        console.error('Error in login handler:', err.message);
-        return res.status(500).json({ error: 'Internal server error', details: err.message });
+        console.error('❌ Error in login handler:', err.message);
+        return res.status(500).json({ 
+            error: 'Internal server error', 
+            details: err.message 
+        });
     }
 }

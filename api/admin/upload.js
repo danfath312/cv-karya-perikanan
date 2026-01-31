@@ -4,9 +4,12 @@
  * 
  * Note: For Vercel, ensure Supabase Storage bucket is public
  * and CORS is properly configured
+ * 
+ * ⚠️ Changing ENV requires redeploy on Vercel
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { authMiddleware, validateEnv } from './_middleware/auth.js';
 import fs from 'fs/promises';
 import path from 'path';
 import formidable from 'formidable';
@@ -15,18 +18,12 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminSecret = process.env.ADMIN_SECRET;
 
-if (!supabaseUrl || !supabaseKey || !adminSecret) {
-    console.error('❌ Missing env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or ADMIN_SECRET');
-}
+// Fail-fast: Don't create Supabase client if ENV missing
+const envCheck = validateEnv(supabaseUrl, supabaseKey);
+let supabase = null;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-/**
- * Check authorization
- */
-function isAuthorized(req) {
-    const token = req.headers['x-admin-secret'];
-    return Boolean(token && adminSecret && token === adminSecret);
+if (envCheck.ok) {
+    supabase = createClient(supabaseUrl, supabaseKey);
 }
 
 /**
@@ -59,6 +56,11 @@ function getFile(files) {
  * POST /api/admin/upload - Upload product image
  */
 async function handlePost(req, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     let uploadedFile = null;
 
     try {
@@ -131,13 +133,8 @@ async function handlePost(req, res) {
  * Main handler - Vercel Serverless
  */
 export default async function handler(req, res) {
-    // Set response headers
-    res.setHeader('Content-Type', 'application/json');
-
-    // Auth check
-    if (!isAuthorized(req)) {
-        return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
-    }
+    // Auth & rate limit check
+    if (!authMiddleware(req, res, adminSecret)) return;
 
     // Only allow POST
     if (req.method !== 'POST') {
@@ -146,3 +143,4 @@ export default async function handler(req, res) {
 
     return handlePost(req, res);
 }
+

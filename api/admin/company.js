@@ -1,26 +1,23 @@
 /**
  * /api/admin/company - GET, POST company profile
  * Vercel Serverless Handler (ESM)
+ * 
+ * ⚠️ Changing ENV requires redeploy on Vercel
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { authMiddleware, validateEnv } from './_middleware/auth.js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminSecret = process.env.ADMIN_SECRET;
 
-if (!supabaseUrl || !supabaseKey || !adminSecret) {
-    console.error('❌ Missing env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or ADMIN_SECRET');
-}
+// Fail-fast: Don't create Supabase client if ENV missing
+const envCheck = validateEnv(supabaseUrl, supabaseKey);
+let supabase = null;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-/**
- * Check authorization
- */
-function isAuthorized(req) {
-    const token = req.headers['x-admin-secret'];
-    return Boolean(token && adminSecret && token === adminSecret);
+if (envCheck.ok) {
+    supabase = createClient(supabaseUrl, supabaseKey);
 }
 
 /**
@@ -58,6 +55,11 @@ async function parseBody(req) {
  * GET /api/admin/company
  */
 async function handleGet(res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     try {
         const { data: companies, error } = await supabase
             .from('company')
@@ -66,14 +68,14 @@ async function handleGet(res) {
             .limit(1);
 
         if (error) {
-            console.error('Supabase GET error:', error.message);
+            console.error('❌ Supabase GET error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
         const company = companies && companies.length > 0 ? companies[0] : null;
         return res.status(200).json(company || {});
     } catch (err) {
-        console.error('Error fetching company info:', err.message);
+        console.error('❌ Error fetching company info:', err.message);
         return res.status(500).json({ error: 'Failed to fetch company info', details: err.message });
     }
 }
@@ -82,6 +84,11 @@ async function handleGet(res) {
  * POST /api/admin/company
  */
 async function handlePostPut(req, res) {
+    // Fail-fast guard
+    if (!envCheck.ok) {
+        return res.status(500).json({ error: envCheck.error });
+    }
+
     try {
         const payload = await parseBody(req);
         const companyData = {
@@ -126,7 +133,7 @@ async function handlePostPut(req, res) {
                 .select();
 
             if (error) {
-                console.error('Supabase UPDATE error:', error.message);
+                console.error('❌ Supabase UPDATE error:', error.message);
                 return res.status(500).json({ error: error.message });
             }
 
@@ -139,13 +146,13 @@ async function handlePostPut(req, res) {
             .select();
 
         if (error) {
-            console.error('Supabase INSERT error:', error.message);
+            console.error('❌ Supabase INSERT error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
         return res.status(201).json(created[0] || {});
     } catch (err) {
-        console.error('Error saving company info:', err.message);
+        console.error('❌ Error saving company info:', err.message);
         return res.status(500).json({ error: 'Failed to save company info', details: err.message });
     }
 }
@@ -154,13 +161,8 @@ async function handlePostPut(req, res) {
  * Main handler - Vercel Serverless
  */
 export default async function handler(req, res) {
-    // Set response headers
-    res.setHeader('Content-Type', 'application/json');
-
-    // Auth check
-    if (!isAuthorized(req)) {
-        return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
-    }
+    // Auth & rate limit check
+    if (!authMiddleware(req, res, adminSecret)) return;
 
     // Route by method
     if (req.method === 'GET') {

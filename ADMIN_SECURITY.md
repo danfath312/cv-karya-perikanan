@@ -6,14 +6,17 @@
 - `admin.html` + `js/admin.js` mengakses Supabase langsung dari browser
 - `SUPABASE_SERVICE_ROLE_KEY` disimpan di `js/admin.js` (bisa dilihat di browser)
 - Siapa saja bisa buka DevTools dan lihat service_role key
-- Full akses database tanpa kontrolkan dari server
+- Full akses database tanpa kontrol dari server
 
 ### Kondisi Sesudah (✅ AMAN)
 - Admin panel hanya menggunakan fetch API ke backend
-- Semua Supabase operations berjalan di server (Node.js)
+- Semua Supabase operations berjalan di server (Vercel Serverless)
 - `SUPABASE_SERVICE_ROLE_KEY` hanya tersimpan di environment variables server
 - Frontend tidak punya akses langsung ke Supabase
-- Setiap API request dilindungi dengan `x-admin-token` header
+- Setiap API request dilindungi dengan `x-admin-secret` header
+- Rate limiting per IP (60 req/minute)
+- Fail-fast ENV validation
+- Health check endpoint untuk diagnosis
 
 ---
 
@@ -21,74 +24,55 @@
 
 ```
 api/admin/
-├── products.js      # Endpoint untuk manage produk
-├── orders.js        # Endpoint untuk manage order
-└── company.js       # Endpoint untuk company info
+├── _middleware/
+│   └── auth.js           # Shared auth middleware dengan rate limiting
+├── health.js             # Health check endpoint (tidak perlu auth)
+├── login.js              # Verify admin secret
+├── company.js            # Endpoint untuk company info
+├── orders.js             # List orders
+├── orders/
+│   └── [id].js          # Update order status
+├── products/
+│   ├── index.js         # List & create products
+│   ├── [id].js          # Get/update/delete single product
+│   └── [id]/
+│       └── toggle.js    # Toggle product availability
+└── upload.js             # Upload product images
 ```
 
 ---
 
-## 🔐 API Endpoints
+## 🔐 Cara Kerja Admin Login
 
-Semua endpoint memerlukan header:
+### 1. Login Flow
 ```
-x-admin-token: <ADMIN_SECRET>
-```
-
-### Products
-- `GET /api/admin/products` - List semua produk
-- `GET /api/admin/products/:id` - Get detail produk
-- `POST /api/admin/products` - Buat produk baru
-- `PUT /api/admin/products/:id` - Update produk
-- `DELETE /api/admin/products/:id` - Hapus produk
-- `PATCH /api/admin/products/:id/toggle-availability` - Toggle availability
-- `POST /api/admin/upload-product-image` - Upload gambar produk
-
-### Orders
-- `GET /api/admin/orders` - List semua order
-- `GET /api/admin/orders/:id` - Get detail order
-- `PUT /api/admin/orders/:id` - Update order
-- `PATCH /api/admin/orders/:id/status` - Update order status
-- `DELETE /api/admin/orders/:id` - Hapus order
-
-### Company
-- `GET /api/admin/company` - Get company info
-- `POST /api/admin/company` - Simpan company info
-- `PUT /api/admin/company` - Update company info
-
----
-
-## 🛠 Admin.js Changes
-
-### Sebelum (Supabase Direct)
-```javascript
-// ❌ TIDAK AMAN - service_role di browser
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
-const supabaseOrderClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
-const { data: products, error } = await supabaseOrderClient
-    .from('products')
-    .select('*');
+User input ADMIN_SECRET → Frontend kirim POST /api/admin/login
+                        → Backend validate token
+                        → Success: simpan di localStorage
+                        → Frontend bisa akses admin endpoints
 ```
 
-### Sesudah (API Client)
-```javascript
-// ✅ AMAN - hanya token admin, bukan service_role
-let adminSecret = localStorage.getItem('adminSecret');
-
-const response = await fetch(`${API_URL}/api/admin/products`, {
-    headers: {
-        'x-admin-token': adminSecret
-    }
-});
-const products = await response.json();
+### 2. Request Flow
 ```
+Frontend → Fetch dengan header x-admin-secret
+        → authMiddleware check rate limit
+        → authMiddleware validate token
+        → validateEnv check Supabase ENV
+        → Handler process request
+```
+
+### 3. Architecture Decision
+**Mengapa pakai header auth, bukan JWT?**
+- Admin panel internal, tidak perlu kompleksitas JWT
+- Mudah rotate: ganti ENV, redeploy
+- Cocok untuk small team
+- Rate limiting per IP cukup untuk proteksi
 
 ---
 
 ## 🔑 Environment Variables
 
-Di server (Vercel atau lokal), set variable:
+Di Vercel Dashboard atau file `.env` lokal:
 
 ```env
 # Supabase
@@ -98,6 +82,8 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 # Admin Secret (Ganti dengan string random yang kuat!)
 ADMIN_SECRET=your-super-secret-admin-token-2024
 ```
+
+⚠️ **PENTING: Setiap perubahan ENV di Vercel WAJIB redeploy!**
 
 ---
 
@@ -112,28 +98,106 @@ vercel deploy
 
 Pergi ke: **Settings** > **Environment Variables**
 
-Tambahkan:
-- `SUPABASE_URL` → Nilai Supabase URL
-- `SUPABASE_SERVICE_ROLE_KEY` → Nilai service_role key (dari Supabase)
-- `ADMIN_SECRET` → Token rahasia untuk admin (generate random string)
+---
 
-### 3. Simpan Admin Secret di localStorage
+## 🔄 Cara Ganti ADMIN_SECRET
 
-Saat admin login, server akan return `admin_secret`. Ini disimpan di localStorage untuk setiap API request.
+### Langkah 1: Generate Secret Baru
+```bash
+# Generate random 32-char string
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### Langkah 2: Update di Vercel Dashboard
+1. Buka Vercel Dashboard → Project Settings
+2. Environment Variables → Edit `ADMIN_SECRET`
+3. Paste secret baru
+4. Save
+
+### Langkah 3: Redeploy
+```bash
+git commit --allow-empty -m "Trigger redeploy for ENV update"
+git push
+```
+
+⚠️ **WAJIB REDEPLOY!** ENV changes tidak otomatis apply di Vercel.
+
+### Langkah 4: Update Admin Login
+- Admin harus login ulang dengan secret baru
+- localStorage akan auto-update
 
 ---
 
-## 🚀 Deployment Checklist
+## 🩺 Health Check & Diagnostics
 
-- [ ] Update server.js dengan import API handlers
-- [ ] Buat folder `/api/admin/`
-- [ ] Buat file endpoints: products.js, orders.js, company.js
-- [ ] Update admin.js untuk pakai fetch API
-- [ ] Remove Supabase SDK dari admin.html
-- [ ] Set environment variables di Vercel/server
-- [ ] Update login endpoint untuk return admin_secret
-- [ ] Test semua API endpoints
-- [ ] Verifikasi service_role tidak ada di browser
+### Endpoint: GET /api/admin/health
+
+**Tidak perlu authentication.** Gunakan untuk cek ENV status.
+
+**Response (200 OK):**
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-01-31T10:00:00.000Z",
+  "env": {
+    "hasAdminSecret": true,
+    "hasSupabaseUrl": true,
+    "hasServiceRoleKey": true
+  }
+}
+```
+
+**Response (503 Degraded):**
+```json
+{
+  "status": "degraded",
+  "timestamp": "2026-01-31T10:00:00.000Z",
+  "env": {
+    "hasAdminSecret": false,
+    "hasSupabaseUrl": true,
+    "hasServiceRoleKey": true
+  },
+  "warning": "Some ENV variables are missing. Admin functions may not work.",
+  "action": "Verify ENV vars in Vercel Dashboard and redeploy if needed."
+}
+```
+
+### Cara Diagnosa < 10 Detik
+
+1. **Tidak bisa login?**
+   ```bash
+   curl https://your-domain.vercel.app/api/admin/health
+   ```
+   - Jika `hasAdminSecret: false` → Set ADMIN_SECRET di Vercel + redeploy
+
+2. **401 Unauthorized tapi secret benar?**
+   - Check health endpoint dulu
+   - Jika ENV ok, coba clear localStorage dan login ulang
+
+3. **500 Internal Server Error?**
+   - Check health endpoint
+   - Jika `hasSupabaseUrl: false` atau `hasServiceRoleKey: false` → Set ENV + redeploy
+
+---
+
+## 🛡️ Rate Limiting
+
+### Konfigurasi
+- **60 requests per minute** per IP
+- In-memory storage (resets on cold start)
+- Headers response:
+  - `X-RateLimit-Remaining: 59`
+  - `X-RateLimit-Reset: 2026-01-31T10:01:00.000Z`
+
+### Response saat Rate Limit
+```json
+{
+  "error": "Too many requests. Please try again later.",
+  "retryAfter": 45
+}
+```
+
+**Status Code:** 429 Too Many Requests
 
 ---
 
@@ -149,9 +213,10 @@ console.log(localStorage.getItem('adminSecret')); // admin-token-xxxxx
 ```
 
 ### Cek di Network Tab:
-- Setiap API request punya header `x-admin-token`
-- Request ke `/api/admin/*` harus authenticated
+- Setiap API request punya header `x-admin-secret`
+- Request ke `/api/admin/*` harus authenticated (kecuali /health)
 - Tidak ada Supabase SDK requests dari browser
+- Rate limit headers muncul di response
 
 ---
 
@@ -160,50 +225,81 @@ console.log(localStorage.getItem('adminSecret')); // admin-token-xxxxx
 1. **Admin Secret**
    - Generate random string yang panjang (minimal 32 karakter)
    - Simpan hanya di server (environment variables)
-   - Change secara berkala
+   - Rotate secara berkala (setiap 3-6 bulan)
+   - JANGAN hardcode atau commit ke Git
 
 2. **Service Role Key**
    - HANYA simpan di server environment
    - JANGAN commit ke GitHub
-   - JANGAN hardcode di frontend
+   - JANGAN hardcode di frontend atau logs
 
 3. **API Protection**
-   - Setiap endpoint cek admin token
+   - Semua endpoints (kecuali /health) protected dengan authMiddleware
+   - Rate limiting aktif per IP
    - Return 401 jika token invalid
-   - Log semua API requests untuk audit
+   - Return 500 dengan clear message jika ENV missing
 
 4. **HTTPS Only**
    - Selalu gunakan HTTPS di production
    - Admin token bisa intercept jika pakai HTTP
+
+5. **Logging**
+   - ❌ JANGAN log: ADMIN_SECRET, tokens, passwords
+   - ✅ LOG: Invalid auth attempts, rate limit hits, errors
 
 ---
 
 ## 🐛 Troubleshooting
 
 ### "Unauthorized" Error pada API Calls
-- Check admin token tersimpan di localStorage
-- Verify ADMIN_SECRET di server match dengan yang dikirim
-- Check x-admin-token header di Network tab
+1. Check `/api/admin/health` - pastikan semua ENV ok
+2. Verify admin token tersimpan di localStorage
+3. Check x-admin-secret header di Network tab
+4. Coba login ulang (clear localStorage)
 
 ### API Returns 500 Error
-- Check server logs di Vercel
-- Verify SUPABASE_URL dan SUPABASE_SERVICE_ROLE_KEY correct
-- Check Supabase database connection
+1. Check `/api/admin/health` - lihat ENV mana yang missing
+2. Check Vercel logs: `vercel logs [deployment-url]`
+3. Verify Supabase database connection
+4. Pastikan sudah redeploy setelah ENV change
+
+### Rate Limit 429 Error
+- Tunggu sampai `retryAfter` seconds
+- Normal behavior untuk proteksi
+- Jika terlalu ketat, adjust di `_middleware/auth.js`
 
 ### Image Upload Fails
-- Verify multer upload directory writable
-- Check file size limits
-- Verify Supabase Storage bucket exists
+- Check Supabase Storage bucket exists
+- Verify bucket is public
+- Check file size (max 50MB)
+- Check CORS settings di Supabase
 
 ---
 
-## 📞 Support
+## 🚀 Deployment Workflow
 
-Untuk masalah:
-1. Check browser console untuk error messages
-2. Check Vercel server logs
-3. Verify environment variables setup
-4. Test API endpoints langsung dengan curl atau Postman
+### Saat Update ENV:
+```bash
+# 1. Update di Vercel Dashboard
+# 2. Trigger redeploy
+git commit --allow-empty -m "Redeploy for ENV update"
+git push
+
+# 3. Verify health check
+curl https://your-domain.vercel.app/api/admin/health
+
+# 4. Test login
+# Admin harus login ulang jika ADMIN_SECRET berubah
+```
+
+### Saat Deploy Code Changes:
+```bash
+git add .
+git commit -m "Your changes"
+git push
+
+# ENV tetap sama, tidak perlu update admin login
+```
 
 ---
 
@@ -211,4 +307,9 @@ Untuk masalah:
 
 - [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables)
 - [Supabase Service Role](https://supabase.com/docs/guides/api/rest/authentication)
-- [Express Middleware](https://expressjs.com/en/guide/using-middleware.html)
+- [Rate Limiting Best Practices](https://www.cloudflare.com/learning/bots/what-is-rate-limiting/)
+
+---
+
+**Last Updated:** January 31, 2026  
+**Version:** 2.0 (with auth middleware & health check)
