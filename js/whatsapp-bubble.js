@@ -11,7 +11,7 @@
         }
     };
 
-    const ALLOWED_PAGES = ['produk.html', 'contact.html'];
+    const ALLOWED_PAGES = ['produk.html', 'contact.html', 'order.html'];
 
     function isAllowedPage() {
         if (window.location.pathname.includes('admin.html')) {
