@@ -1,0 +1,334 @@
+VERCEL DEPLOYMENT CHECKLIST
+===========================
+
+✅ REFACTORING COMPLETE - Follow this checklist before deploying to Vercel
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: Local Setup & Testing
+─────────────────────────────
+
+[ ] Verify Node.js version (14+ required):
+    node --version
+
+[ ] Install formidable dependency:
+    npm install formidable@^3.5.2
+
+[ ] Verify package.json has ESM enabled:
+    - Check: "type": "module"
+
+[ ] Start local Vercel emulation (optional):
+    npm install -g vercel
+    vercel dev
+
+[ ] Test all 8 endpoints locally:
+    - POST /api/admin/login
+    - GET /api/admin/products
+    - POST /api/admin/products
+    - GET /api/admin/products/[id]
+    - PUT /api/admin/products/[id]
+    - DELETE /api/admin/products/[id]
+    - PATCH /api/admin/products/[id]/toggle
+    - POST /api/admin/upload
+    - GET /api/admin/orders
+    - PATCH /api/admin/orders/[id]
+    - GET /api/admin/company
+    - PUT /api/admin/company
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 2: Environment Variables Setup
+───────────────────────────────────
+
+[ ] Create .env.local for local testing:
+    SUPABASE_URL=https://your-project.supabase.co
+    SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+    ADMIN_SECRET=your-admin-secret-here
+
+[ ] DO NOT commit .env.local to Git
+
+[ ] Verify Supabase credentials:
+    - Go to: https://app.supabase.com
+    - Select your project
+    - Settings > API > Copy URL
+    - Settings > API > Copy Service Role Key
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 3: Vercel Project Configuration
+────────────────────────────────────
+
+[ ] Link project to Vercel:
+    vercel link
+
+[ ] Set environment variables in Vercel:
+    - Go to: https://vercel.com/dashboard
+    - Select your project
+    - Settings > Environment Variables
+    - Add:
+      Name: SUPABASE_URL
+      Value: https://your-project.supabase.co
+      
+      Name: SUPABASE_SERVICE_ROLE_KEY
+      Value: your-service-role-key-here
+      
+      Name: ADMIN_SECRET
+      Value: your-admin-secret-here
+
+[ ] Verify all 3 variables are set
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 4: Code Quality Checks
+──────────────────────────
+
+[ ] No syntax errors:
+    - Check each /api/admin/*.js file
+    - All should have: export default async function handler(req, res)
+
+[ ] No require() statements in /api files:
+    - Only import syntax allowed
+    - Should use: import { createClient } from '@supabase/supabase-js'
+
+[ ] No Express.js usage in /api files:
+    - No express()
+    - No router
+    - No middleware functions
+
+[ ] All files use ESM syntax:
+    - import statements
+    - export default
+
+[ ] Check package.json:
+    - Has "type": "module" at top level
+    - formidable is in dependencies
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 5: Supabase Database Setup
+──────────────────────────────
+
+[ ] Verify Supabase tables exist:
+    - products (id, name, description, price, stock, available, image_url, ...)
+    - orders (id, customer_name, status, ...)
+    - company (id, name, description, ...)
+
+[ ] Verify Supabase Storage buckets:
+    - Create bucket: "product_images"
+    - Set to "Public"
+    - Allow file uploads
+
+[ ] Verify Service Role Key has permissions:
+    - Can read all tables
+    - Can write all tables
+    - Can upload to storage
+
+[ ] Test connection with Supabase SQL editor:
+    SELECT COUNT(*) FROM products;
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 6: Frontend Admin Panel Check
+──────────────────────────────────
+
+[ ] admin.html loads without errors
+
+[ ] Admin panel login works with ADMIN_SECRET:
+    - Enter secret in login form
+    - Should see dashboard
+
+[ ] Products tab functional:
+    - Lists all products
+    - Can create new product
+    - Can edit product
+    - Can delete product
+    - Can toggle availability
+    - Can upload product image
+
+[ ] Orders tab functional:
+    - Lists all orders
+    - Can update order status
+
+[ ] Company info tab functional:
+    - Displays company info
+    - Can update info
+
+[ ] All API calls use /api/admin/... paths:
+    - Check browser Network tab in DevTools
+    - No /api/admin/products/[id]/toggle-availability
+    - Should be /api/admin/products/[id]/toggle
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 7: Git & Deployment
+───────────────────────
+
+[ ] Commit all changes:
+    git add .
+    git commit -m "Refactor: Complete Vercel Serverless migration"
+
+[ ] Push to main branch:
+    git push origin main
+
+[ ] Vercel auto-deploys:
+    - Check: https://vercel.com/dashboard
+    - Should see deployment in progress
+    - Wait for "Ready" status
+
+[ ] Test in production:
+    - Go to: https://your-domain.vercel.app
+    - Test admin login
+    - Test all endpoints
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 8: Production Testing
+──────────────────────────
+
+[ ] Admin login works in production:
+    - Submit admin secret
+    - Should see dashboard
+
+[ ] GET /api/admin/products returns data:
+    - Should return array of products
+    - Status 200 (with secret), 401 (without)
+
+[ ] POST /api/admin/products creates product:
+    - Submit product form
+    - Should appear in list
+
+[ ] PATCH /api/admin/products/[id]/toggle works:
+    - Toggle availability
+    - Should update immediately
+
+[ ] POST /api/admin/upload uploads image:
+    - Select product image
+    - Should upload to Supabase Storage
+    - Should display preview
+
+[ ] GET /api/admin/orders returns data:
+    - Should list orders
+    - Status 200
+
+[ ] PATCH /api/admin/orders/[id] updates status:
+    - Change order status in dropdown
+    - Should update in Supabase
+
+[ ] GET /api/admin/company returns data:
+    - Should show company info
+    - Status 200
+
+[ ] PUT /api/admin/company updates info:
+    - Edit company info
+    - Should save to Supabase
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 9: Monitoring & Logging
+────────────────────────────
+
+[ ] Check Vercel Functions dashboard:
+    - https://vercel.com/dashboard
+    - Go to your project > Functions
+    - Should see all 8 functions listed
+
+[ ] Monitor function invocations:
+    - Check execution time
+    - Check for errors
+    - Monitor CPU usage
+
+[ ] Set up error alerts (optional):
+    - Vercel Slack integration
+    - Email notifications
+
+[ ] Check application logs:
+    - Vercel > Deployments > Logs
+    - Should be clean (no errors)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 10: Post-Deployment
+────────────────────────
+
+[ ] Document API endpoints:
+    - Share VERCEL_SERVERLESS_REFACTOR.md with team
+    - Include environment variables needed
+
+[ ] Setup CI/CD (optional):
+    - Auto-deploy on Git push
+    - Run tests on pull requests
+
+[ ] Backup Supabase:
+    - Set up automated backups
+    - Test restoration procedure
+
+[ ] Security review:
+    - Verify ADMIN_SECRET is strong
+    - Verify Service Role Key is secure
+    - Check API permissions
+
+[ ] Performance monitoring:
+    - Track response times
+    - Monitor error rates
+    - Analyze usage patterns
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING
+───────────────
+
+If you encounter issues:
+
+❌ 401 Unauthorized error:
+   ✓ Verify ADMIN_SECRET in Vercel env vars
+   ✓ Check x-admin-secret header in request
+   ✓ Verify admin secret matches between frontend and Vercel
+
+❌ 500 Error on upload:
+   ✓ Check formidable is installed: npm ls formidable
+   ✓ Verify Supabase Storage bucket "product_images" exists
+   ✓ Check Service Role Key has storage permissions
+
+❌ Supabase connection error:
+   ✓ Verify SUPABASE_URL is correct
+   ✓ Verify SUPABASE_SERVICE_ROLE_KEY is correct
+   ✓ Check Supabase project is active (not paused)
+   ✓ Check network connectivity
+
+❌ 404 Not Found on API:
+   ✓ Verify file paths: /api/admin/products/[id].js (brackets!)
+   ✓ Check files are in correct folders
+   ✓ Redeploy Vercel after file structure changes
+
+❌ FormData/upload not working:
+   ✓ Check Content-Type NOT set to application/json (let formidable handle it)
+   ✓ Verify formidable configuration
+   ✓ Check file size limits
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK REFERENCE
+───────────────
+
+Environment Variables:
+  SUPABASE_URL = "https://xxxxxxxxxxxx.supabase.co"
+  SUPABASE_SERVICE_ROLE_KEY = "eyJhbGc..." (long string)
+  ADMIN_SECRET = "your-secret-password"
+
+API Base URL (Vercel):
+  https://your-domain.vercel.app/api/admin
+
+Auth Header (all requests):
+  x-admin-secret: your-secret-password
+
+Supabase Console:
+  https://app.supabase.com
+
+Vercel Dashboard:
+  https://vercel.com/dashboard
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ All checks passed? You're ready to deploy! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════

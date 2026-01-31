@@ -56,7 +56,8 @@ async function handleLogin(e) {
 
     try {
         // Verify secret dengan API test call
-        const response = await fetch(`${API_URL}/api/admin/products`, {
+        const response = await fetch(`${API_URL}/api/admin/login`, {
+            method: 'POST',
             headers: {
                 'x-admin-secret': secret
             }
@@ -299,7 +300,7 @@ async function uploadProductImage(file, productName) {
         formData.append('fileName', fileName);
 
         // Send to backend API
-        const response = await fetch(`${API_URL}/api/admin/upload-product-image`, {
+        const response = await fetch(`${API_URL}/api/admin/upload`, {
             method: 'POST',
             headers: {
                 'x-admin-secret': adminSecret
@@ -519,7 +520,7 @@ async function updateOrderStatus(orderId, newStatus) {
     try {
         console.log(`Updating order ${orderId} status to: ${newStatus}`);
 
-        const response = await fetch(`${API_URL}/api/admin/orders/${orderId}/status`, {
+        const response = await fetch(`${API_URL}/api/admin/orders/${orderId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -576,7 +577,7 @@ function formatOrderDate(dateString) {
 async function toggleAvailability(id, currentStatus) {
     try {
         // Toggle availability and update via API
-        const response = await fetch(`${API_URL}/api/admin/products/${id}/toggle-availability`, {
+        const response = await fetch(`${API_URL}/api/admin/products/${id}/toggle`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
