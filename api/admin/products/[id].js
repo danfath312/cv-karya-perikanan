@@ -74,6 +74,13 @@ async function parseBody(req) {
  * GET /api/admin/products/[id] - Get single product
  */
 async function handleGet(id, res) {
+    if (!id) {
+        console.error('❌ GET: Product ID is missing');
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
+    
+    console.log(`📦 GET: Fetching product with ID: ${id}`);
+    
     try {
         const { data: product, error } = await supabase
             .from('products')
@@ -82,17 +89,24 @@ async function handleGet(id, res) {
             .single();
 
         if (error) {
-            console.error('Supabase GET error:', error.message);
+            if (error.code === 'PGRST116') {
+                // No rows found
+                console.error(`❌ GET: Product not found - ID: ${id}`);
+                return res.status(404).json({ error: 'Product not found' });
+            }
+            console.error('❌ GET: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
         if (!product) {
+            console.error(`❌ GET: Product returned null for ID: ${id}`);
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        console.log(`✅ GET: Product loaded successfully:`, product.id);
         return res.status(200).json(product);
     } catch (err) {
-        console.error('Error fetching product:', err.message);
+        console.error('❌ GET: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to fetch product', details: err.message });
     }
 }
@@ -101,13 +115,27 @@ async function handleGet(id, res) {
  * PUT /api/admin/products/[id] - Update product
  */
 async function handlePut(id, req, res) {
+    if (!id) {
+        console.error('❌ PUT: Product ID is missing');
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
+    
+    console.log(`🔄 PUT: Updating product with ID: ${id}`);
+    
     try {
         const updateData = await parseBody(req);
+        console.log('📝 PUT: Update data received:', Object.keys(updateData));
 
         // Remove immutable fields
         delete updateData.id;
         delete updateData.created_at;
         delete updateData.updated_at;
+
+        // Validate at least one field to update
+        if (Object.keys(updateData).length === 0) {
+            console.warn('⚠️ PUT: No fields to update');
+            return res.status(400).json({ error: 'No fields to update' });
+        }
 
         const { data: products, error } = await supabase
             .from('products')
@@ -116,17 +144,19 @@ async function handlePut(id, req, res) {
             .select();
 
         if (error) {
-            console.error('Supabase PUT error:', error.message);
+            console.error('❌ PUT: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
         if (!products || products.length === 0) {
+            console.error(`❌ PUT: Product not found after update - ID: ${id}`);
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        console.log(`✅ PUT: Product updated successfully:`, products[0].id);
         return res.status(200).json(products[0]);
     } catch (err) {
-        console.error('Error updating product:', err.message);
+        console.error('❌ PUT: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to update product', details: err.message });
     }
 }
@@ -135,6 +165,13 @@ async function handlePut(id, req, res) {
  * DELETE /api/admin/products/[id] - Delete product
  */
 async function handleDelete(id, res) {
+    if (!id) {
+        console.error('❌ DELETE: Product ID is missing');
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
+    
+    console.log(`🗑️ DELETE: Deleting product with ID: ${id}`);
+    
     try {
         const { error } = await supabase
             .from('products')
@@ -142,13 +179,14 @@ async function handleDelete(id, res) {
             .eq('id', id);
 
         if (error) {
-            console.error('Supabase DELETE error:', error.message);
+            console.error('❌ DELETE: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
+        console.log(`✅ DELETE: Product deleted successfully:`, id);
         return res.status(200).json({ success: true });
     } catch (err) {
-        console.error('Error deleting product:', err.message);
+        console.error('❌ DELETE: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to delete product', details: err.message });
     }
 }

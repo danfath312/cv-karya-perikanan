@@ -72,6 +72,13 @@ async function parseBody(req) {
  * PATCH /api/admin/products/[id]/toggle - Toggle availability
  */
 async function handlePatch(id, req, res) {
+    if (!id) {
+        console.error('❌ PATCH: Product ID is missing');
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
+    
+    console.log(`🔀 PATCH: Toggling availability for product ID: ${id}`);
+    
     try {
         const body = await parseBody(req);
         const hasExplicitAvailability = typeof body.available === 'boolean';
@@ -86,10 +93,12 @@ async function handlePatch(id, req, res) {
                 .single();
 
             if (fetchError || !existing) {
+                console.error(`❌ PATCH: Product not found - ID: ${id}`);
                 return res.status(404).json({ error: 'Product not found' });
             }
 
             nextAvailability = !existing.available;
+            console.log(`📋 PATCH: Current availability: ${existing.available}, toggling to: ${nextAvailability}`);
         }
 
         const { data: updated, error } = await supabase
@@ -99,17 +108,19 @@ async function handlePatch(id, req, res) {
             .select();
 
         if (error) {
-            console.error('Supabase PATCH error:', error.message);
+            console.error('❌ PATCH: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
         if (!updated || updated.length === 0) {
+            console.error(`❌ PATCH: Product not found after toggle - ID: ${id}`);
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        console.log(`✅ PATCH: Availability toggled to ${nextAvailability} for ID:`, id);
         return res.status(200).json(updated[0]);
     } catch (err) {
-        console.error('Error toggling availability:', err.message);
+        console.error('❌ PATCH: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to toggle availability', details: err.message });
     }
 }

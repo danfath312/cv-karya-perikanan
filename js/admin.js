@@ -229,6 +229,8 @@ function openAddProductModal() {
 
 async function openEditProductModal(id) {
     currentProductId = id;
+    console.log(`🔍 Opening edit modal for product ID: ${id}`);
+    
     try {
         // Fetch product from API
         const response = await fetch(`${API_URL}/api/admin/products/${id}`, {
@@ -238,11 +240,16 @@ async function openEditProductModal(id) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to load product');
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Server returned ${response.status}`);
         }
 
         const product = await response.json();
         console.log('📦 Loading product:', product);
+        
+        if (!product || !product.id) {
+            throw new Error('Invalid product data received from server');
+        }
         
         document.getElementById('productModalTitle').textContent = 'Edit Produk';
         document.getElementById('productName').value = product.name;
@@ -332,17 +339,23 @@ async function handleProductSubmit(e) {
     e.preventDefault();
 
     try {
-        const name = document.getElementById('productName').value;
-        const nameEn = document.getElementById('productNameEn').value;
-        const description = document.getElementById('productDescription').value;
-        const descriptionEn = document.getElementById('productDescriptionEn').value;
-        const specificationsText = document.getElementById('productSpecifications').value;
-        const specificationsEnText = document.getElementById('productSpecificationsEn').value;
-        const usesText = document.getElementById('productUses').value;
-        const usesEnText = document.getElementById('productUsesEn').value;
+        const name = document.getElementById('productName').value.trim();
+        const nameEn = document.getElementById('productNameEn').value.trim();
+        const description = document.getElementById('productDescription').value.trim();
+        const descriptionEn = document.getElementById('productDescriptionEn').value.trim();
+        const specificationsText = document.getElementById('productSpecifications').value.trim();
+        const specificationsEnText = document.getElementById('productSpecificationsEn').value.trim();
+        const usesText = document.getElementById('productUses').value.trim();
+        const usesEnText = document.getElementById('productUsesEn').value.trim();
         const stock = parseInt(document.getElementById('productStock').value) || 0;
         const price = parseInt(document.getElementById('productPrice').value) || 0;
         const available = document.getElementById('productAvailable').checked;
+
+        // Validate required fields
+        if (!name) {
+            showAlert('productFormError', 'Nama produk tidak boleh kosong', 'danger');
+            return;
+        }
 
         // Convert text (newline-separated) to JSONB arrays
         const specifications = specificationsText.split('\n').filter(s => s.trim()).map(s => s.trim());
@@ -366,9 +379,9 @@ async function handleProductSubmit(e) {
 
         const productData = {
             name: name,
-            name_en: nameEn,
-            description: description,
-            description_en: descriptionEn,
+            name_en: nameEn || null,
+            description: description || null,
+            description_en: descriptionEn || null,
             specifications: specifications,
             specifications_en: specificationsEn,
             uses: uses,
@@ -407,7 +420,9 @@ async function handleProductSubmit(e) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to save product');
+            const errorMsg = errorData.error || errorData.details || `Server error (${response.status})`;
+            console.error(`❌ Server error (${response.status}):`, errorMsg);
+            throw new Error(errorMsg);
         }
 
         const result = await response.json();
@@ -422,7 +437,12 @@ async function handleProductSubmit(e) {
 }
 
 async function deleteProduct(id) {
-    if (!confirm('Yakin ingin menghapus produk ini?')) return;
+    console.log(`🗑️ Attempting to delete product: ${id}`);
+    
+    if (!confirm('Yakin ingin menghapus produk ini?')) {
+        console.log('❌ Delete cancelled by user');
+        return;
+    }
 
     try {
         const response = await fetch(`${API_URL}/api/admin/products/${id}`, {
@@ -434,10 +454,12 @@ async function deleteProduct(id) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to delete product');
+            const errorMsg = errorData.error || errorData.details || `Server error (${response.status})`;
+            console.error(`❌ Delete failed (${response.status}):`, errorMsg);
+            throw new Error(errorMsg);
         }
 
-        console.log(`✅ Product ${id} deleted`);
+        console.log(`✅ Product ${id} deleted successfully`);
         alert('✅ Produk berhasil dihapus');
         loadProducts();
     } catch (error) {
@@ -575,6 +597,8 @@ function formatOrderDate(dateString) {
 }
 
 async function toggleAvailability(id, currentStatus) {
+    console.log(`🔀 Toggling availability for product: ${id} (current: ${currentStatus})`);
+    
     try {
         // Toggle availability and update via API
         const response = await fetch(`${API_URL}/api/admin/products/${id}/toggle`, {
@@ -587,15 +611,18 @@ async function toggleAvailability(id, currentStatus) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to toggle availability');
+            const errorMsg = errorData.error || errorData.details || `Server error (${response.status})`;
+            console.error(`❌ Toggle failed (${response.status}):`, errorMsg);
+            throw new Error(errorMsg);
         }
 
         const data = await response.json();
-        console.log(`✅ Product ${id} availability toggled to: ${!currentStatus}`, data);
+        console.log(`✅ Product ${id} availability toggled to: ${data.available}`);
+        alert(`✅ Status produk berhasil diubah menjadi: ${data.available ? 'Tersedia' : 'Tidak Tersedia'}`);
         loadProducts();
     } catch (error) {
-        console.error('❌ Gagal update status:', error);
-        alert('Gagal update status: ' + error.message);
+        console.error('❌ Error toggling availability:', error);
+        alert('❌ Gagal update status: ' + error.message);
     }
 }
 
@@ -684,9 +711,9 @@ async function handleCompanySubmit(e) {
 async function translateProductField(sourceId, targetId, buttonElement) {
     const sourceField = document.getElementById(sourceId);
     const targetField = document.getElementById(targetId);
-    const sourceText = sourceField.value;
+    const sourceText = sourceField.value.trim();
 
-    console.log('🔍 DEBUG:', { sourceId, targetId, sourceField, targetField, sourceText });
+    console.log('🌐 TRANSLATE: Starting translation...', { sourceId, targetId, sourceText: sourceText.substring(0, 50) });
 
     if (!sourceText) {
         alert('Masukkan teks terlebih dahulu sebelum translate');
@@ -700,36 +727,73 @@ async function translateProductField(sourceId, targetId, buttonElement) {
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Translating...';
 
     try {
-        // Use backend endpoint on port 3000
-        const response = await fetch('http://localhost:3000/api/translate', {
-            method: 'POST',
-            body: JSON.stringify({
-                text: sourceText,
-                source: 'id',
-                target: 'en'
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Translation service error');
-        }
-
-        const data = await response.json();
-        console.log('📝 Response data:', data);
+        // Try backend translation service first (if available)
+        let translatedText = null;
         
-        if (data.translatedText) {
-            console.log('📌 Setting targetField.value to:', data.translatedText);
-            targetField.value = data.translatedText;
-            console.log('✅ Translation successful:', data.translatedText);
-            console.log('✅ targetField.value after set:', targetField.value);
-        } else {
-            throw new Error(data.error || 'No translation returned');
+        // First attempt: Backend translation via Vercel API
+        try {
+            const response = await fetch(`${API_URL}/api/translate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: sourceText,
+                    source: 'id',
+                    target: 'en'
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.translatedText) {
+                    translatedText = data.translatedText;
+                    console.log('✅ TRANSLATE: Backend translation successful');
+                }
+            }
+        } catch (backendErr) {
+            console.log('⚠️ TRANSLATE: Backend not available, trying fallback...');
         }
+
+        // Fallback: Use Google Translate API (if no backend)
+        if (!translatedText) {
+            try {
+                // Use MyMemory Translation API (free, no key required)
+                const encodedText = encodeURIComponent(sourceText);
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodedText}&langpair=id|en`, {
+                    method: 'GET'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.responseStatus === 200 && data.responseData.translatedText) {
+                        translatedText = data.responseData.translatedText;
+                        console.log('✅ TRANSLATE: Fallback translation successful');
+                    }
+                }
+            } catch (fallbackErr) {
+                console.error('⚠️ TRANSLATE: Fallback failed:', fallbackErr.message);
+            }
+        }
+
+        if (!translatedText) {
+            throw new Error('Tidak ada layanan terjemahan yang tersedia. Silakan masukkan manual.');
+        }
+
+        // Set the target field value
+        console.log('📝 TRANSLATE: Setting target field value:', translatedText.substring(0, 50));
+        targetField.value = translatedText;
+        targetField.style.backgroundColor = '#d4edda';
+        
+        // Remove highlight after 2 seconds
+        setTimeout(() => {
+            targetField.style.backgroundColor = '';
+        }, 2000);
+
+        console.log('✅ TRANSLATE: Translation complete and field updated');
+        
     } catch (error) {
-        console.error('Translation error:', error);
+        console.error('❌ TRANSLATE: Error:', error);
         alert('Gagal translate. Silakan coba lagi atau masukkan manual.\nError: ' + error.message);
     } finally {
         // Restore button state

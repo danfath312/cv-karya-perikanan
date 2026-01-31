@@ -63,6 +63,8 @@ async function parseBody(req) {
  * GET /api/admin/products - List all products
  */
 async function handleGet(req, res) {
+    console.log('📦 GET: Fetching all products');
+    
     try {
         const { data: products, error } = await supabase
             .from('products')
@@ -70,13 +72,14 @@ async function handleGet(req, res) {
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error('Supabase GET error:', error.message);
+            console.error('❌ GET: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
+        console.log(`✅ GET: Loaded ${products?.length || 0} products`);
         return res.status(200).json(products || []);
     } catch (err) {
-        console.error('Error fetching products:', err.message);
+        console.error('❌ GET: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to fetch products', details: err.message });
     }
 }
@@ -85,6 +88,8 @@ async function handleGet(req, res) {
  * POST /api/admin/products - Create new product
  */
 async function handlePost(req, res) {
+    console.log('✨ POST: Creating new product');
+    
     try {
         const body = await parseBody(req);
         const {
@@ -102,9 +107,12 @@ async function handlePost(req, res) {
             image_url
         } = body;
 
-        if (!name) {
+        if (!name || !name.trim()) {
+            console.warn('⚠️ POST: Product name is required');
             return res.status(400).json({ error: 'Product name is required' });
         }
+
+        console.log(`📝 POST: Creating product: ${name}`);
 
         const productData = {
             name,
@@ -127,13 +135,19 @@ async function handlePost(req, res) {
             .select();
 
         if (error) {
-            console.error('Supabase POST error:', error.message);
+            console.error('❌ POST: Supabase error:', error.message);
             return res.status(500).json({ error: error.message });
         }
 
-        return res.status(201).json(products[0] || {});
+        if (!products || products.length === 0) {
+            console.error('❌ POST: No product returned from insert');
+            return res.status(500).json({ error: 'Failed to create product' });
+        }
+
+        console.log(`✅ POST: Product created successfully: ${products[0].id}`);
+        return res.status(201).json(products[0]);
     } catch (err) {
-        console.error('Error creating product:', err.message);
+        console.error('❌ POST: Unexpected error:', err.message);
         return res.status(500).json({ error: 'Failed to create product', details: err.message });
     }
 }
