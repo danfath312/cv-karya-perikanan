@@ -1,92 +1,148 @@
-// Admin company profile endpoint (GET, POST)
+/**
+ * /api/admin/company - GET, POST company profile
+ * Vercel Serverless Handler (ESM)
+ */
+
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
-
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminSecret = process.env.ADMIN_SECRET;
 
+if (!supabaseUrl || !supabaseKey || !adminSecret) {
+    console.error('❌ Missing env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or ADMIN_SECRET');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+/**
+ * Check authorization
+ */
 function isAuthorized(req) {
     const token = req.headers['x-admin-secret'];
     return Boolean(token && adminSecret && token === adminSecret);
 }
 
-async function readJsonBody(req) {
-    if (req.body && typeof req.body === 'object') return req.body;
-    if (typeof req.body === 'string') return JSON.parse(req.body);
-
-    let rawBody = '';
-    for await (const chunk of req) {
-        rawBody += chunk;
+/**
+ * Parse JSON body safely
+ */
+async function parseBody(req) {
+    if (req.body && typeof req.body === 'object') {
+        return req.body;
     }
-    if (!rawBody) return {};
-    return JSON.parse(rawBody);
+
+    if (typeof req.body === 'string') {
+        try {
+            return JSON.parse(req.body);
+        } catch (e) {
+            return {};
+        }
+    }
+
+    if (req.readable || req.on) {
+        let rawBody = '';
+        for await (const chunk of req) {
+            rawBody += chunk;
+        }
+        try {
+            return rawBody ? JSON.parse(rawBody) : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    return {};
 }
 
+/**
+ * GET /api/admin/company
+ */
+async function handleGet(res) {
+    try {
+        const { data: companies, error } = await supabase
+            .from('company')
+            .select('*')
+            .limit(1);
+
+        if (error) {
+            console.error('Supabase GET error:', error.message);
+            return res.status(500).json({ error: error.message });
+        }
+
+        const company = companies && companies.length > 0 ? companies[0] : null;
+        return res.status(200).json(company || {});
+    } catch (err) {
+        console.error('Error fetching company info:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch company info', details: err.message });
+    }
+}
+
+/**
+ * POST /api/admin/company
+ */
+async function handlePostPut(req, res) {
+    try {
+        const companyData = await parseBody(req);
+
+        const { data: existingCompany, error: checkError } = await supabase
+            .from('company')
+            .select('id')
+            .limit(1)
+            .single();
+
+        if (existingCompany) {
+            // Update existing
+            const { data: updated, error } = await supabase
+                .from('company')
+                .update(companyData)
+                .eq('id', existingCompany.id)
+                .select();
+
+            if (error) {
+                console.error('Supabase UPDATE error:', error.message);
+                return res.status(500).json({ error: error.message });
+            }
+
+            return res.status(200).json(updated[0] || {});
+        }
+
+        // Create new
+        const { data: created, error } = await supabase
+            .from('company')
+            .insert([companyData])
+            .select();
+
+        if (error) {
+            console.error('Supabase INSERT error:', error.message);
+            return res.status(500).json({ error: error.message });
+        }
+
+        return res.status(201).json(created[0] || {});
+    } catch (err) {
+        console.error('Error saving company info:', err.message);
+        return res.status(500).json({ error: 'Failed to save company info', details: err.message });
+    }
+}
+
+/**
+ * Main handler - Vercel Serverless
+ */
 export default async function handler(req, res) {
+    // Set response headers
+    res.setHeader('Content-Type', 'application/json');
+
+    // Auth check
     if (!isAuthorized(req)) {
         return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin secret' });
     }
 
+    // Route by method
     if (req.method === 'GET') {
-        try {
-            const { data: companies, error } = await supabase
-                .from('company')
-                .select('*')
-                .limit(1);
-
-            if (error) {
-                return res.status(500).json({ error: error.message });
-            }
-
-            const company = companies && companies.length > 0 ? companies[0] : null;
-            return res.status(200).json(company || {});
-        } catch (err) {
-            console.error('Error fetching company info:', err);
-            return res.status(500).json({ error: 'Failed to fetch company info' });
-        }
+        return handleGet(res);
     }
 
     if (req.method === 'POST' || req.method === 'PUT') {
-        try {
-            const companyData = await readJsonBody(req);
-
-            const { data: existingCompany } = await supabase
-                .from('company')
-                .select('id')
-                .limit(1)
-                .single();
-
-            if (existingCompany) {
-                const { data: updated, error } = await supabase
-                    .from('company')
-                    .update(companyData)
-                    .eq('id', existingCompany.id)
-                    .select();
-
-                if (error) {
-                    return res.status(500).json({ error: error.message });
-                }
-
-                return res.status(200).json(updated[0]);
-            }
-
-            const { data: created, error } = await supabase
-                .from('company')
-                .insert([companyData])
-                .select();
-
-            if (error) {
-                return res.status(500).json({ error: error.message });
-            }
-
-            return res.status(201).json(created[0]);
-        } catch (err) {
-            console.error('Error saving company info:', err);
-            return res.status(500).json({ error: 'Failed to save company info' });
-        }
+        return handlePostPut(req, res);
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
